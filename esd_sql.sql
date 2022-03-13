@@ -40,6 +40,32 @@ INSERT INTO `customer` (`customer_id`, `username`, `email`, `password`, `wallet_
 COMMIT;
 
 --
+-- Table structure for table `hawker`
+--
+
+DROP TABLE IF EXISTS `hawker`;
+CREATE TABLE IF NOT EXISTS `hawker` (
+  `hawker_id` varchar(64) NOT NULL,
+  `username` varchar(64) NOT NULL,
+  `email` varchar(64) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `wallet_id` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`hawker_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `hawker`
+--
+
+INSERT INTO `hawker` (`hawker_id`, `username`, `email`, `password`, `wallet_id`) VALUES
+('hawker_1', 'hawker_username_1', 'hawker1@mail.com', 'hawker_password_1', 'hawker_wallet_1'), 
+('hawker_2', 'hawker_username_2', 'hawker2@mail.com', 'hawker_password_2', 'hawker_wallet_2'),
+('hawker_3', 'hawker_username_3', 'hawker3@mail.com', 'hawker_password_3', 'hawker_wallet_3'),
+('hawker_4', 'hawker_username_4', 'hawker4@mail.com', 'hawker_password_4', 'hawker_wallet_4');
+COMMIT;
+
+
+--
 -- Table structure for table `item`
 --
 
