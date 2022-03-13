@@ -15,53 +15,40 @@ USE `ESD`;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `customer`
+-- Table structure for table `user`
 --
 
-DROP TABLE IF EXISTS `customer`;
-CREATE TABLE IF NOT EXISTS `customer` (
-  `customer_id` varchar(64) NOT NULL,
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE IF NOT EXISTS `user` (
+  `user_id` varchar(64) NOT NULL,
   `username` varchar(64) NOT NULL,
   `email` varchar(64) NOT NULL,
   `password` varchar(255) NOT NULL,
   `wallet_id` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`customer_id`)
+  `is_hawker` BOOLEAN DEFAULT FALSE,
+  PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `customer`
+-- Dumping data for table `user`
 --
 
-INSERT INTO `customer` (`customer_id`, `username`, `email`, `password`, `wallet_id`) VALUES
-('customer_1', 'customer_username_1', 'customer1@mail.com', 'customer_password_1', 'customer_wallet_1'), 
-('customer_2', 'customer_username_2', 'customer2@mail.com', 'customer_password_2', 'customer_wallet_2'),
-('customer_3', 'customer_username_3', 'customer3@mail.com', 'customer_password_3', 'customer_wallet_3'),
-('customer_4', 'customer_username_4', 'customer4@mail.com', 'customer_password_4', 'customer_wallet_4');
+INSERT INTO `user` (`user_id`, `username`, `email`, `password`, `wallet_id`, `is_hawker`) VALUES
+('customer_1', 'customer_username_1', 'customer1@mail.com', 'customer_password_1', 'customer_wallet_1', False), 
+('customer_2', 'customer_username_2', 'customer2@mail.com', 'customer_password_2', 'customer_wallet_2', False),
+('customer_3', 'customer_username_3', 'customer3@mail.com', 'customer_password_3', 'customer_wallet_3', False),
+('customer_4', 'customer_username_4', 'customer4@mail.com', 'customer_password_4', 'customer_wallet_4', False);
 COMMIT;
 
 --
--- Table structure for table `hawker`
+-- Dumping data for table `user`
 --
 
-DROP TABLE IF EXISTS `hawker`;
-CREATE TABLE IF NOT EXISTS `hawker` (
-  `hawker_id` varchar(64) NOT NULL,
-  `username` varchar(64) NOT NULL,
-  `email` varchar(64) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `wallet_id` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`hawker_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `hawker`
---
-
-INSERT INTO `hawker` (`hawker_id`, `username`, `email`, `password`, `wallet_id`) VALUES
-('hawker_1', 'hawker_username_1', 'hawker1@mail.com', 'hawker_password_1', 'hawker_wallet_1'), 
-('hawker_2', 'hawker_username_2', 'hawker2@mail.com', 'hawker_password_2', 'hawker_wallet_2'),
-('hawker_3', 'hawker_username_3', 'hawker3@mail.com', 'hawker_password_3', 'hawker_wallet_3'),
-('hawker_4', 'hawker_username_4', 'hawker4@mail.com', 'hawker_password_4', 'hawker_wallet_4');
+INSERT INTO `user` (`user_id`, `username`, `email`, `password`, `wallet_id`, `is_hawker`) VALUES
+('hawker_1', 'hawker_username_1', 'hawker1@mail.com', 'hawker_password_1', 'hawker_wallet_1', True), 
+('hawker_2', 'hawker_username_2', 'hawker2@mail.com', 'hawker_password_2', 'hawker_wallet_2', True),
+('hawker_3', 'hawker_username_3', 'hawker3@mail.com', 'hawker_password_3', 'hawker_wallet_3', True),
+('hawker_4', 'hawker_username_4', 'hawker4@mail.com', 'hawker_password_4', 'hawker_wallet_4', True);
 COMMIT;
 
 
