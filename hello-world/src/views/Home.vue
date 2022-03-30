@@ -1,6 +1,7 @@
 <template>
-  <div class="home">
-    <Login/>
+  <div class="container mt-4 px-4 text-left">
+    <span class="text-3xl font-bold">Login Prime Hawker</span>
+    <Login class="mt-3"/>
   </div>
 </template>
 

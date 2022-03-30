@@ -1,8 +1,8 @@
 <template>
   <div id="nav">
     <NavBar/>
-    <router-link to="/">Login</router-link> |
-    <router-link to="/Hawkers">About</router-link>
+    <!-- <router-link to="/">Login</router-link> |
+    <router-link to="/Hawkers">About</router-link> -->
 
     <router-view/>
   </div>
