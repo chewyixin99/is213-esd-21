@@ -68,17 +68,9 @@ INSERT INTO `item` (`item_id`, `hawker_id`, `name`, `description`, `price`, `cui
 COMMIT;
 
 --
--- Table structure for table `wallet`
---
--- insert table structure CODE here
---
--- Dumping data for table `wallet`
---
--- insert dumping data CODE here
-
---
 -- Table structure for table `order`
 --
+
 DROP TABLE IF EXISTS `order`;
 CREATE TABLE IF NOT EXISTS `order` (
   `order_id` varchar(64) NOT NULL PRIMARY KEY,
@@ -91,23 +83,63 @@ CREATE TABLE IF NOT EXISTS `order` (
   `items` varchar(255) NOT NULL,
   `time` DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --
 -- Dumping data for table `order`
 --
+
 INSERT INTO `order` (`order_id`, `user_id`, `hawker_id`, `status`, `total_price`, `discount`, `final_price`, `items`) VALUES
 ("order_2", "user_1", "hawker_2", "pending", 10, 5, 5, "[{'item': 'item3', 'quantity': 1}, {'item': 'item4', 'quantity': 1}]"),
 ("order_1", "user_1", "hawker_1", "pending", 10, 0, 10, "[{'item': 'item1', 'quantity': 2}, {'item': 'item2', 'quantity': 1}, {'item': 'item2', 'quantity': 1}, {'item': 'item3', 'quantity': 1}, {'item': 'item4', 'quantity': 1}]");
 COMMIT;
 
+--
+-- Table structure for table `wallet`
+--
+
+DROP TABLE IF EXISTS `wallet`;
+CREATE TABLE IF NOT EXISTS `wallet` (
+  `wallet_id` INT PRIMARY KEY,
+  `total_balance` float NOT NULL,
+  `available_balance` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `wallet`
+--
+
+INSERT INTO `wallet` (`wallet_id`, `total_balance`, `available_balance`) VALUES
+(1, 0.0, 0.0),
+(2, 100.0, 95.0),
+(3, 36.9, 13.4)
+(4, 15.3, 12.4)
+(5, 1337.0, 42.0);
+COMMIT;
 
 --
 -- Table structure for table `escrow`
 --
--- insert table structure CODE here
+
+DROP TABLE IF EXISTS `escrow`;
+CREATE TABLE IF NOT EXISTS `escrow` (
+  `escrow_id` INT PRIMARY KEY,
+  `payer_id` INT NOT NULL,
+  `receiving_id` INT NOT NULL,
+  `amount` float NOT NULL,
+  `time` DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --
--- Dumping data for table escrow`
+-- Dumping data for table `escrow` <this shouldn't happen here, since escrow means got transactions.>
 --
--- insert dumping data CODE here
+
+-- INSERT INTO `escrow` (`escrow_id`, `payer_id`, `receiving_id`, `amount`) VALUES
+-- (1, 1, 2, 1.0), -- check if can pay when person has no money
+-- (2, 2, 3, 1.0),
+-- (3, 3, 4, 1.0), 
+-- (4, 4, 5, 1.0),
+-- (5, 5, 1, 45.0); -- to check the available balance if enough, this should fail
+-- COMMIT;
 
 --
 -- Table structure for table `error`

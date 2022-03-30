@@ -91,7 +91,7 @@ def create_escrow(escrow_id):
         ), 400
 
     data = request.get_json()
-    escrow = escrow(escrow_id, **data)
+    escrow = Escrow(escrow_id, **data)
 
     try:
         db.session.add(escrow)

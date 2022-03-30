@@ -109,7 +109,7 @@ def create_wallet(wallet_id):
 
 #update wallet
 @app.route("/wallet/<int:wallet_id>", methods=['PUT'])
-def update_wallet(wallet_id):
+def add_amount_to_wallet(wallet_id):
     wallet = wallet.query.filter_by(wallet_id=wallet_id).first()
     if not (wallet):
         return jsonify(
@@ -123,10 +123,9 @@ def update_wallet(wallet_id):
         ), 404
 
     data = request.get_json()
-    newwallet = Wallet(wallet_id, **data)
+    wallet.available_balance += data['price']
 
     try:
-        wallet = newwallet
         db.session.commit()
     except:
         return jsonify(
