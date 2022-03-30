@@ -18,15 +18,13 @@ class User(db.Model):
     email = db.Column(db.String(64), nullable=False)
     password = db.Column(db.String(255), nullable=False)
     wallet_id = db.Column(db.String(64), nullable=False)
-    is_hawker = db.Column(db.Boolean, nullable=False)
 
-    def __init__ (self, user_id, username, email, password, wallet_id, is_hawker):
+    def __init__ (self, user_id, username, email, password, wallet_id):
         self.user_id = user_id
         self.username = username
         self.email = email
         self.password = password
         self.wallet_id = wallet_id
-        self.is_hawker = is_hawker
 
     def json(self):
         return {
@@ -35,7 +33,6 @@ class User(db.Model):
             "email": self.email,
             "password": self.password,
             "wallet_id": self.wallet_id,
-            "is_hawker": self.is_hawker,
         }
 
 
@@ -77,28 +74,6 @@ def find_by_user_id(user_id):
         {
             "code": "404",
             "message": "User does not exist."
-        }
-    )
-
-# Hawkers
-@app.route("/hawker")
-def get_hawkers():
-    users = User.query.filter_by(is_hawker=True).all()
-    if len(users):
-        return jsonify(
-            {
-                "code":200,
-                "data": {
-                    "users": [
-                        user.json() for user in users
-                    ]
-                }
-            }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "message": "There are no hawkers"
         }
     )
 

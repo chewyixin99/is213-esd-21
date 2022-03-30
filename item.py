@@ -15,30 +15,33 @@ class Item(db.Model):
 
     item_id = db.Column(db.String(64), primary_key=True)
     hawker_id = db.Column(db.String(64), nullable=False)
+    name = db.Column(db.String(64), nullable=False)
     description = db.Column(db.String(255), nullable=False)
     price = db.Column(db.Float, nullable=False)
-    cuisine_type = db.Column(db.String(64), nullable=False)
-    base = db.Column(db.String(64), nullable=False)
-    course_type = db.Column(db.String(64), nullable=False)
+    cuisine = db.Column(db.String(64), nullable=False)
+    course = db.Column(db.String(64), nullable=False)
+    vegetarian = db.Column(db.String(64), nullable=False)
 
-    def __init__ (self, item_id, hawker_id, description, price, cuisine_type, base, course_type):
+    def __init__ (self, item_id, hawker_id, name, description, price, cuisine, course, vegetarian):
         self.item_id = item_id
         self.hawker_id = hawker_id
+        self.name = name
         self.description = description
         self.price = price
-        self.cuisine_type = cuisine_type
-        self.base = base
-        self.course_type = course_type
+        self.cuisine = cuisine
+        self.course = course
+        self.vegetarian = vegetarian
 
     def json(self):
         return {
             "item_id": self.item_id,
             "hawker_id": self.hawker_id,
+            "name": self.name,
             "description": self.description,
             "price": self.price,
-            "cuisine_type": self.cuisine_type,
-            "base": self.base,
-            "course_type": self.cuisine_type,
+            "cuisine": self.cuisine,
+            "course": self.course,
+            "vegetarian": self.vegetarian,
         }
 
 

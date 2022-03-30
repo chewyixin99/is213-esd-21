@@ -25,7 +25,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   `email` varchar(64) NOT NULL,
   `password` varchar(255) NOT NULL,
   `wallet_id` varchar(64) DEFAULT NULL,
-  `is_hawker` BOOLEAN DEFAULT FALSE,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -34,23 +33,11 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 INSERT INTO `user` (`user_id`, `username`, `email`, `password`, `wallet_id`, `is_hawker`) VALUES
-('customer_1', 'customer_username_1', 'customer1@mail.com', 'customer_password_1', 'customer_wallet_1', False), 
-('customer_2', 'customer_username_2', 'customer2@mail.com', 'customer_password_2', 'customer_wallet_2', False),
-('customer_3', 'customer_username_3', 'customer3@mail.com', 'customer_password_3', 'customer_wallet_3', False),
-('customer_4', 'customer_username_4', 'customer4@mail.com', 'customer_password_4', 'customer_wallet_4', False);
+('customer_1', 'customer_username_1', 'customer1@mail.com', 'customer_password_1', 'customer_wallet_1'), 
+('customer_2', 'customer_username_2', 'customer2@mail.com', 'customer_password_2', 'customer_wallet_2'),
+('customer_3', 'customer_username_3', 'customer3@mail.com', 'customer_password_3', 'customer_wallet_3'),
+('customer_4', 'customer_username_4', 'customer4@mail.com', 'customer_password_4', 'customer_wallet_4');
 COMMIT;
-
---
--- Dumping data for table `user`
---
-
-INSERT INTO `user` (`user_id`, `username`, `email`, `password`, `wallet_id`, `is_hawker`) VALUES
-('hawker_1', 'hawker_username_1', 'hawker1@mail.com', 'hawker_password_1', 'hawker_wallet_1', True), 
-('hawker_2', 'hawker_username_2', 'hawker2@mail.com', 'hawker_password_2', 'hawker_wallet_2', True),
-('hawker_3', 'hawker_username_3', 'hawker3@mail.com', 'hawker_password_3', 'hawker_wallet_3', True),
-('hawker_4', 'hawker_username_4', 'hawker4@mail.com', 'hawker_password_4', 'hawker_wallet_4', True);
-COMMIT;
-
 
 --
 -- Table structure for table `item`
@@ -60,11 +47,12 @@ DROP TABLE IF EXISTS `item`;
 CREATE TABLE IF NOT EXISTS `item` (
   `item_id` varchar(64) NOT NULL,
   `hawker_id` varchar(64) NOT NULL,
+  `name` varchar(64) NOT NULL,
   `description` varchar(255) NOT NULL,
   `price` float NOT NULL,
-  `cuisine_type` varchar(64) NOT NULL,
-  `base` varchar(64) NOT NULL,
-  `course_type` varchar(64) NOT NULL,
+  `cuisine` varchar(64) NOT NULL,
+  `course` varchar(64) NOT NULL,
+  `vegetarian` BOOLEAN DEFAULT FALSE,
   
   PRIMARY KEY (`item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -73,14 +61,52 @@ CREATE TABLE IF NOT EXISTS `item` (
 -- Dumping data for table `item`
 --
 
-INSERT INTO `item` (`item_id`, `hawker_id`, `description`, `price`, `cuisine_type`, `base`, `course_type`) VALUES
-('item_1', 'hawker_1', 'item_description_1', 1.0, 'chinese', 'rice', 'main'), 
-('item_2', 'hawker_2', 'item_description_2', 2.0, 'muslim', 'rice', 'main'), 
-('item_3', 'hawker_3', 'item_description_3', 3.0, 'indian', 'noodle', 'main'), 
-('item_4', 'hawker_4', 'item_description_4', 4.0, 'korean', 'soup', 'main'), 
-('item_5', 'hawker_5', 'item_description_5', 5.0, 'japanese', 'noodle', 'main');
+INSERT INTO `item` (`item_id`, `hawker_id`, `name`, `description`, `price`, `cuisine`, `course`, `vegetarian`) VALUES
+('item_1', 'hawker_1', 'item_name_1', 'item_description_1', 1.0, 'chinese', 'main', 'main', TRUE), 
+('item_2', 'hawker_2', 'item_name_2', 'item_description_2', 2.0, 'muslim', 'side', 'main', FALSE), 
+('item_3', 'hawker_3', 'item_name_3', 'item_description_3', 3.0, 'indian', 'main', 'main', FALSE), 
+('item_4', 'hawker_4', 'item_name_4', 'item_description_4', 4.0, 'korean', 'main', 'main', FALSE), 
+('item_5', 'hawker_5', 'item_name_5', 'item_description_5', 5.0, 'any', 'drinks', 'main', TRUE);
 COMMIT;
+
+--
+-- Table structure for table `wallet`
+--
+-- insert your code here 
+--
+-- Dumping data for table `wallet`
+--
+
+
+--
+-- Table structure for table `order`
+--
+-- insert your code here 
+--
+-- Dumping data for table `order`
+--
+
+
+--
+-- Table structure for table `escrow`
+--
+-- insert your code here 
+--
+-- Dumping data for table escrow`
+--
+
+
+--
+-- Table structure for table `error`
+--
+-- insert your code here 
+--
+-- Dumping data for table `error`
+--
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
