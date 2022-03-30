@@ -13,11 +13,11 @@ db = SQLAlchemy(app)
 class User(db.Model):
     __tablename__ = "user"
 
-    user_id = db.Column(db.String(64), primary_key=True)
+    user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(64), nullable=False)
     password = db.Column(db.String(255), nullable=False)
-    wallet_id = db.Column(db.String(64), nullable=False)
+    wallet_id = db.Column(db.String(64), nullable=True)
 
     def __init__ (self, user_id, username, email, password, wallet_id):
         self.user_id = user_id

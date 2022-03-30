@@ -1,7 +1,7 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
-SET time_zone = "+00:00";
+SET time_zone = "+08:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -20,12 +20,13 @@ USE `ESD`;
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
-  `user_id` INT IDENTITY(1000, 1) PRIMARY KEY,
+  `user_id` INT PRIMARY KEY AUTO_INCREMENT,
   `username` varchar(64) NOT NULL,
   `email` varchar(64) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `wallet_id` varchar(64) DEFAULT NULL,
+  `wallet_id` varchar(64) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER TABLE user AUTO_INCREMENT=1000;
 
 --
 -- Dumping data for table `user`
@@ -51,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `item` (
   `price` float NOT NULL,
   `cuisine` varchar(64) NOT NULL,
   `course` varchar(64) NOT NULL,
-  `vegetarian` BOOLEAN DEFAULT FALSE,
+  `vegetarian` BOOLEAN DEFAULT FALSE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -88,8 +89,7 @@ CREATE TABLE IF NOT EXISTS `order` (
   `discount` float NOT NULL,
   `final_price` float NOT NULL,
   `items` varchar(255) NOT NULL,
-  `time` DATETIME DEFAULT CURRENT_TIMESTAMP,
-  
+  `time` DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --
 -- Dumping data for table `order`
