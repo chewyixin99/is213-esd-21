@@ -107,7 +107,7 @@ def create_wallet(wallet_id):
     ), 201
 
 
-#update wallet
+#add amount to wallet, can be in negative integers to simulate a deduction
 @app.route("/wallet/<int:wallet_id>", methods=['PUT'])
 def add_amount_to_wallet(wallet_id):
     wallet = wallet.query.filter_by(wallet_id=wallet_id).first()
@@ -123,7 +123,10 @@ def add_amount_to_wallet(wallet_id):
         ), 404
 
     data = request.get_json()
-    wallet.available_balance += data['price']
+    # data will come in 2 parts to be settled by each complex microservice.
+    # (place_order will update only user's AB, reject_order will update both user's AB & TB, complete_order will update user+hawker's AB & TB)
+    wallet.available_balance += data['amount_to_add_to_available_balance']
+    wallet.total_balance += data['amount_to_add_to_total_balance']
 
     try:
         db.session.commit()

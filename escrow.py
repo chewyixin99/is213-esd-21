@@ -76,7 +76,7 @@ def find_by_escrow_id(escrow_id):
     ), 404
 
 
-#create escrow
+#create escrow (only positive values, remember!)
 @app.route("/escrow/<int:escrow_id>", methods=['POST'])
 def create_escrow(escrow_id):
     if (escrow.query.filter_by(escrow_id=escrow_id).first()):
