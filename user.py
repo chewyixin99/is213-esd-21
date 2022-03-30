@@ -98,7 +98,7 @@ def create_user(email):
                 "data": {
                     "email": email,
                 },
-                "message": "An error occured while creating the book"
+                "message": "An error occurred while creating user"
             }
         )
     return jsonify(

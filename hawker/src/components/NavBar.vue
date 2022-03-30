@@ -1,0 +1,37 @@
+<template>
+  <div>
+    <div class="collapse" id="navbarToggleExternalContent">
+    <div class="bg-dark p-4">
+        <router-link to="/hawkers">
+          <div class="text-white mb-2">Hawker Stalls</div>
+        </router-link>
+        <router-link to="/profile">
+          <div class="text-white mb-2">My Profile</div>
+        </router-link>
+        <router-link to="/topup">
+          <div class="text-white mb-2">Top Up Wallet</div>
+        </router-link>
+        <router-link to="/">
+          <div class="text-white">Log out</div>
+        </router-link>
+
+    </div>
+    </div>
+    <nav class="navbar navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <router-link to="/cart">
+          <img src="../assets/cart.png" class="w-7 mr-2">
+        </router-link>
+    </div>
+    </nav>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'NavBar',
+}
+</script>
