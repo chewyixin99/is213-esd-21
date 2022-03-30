@@ -43,7 +43,7 @@ class Item(db.Model):
             "vegetarian": self.vegetarian,
         }
 
-
+# Get all items
 @app.route("/item")
 def get_all():
     items = Item.query.all()
@@ -64,8 +64,8 @@ def get_all():
             "message": "No items found."
         }
     )
-    
-# Get all items
+
+# Get specific item
 @app.route("/item/<string:item_id>")
 def find_by_item_id(item_id):
     

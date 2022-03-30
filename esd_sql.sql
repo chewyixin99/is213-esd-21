@@ -39,6 +39,30 @@ INSERT INTO `user` (`username`, `email`, `password`) VALUES
 ('customer_username_4', 'customer4@mail.com', 'customer_password_4');
 COMMIT;
 
+DROP TABLE IF EXISTS `hawker`;
+CREATE TABLE IF NOT EXISTS `hawker` (
+  `hawker_id` INT PRIMARY KEY AUTO_INCREMENT,
+  `username` varchar(64) NOT NULL,
+  `email` varchar(64) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `wallet_id` varchar(64) DEFAULT NULL,
+  `cuisine` varchar(64) NOT NULL,
+  `halal` BOOLEAN DEFAULT FALSE,
+  `has_vegetarian_option` BOOLEAN DEFAULT FALSE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER TABLE hawker AUTO_INCREMENT=2000;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `hawker` (`username`, `email`, `password`) VALUES
+('hawker_username_1', 'hawker1@mail.com', 'hawker_password_1'), 
+('hawker_username_2', 'hawker2@mail.com', 'hawker_password_2'),
+('hawker_username_3', 'hawker3@mail.com', 'hawker_password_3'),
+('hawker_username_4', 'hawker4@mail.com', 'hawker_password_4');
+COMMIT;
+
 --
 -- Table structure for table `item`
 --
@@ -112,8 +136,8 @@ CREATE TABLE IF NOT EXISTS `wallet` (
 INSERT INTO `wallet` (`wallet_id`, `total_balance`, `available_balance`) VALUES
 (1, 0.0, 0.0),
 (2, 100.0, 95.0),
-(3, 36.9, 13.4)
-(4, 15.3, 12.4)
+(3, 36.9, 13.4),
+(4, 15.3, 12.4),
 (5, 1337.0, 42.0);
 COMMIT;
 
