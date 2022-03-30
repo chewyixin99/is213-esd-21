@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `username`, `email`, `password`, `wallet_id`, `is_hawker`) VALUES
+INSERT INTO `user` (`user_id`, `username`, `email`, `password`, `wallet_id`) VALUES
 ('customer_1', 'customer_username_1', 'customer1@mail.com', 'customer_password_1', 'customer_wallet_1'), 
 ('customer_2', 'customer_username_2', 'customer2@mail.com', 'customer_password_2', 'customer_wallet_2'),
 ('customer_3', 'customer_username_3', 'customer3@mail.com', 'customer_password_3', 'customer_wallet_3'),
@@ -62,11 +62,11 @@ CREATE TABLE IF NOT EXISTS `item` (
 --
 
 INSERT INTO `item` (`item_id`, `hawker_id`, `name`, `description`, `price`, `cuisine`, `course`, `vegetarian`) VALUES
-('item_1', 'hawker_1', 'item_name_1', 'item_description_1', 1.0, 'chinese', 'main', 'main', TRUE), 
-('item_2', 'hawker_2', 'item_name_2', 'item_description_2', 2.0, 'muslim', 'side', 'main', FALSE), 
-('item_3', 'hawker_3', 'item_name_3', 'item_description_3', 3.0, 'indian', 'main', 'main', FALSE), 
-('item_4', 'hawker_4', 'item_name_4', 'item_description_4', 4.0, 'korean', 'main', 'main', FALSE), 
-('item_5', 'hawker_5', 'item_name_5', 'item_description_5', 5.0, 'any', 'drinks', 'main', TRUE);
+('item_1', 'hawker_1', 'item_name_1', 'item_description_1', 1.0, 'chinese', 'main', TRUE), 
+('item_2', 'hawker_2', 'item_name_2', 'item_description_2', 2.0, 'muslim', 'side', FALSE), 
+('item_3', 'hawker_3', 'item_name_3', 'item_description_3', 3.0, 'indian', 'main', FALSE), 
+('item_4', 'hawker_4', 'item_name_4', 'item_description_4', 4.0, 'korean', 'main', FALSE), 
+('item_5', 'hawker_5', 'item_name_5', 'item_description_5', 5.0, 'any', 'drinks', TRUE);
 COMMIT;
 
 --
