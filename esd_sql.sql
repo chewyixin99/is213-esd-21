@@ -20,23 +20,22 @@ USE `ESD`;
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
-  `user_id` varchar(64) NOT NULL,
+  `user_id` INT IDENTITY(1000, 1) PRIMARY KEY,
   `username` varchar(64) NOT NULL,
   `email` varchar(64) NOT NULL,
   `password` varchar(255) NOT NULL,
   `wallet_id` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `username`, `email`, `password`, `wallet_id`) VALUES
-('customer_1', 'customer_username_1', 'customer1@mail.com', 'customer_password_1', 'customer_wallet_1'), 
-('customer_2', 'customer_username_2', 'customer2@mail.com', 'customer_password_2', 'customer_wallet_2'),
-('customer_3', 'customer_username_3', 'customer3@mail.com', 'customer_password_3', 'customer_wallet_3'),
-('customer_4', 'customer_username_4', 'customer4@mail.com', 'customer_password_4', 'customer_wallet_4');
+INSERT INTO `user` (`username`, `email`, `password`) VALUES
+('customer_username_1', 'customer1@mail.com', 'customer_password_1'), 
+('customer_username_2', 'customer2@mail.com', 'customer_password_2'),
+('customer_username_3', 'customer3@mail.com', 'customer_password_3'),
+('customer_username_4', 'customer4@mail.com', 'customer_password_4');
 COMMIT;
 
 --
@@ -45,7 +44,7 @@ COMMIT;
 
 DROP TABLE IF EXISTS `item`;
 CREATE TABLE IF NOT EXISTS `item` (
-  `item_id` varchar(64) NOT NULL,
+  `item_id` varchar(64) NOT NULL PRIMARY KEY,
   `hawker_id` varchar(64) NOT NULL,
   `name` varchar(64) NOT NULL,
   `description` varchar(255) NOT NULL,
@@ -53,8 +52,6 @@ CREATE TABLE IF NOT EXISTS `item` (
   `cuisine` varchar(64) NOT NULL,
   `course` varchar(64) NOT NULL,
   `vegetarian` BOOLEAN DEFAULT FALSE,
-  
-  PRIMARY KEY (`item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -83,7 +80,7 @@ COMMIT;
 --
 DROP TABLE IF EXISTS `order`;
 CREATE TABLE IF NOT EXISTS `order` (
-  `order_id` varchar(64) NOT NULL,
+  `order_id` varchar(64) NOT NULL PRIMARY KEY,
   `user_id` varchar(64) NOT NULL,
   `hawker_id` varchar(64) NOT NULL,
   `status` varchar(10) NOT NULL,
@@ -93,7 +90,6 @@ CREATE TABLE IF NOT EXISTS `order` (
   `items` varchar(255) NOT NULL,
   `time` DATETIME DEFAULT CURRENT_TIMESTAMP,
   
-  PRIMARY KEY (`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --
 -- Dumping data for table `order`

@@ -77,6 +77,10 @@ def find_by_user_id(user_id):
         }
     )
 
+# @app.route("/user/<string:user_id>", methods=["POST"])
+# def create_user(user_id):
+
+
     
 # @app.route("/customer/<string:customer_id>", methods=["POST"])
 # def create_customer(customer_id):
