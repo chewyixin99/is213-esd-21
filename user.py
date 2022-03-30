@@ -19,12 +19,10 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
     wallet_id = db.Column(db.String(64), nullable=True)
 
-    def __init__ (self, user_id, username, email, password, wallet_id):
-        self.user_id = user_id
+    def __init__ (self, username, email, password):
         self.username = username
         self.email = email
         self.password = password
-        self.wallet_id = wallet_id
 
     def json(self):
         return {
@@ -77,14 +75,42 @@ def find_by_user_id(user_id):
         }
     )
 
-# @app.route("/user/<string:user_id>", methods=["POST"])
-# def create_user(user_id):
+@app.route("/user/<string:email>", methods=["POST"])
+def create_user(email):
+    if (User.query.filter_by(email=email).first()):
+        return jsonify(
+            {
+                "code": 400,
+                "data": User.query.filter_by(email=email).first().json(),
+                "message": "User already exists.",
+            }
+        )
+    data = request.get_json()
+    user = User(**data)
+
+    try:
+        db.session.add(user)
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "data": {
+                    "email": email,
+                },
+                "message": "An error occured while creating the book"
+            }
+        )
+    return jsonify(
+        {
+            "code": 201,
+            "data": user.json(),
+            "message": "Created user."
+        }
+    )
 
 
     
-# @app.route("/customer/<string:customer_id>", methods=["POST"])
-# def create_customer(customer_id):
-#     pass
 
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    app.run(port=5001, debug=True)
