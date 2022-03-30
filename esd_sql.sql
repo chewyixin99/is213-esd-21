@@ -72,38 +72,55 @@ COMMIT;
 --
 -- Table structure for table `wallet`
 --
--- insert your code here 
+-- insert table structure CODE here
 --
 -- Dumping data for table `wallet`
 --
-
+-- insert dumping data CODE here
 
 --
 -- Table structure for table `order`
 --
--- insert your code here 
+DROP TABLE IF EXISTS `order`;
+CREATE TABLE IF NOT EXISTS `order` (
+  `order_id` varchar(64) NOT NULL,
+  `user_id` varchar(64) NOT NULL,
+  `hawker_id` varchar(64) NOT NULL,
+  `status` varchar(10) NOT NULL,
+  `total_price` float NOT NULL,
+  `discount` float NOT NULL,
+  `final_price` float NOT NULL,
+  `items` varchar(255) NOT NULL,
+  `time` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  
+  PRIMARY KEY (`order_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --
 -- Dumping data for table `order`
 --
+INSERT INTO `order` (`order_id`, `user_id`, `hawker_id`, `status`, `total_price`, `discount`, `final_price`, `items`) VALUES
+("order_2", "user_1", "hawker_2", "pending", 10, 5, 5, "[{'item': 'item3', 'quantity': 1}, {'item': 'item4', 'quantity': 1}]"),
+("order_1", "user_1", "hawker_1", "pending", 10, 0, 10, "[{'item': 'item1', 'quantity': 2}, {'item': 'item2', 'quantity': 1}, {'item': 'item2', 'quantity': 1}, {'item': 'item3', 'quantity': 1}, {'item': 'item4', 'quantity': 1}]");
+COMMIT;
 
 
 --
 -- Table structure for table `escrow`
 --
--- insert your code here 
+-- insert table structure CODE here
 --
 -- Dumping data for table escrow`
 --
-
+-- insert dumping data CODE here
 
 --
 -- Table structure for table `error`
 --
--- insert your code here 
+-- insert table structure CODE here
 --
 -- Dumping data for table `error`
 --
-
+-- insert dumping data CODE here
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

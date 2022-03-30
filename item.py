@@ -20,7 +20,7 @@ class Item(db.Model):
     price = db.Column(db.Float, nullable=False)
     cuisine = db.Column(db.String(64), nullable=False)
     course = db.Column(db.String(64), nullable=False)
-    vegetarian = db.Column(db.String(64), nullable=False)
+    vegetarian = db.Column(db.Boolean, nullable=False, default=False)
 
     def __init__ (self, item_id, hawker_id, name, description, price, cuisine, course, vegetarian):
         self.item_id = item_id
