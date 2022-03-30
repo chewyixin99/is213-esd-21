@@ -33,7 +33,7 @@ def processNotificationLog(notificationBody):
         from_=twilio_number,
         to=target_number
     )
-    print("Notification sent successfuly..")
+    print("Notification sent successfully..")
 
     
 
