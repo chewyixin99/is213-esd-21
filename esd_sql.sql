@@ -45,13 +45,13 @@ COMMIT;
 
 DROP TABLE IF EXISTS `item`;
 CREATE TABLE IF NOT EXISTS `item` (
-  `item_id` varchar(64) NOT NULL PRIMARY KEY,
-  `hawker_id` varchar(64) NOT NULL,
+  `item_id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `hawker_id` INT NOT NULL,
   `name` varchar(64) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `price` float NOT NULL,
   `cuisine` varchar(64) NOT NULL,
+  `description` varchar(255) NOT NULL,
   `course` varchar(64) NOT NULL,
+  `price` float NOT NULL,
   `vegetarian` BOOLEAN DEFAULT FALSE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -59,12 +59,13 @@ CREATE TABLE IF NOT EXISTS `item` (
 -- Dumping data for table `item`
 --
 
-INSERT INTO `item` (`item_id`, `hawker_id`, `name`, `description`, `price`, `cuisine`, `course`, `vegetarian`) VALUES
-('item_1', 'hawker_1', 'item_name_1', 'item_description_1', 1.0, 'chinese', 'main', TRUE), 
-('item_2', 'hawker_2', 'item_name_2', 'item_description_2', 2.0, 'muslim', 'side', FALSE), 
-('item_3', 'hawker_3', 'item_name_3', 'item_description_3', 3.0, 'indian', 'main', FALSE), 
-('item_4', 'hawker_4', 'item_name_4', 'item_description_4', 4.0, 'korean', 'main', FALSE), 
-('item_5', 'hawker_5', 'item_name_5', 'item_description_5', 5.0, 'any', 'drinks', TRUE);
+INSERT INTO `item` (`hawker_id`, `name`, `description`, `price`, `cuisine`, `course`, `vegetarian`) VALUES
+(2001, 'item_name_1', 'item_description_1', 1.0, 'chinese', 'main', TRUE), 
+(2001, 'item_name_1', 'item_description_1_alt', 1.0, 'chinese', 'side', TRUE), 
+(2002, 'item_name_2', 'item_description_2', 2.0, 'muslim', 'side', FALSE), 
+(2003, 'item_name_3', 'item_description_3', 3.0, 'indian', 'main', FALSE), 
+(2004, 'item_name_4', 'item_description_4', 4.0, 'korean', 'main', FALSE), 
+(2005, 'item_name_5', 'item_description_5', 5.0, 'any', 'drinks', TRUE);
 COMMIT;
 
 --
