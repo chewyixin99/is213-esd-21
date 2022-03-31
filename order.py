@@ -70,10 +70,31 @@ def get_all():
         }
     )
 
+# Get order by order id
+@app.route("/order/<string:order_id>")
+def find_by_order_id(order_id):
+    # .first() is similar to LIMIT 1 clause in SQL
+    # .filter_by is similar to WHERE clause in SQL
+    order = Order.query.filter_by(order_id=order_id).first()
+    if order:
+        return jsonify(
+            {
+                "code": 200,
+                "order": order.json()
+            }
+        )
+    return jsonify(
+        {
+            "code": 400,
+            "message": f"Order with order id:'{order_id}' not found."
+        }
+    )
+
+
 # Get order by user_id
 @app.route("/order/user/<string:user_id>")
-def get_all():
-    orders = Order.query.all()
+def find_by_user_id(user_id):
+    orders = Order.query.filter_by(user_id=user_id).all()
     if len(orders):
         return jsonify(
             {
@@ -87,16 +108,16 @@ def get_all():
         )
     return jsonify(
         {
-            "code": 404,
-            "message": "There are no orders"
+            "code": 400,
+            "message": f"Order with user id:{user_id} not found."
         }
     )
 
 
 # Get order by hawker id
-@app.route("/order/hawker<string:hawker>")
-def get_all():
-    orders = Order.query.all()
+@app.route("/order/hawker/<string:hawker_id>")
+def find_by_hawker_id(hawker_id):
+    orders = Order.query.filter_by(hawker_id=hawker_id).all()
     if len(orders):
         return jsonify(
             {
@@ -110,38 +131,85 @@ def get_all():
         )
     return jsonify(
         {
-            "code": 404,
-            "message": "There are no orders"
+            "code": 400,
+            "message": f"Order with hawker id:{hawker_id} not found."
         }
     )
-
-
-
-# Get order by order id
-@app.route("/order/<string:order_id>")
-def get_all():
-    orders = Order.query.all()
-    if len(orders):
-        return jsonify(
-            {
-                "code":200,
-                "data": {
-                    "orders": [
-                        order.json() for order in orders
-                    ]
-                }
-            }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "message": "There are no orders"
-        }
-    )
-
 
 
 # Create a order record
+@app.route("/order", methods=["POST"])
+def create_order():
+    data = request.get_json()
+    order = Order(**data)
+
+    try:
+        db.session.add(order)
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "data": {
+                    "order": order,
+                },
+                "message": "An error occurred while creating order"
+            }
+        )
+    return jsonify(
+        {
+            "code": 201,
+            "data": order.json(),
+            "message": "Created order."
+        }
+    )
+
+
+# Edit an order status
+@app.route("/order/<string:order_id>", methods=["PUT"])
+def update_order(order_id):
+    order = Order.query.filter_by(order_id=order_id).first()
+    if (order):
+        data = request.get_json()
+        # THE ENTIRE RECORD IS UPDATED
+        order.status = data['status']
+                
+        try:
+            # ONLY A FIELD IN THE RECORD IS UPDATED
+
+            # THE ENTIRE RECORD IS UPDATED
+            db.session.merge(order)
+            
+            db.session.commit()
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": order.json(),
+                    "message": f"Successfully updated status to: {data['status']}."
+                }
+            )
+        except:
+            return jsonify(
+                {
+                    "code": 500,
+                    "data": {
+                        "order": order
+                    },
+                    "message": "An error occured updating the order."
+                }
+            )
+    return jsonify(
+        {
+            "code": 404,
+            "data": {
+                "order": order
+            },
+            "message": "Order not found."
+
+        }
+    )
+
+
 
 
 if __name__ == "__main__":

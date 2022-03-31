@@ -102,14 +102,14 @@ CREATE TABLE IF NOT EXISTS `order` (
   `order_id` INT PRIMARY KEY AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `hawker_id` INT NOT NULL,
-  `status` varchar(10) NOT NULL,
+  `status` varchar(16) NOT NULL,
   `total_price` float NOT NULL,
   `discount` float NOT NULL,
   `final_price` float NOT NULL,
   `items` varchar(255) NOT NULL,
   `time` DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-ALTER TABLE hawker AUTO_INCREMENT=4000;
+ALTER TABLE `order` AUTO_INCREMENT=4000;
 
 --
 -- Dumping data for table `order`

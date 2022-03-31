@@ -71,7 +71,7 @@ def find_by_user_id(user_id):
     return jsonify(
         {
             "code": "404",
-            "message": "User does not exist."
+            "message": f"User with user id:{user_id} does not exist."
         }
     )
 
@@ -82,7 +82,7 @@ def create_user(email):
             {
                 "code": 400,
                 "data": User.query.filter_by(email=email).first().json(),
-                "message": "User already exists.",
+                "message": f"User already exists.",
             }
         )
     data = request.get_json()
