@@ -14,7 +14,7 @@ class Item(db.Model):
     __tablename__ = "Item"
 
     item_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    hawker_id = db.Column(db.String(64), nullable=False)
+    hawker_id = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(64), nullable=False)
     cuisine = db.Column(db.String(64), nullable=False)
     description = db.Column(db.String(255), nullable=False)

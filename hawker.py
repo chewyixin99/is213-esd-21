@@ -17,7 +17,7 @@ class Hawker(db.Model):
     username = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(64), nullable=False)
     password = db.Column(db.String(255), nullable=False)
-    wallet_id = db.Column(db.String(64), nullable=True)
+    wallet_id = db.Column(db.Integer, nullable=True)
     cuisine = db.Column(db.String(64), nullable=True)
     halal = db.Column(db.Boolean(), nullable=False)
     has_vegetarian_option = db.Column(db.Boolean(), nullable=False)
