@@ -26,7 +26,7 @@ class Order(db.Model):
     items = db.Column(db.String(255), nullable=False)
     
 
-    def __init__ (self, order_id, user_id, hawker_id, time, status, total_price, discount, final_price, items):
+    def __init__ (self, order_id, user_id, hawker_id, status, total_price, discount, final_price, items):
         self.order_id = order_id
         self.user_id = user_id
         self.hawker_id = hawker_id
@@ -35,7 +35,6 @@ class Order(db.Model):
         self.total_price = total_price
         self.discount = discount
         self.final_price = final_price
-        self.items = items
 
     def json(self):
         return {

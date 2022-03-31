@@ -19,12 +19,11 @@ class Escrow(db.Model):
     amount = db.Column(db.Float, nullable=False)
     time = db.Column(db.DateTime(timezone=True), nullable=False, server_default=func.now())
 
-    def __init__(self, escrow_id, payer_id, receiving_id, amount, time):
+    def __init__(self, escrow_id, payer_id, receiving_id, amount):
         self.escrow_id = escrow_id
         self.payer_id = payer_id
         self.receiving_id = receiving_id
         self.amount = amount
-        self.time = time
 
 
     def json(self):
