@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `username` varchar(64) NOT NULL,
   `email` varchar(64) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `wallet_id` varchar(64) DEFAULT NULL
+  `wallet_id` INT DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE user AUTO_INCREMENT=1000;
 
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `hawker` (
   `username` varchar(64) NOT NULL,
   `email` varchar(64) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `wallet_id` varchar(64) DEFAULT NULL,
+  `wallet_id` INT DEFAULT NULL,
   `cuisine` varchar(64) NOT NULL,
   `halal` BOOLEAN DEFAULT FALSE,
   `has_vegetarian_option` BOOLEAN DEFAULT FALSE
