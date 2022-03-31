@@ -91,7 +91,7 @@ def create_escrow(escrow_id):
         ), 400
 
     data = request.get_json()
-    escrow = Escrow(escrow_id, **data)
+    escrow = Escrow(escrow_id, **data) #need to revise this, creation has error
 
     try:
         db.session.add(escrow)
@@ -119,7 +119,7 @@ def create_escrow(escrow_id):
 #delete escrow
 @app.route("/escrow/<int:escrow_id>", methods=['DELETE'])
 def delete_escrow(escrow_id):
-    escrow = E  scrow.query.filter_by(escrow_id=escrow_id).first()
+    escrow = Escrow.query.filter_by(escrow_id=escrow_id).first()
     if not (escrow):
         return jsonify(
             {

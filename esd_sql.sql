@@ -158,13 +158,13 @@ CREATE TABLE IF NOT EXISTS `escrow` (
 -- Dumping data for table `escrow` <this shouldn't happen here, since escrow means got transactions.>
 --
 
--- INSERT INTO `escrow` (`escrow_id`, `payer_id`, `receiving_id`, `amount`) VALUES
--- (1, 1, 2, 1.0), -- check if can pay when person has no money
--- (2, 2, 3, 1.0),
--- (3, 3, 4, 1.0), 
--- (4, 4, 5, 1.0),
--- (5, 5, 1, 45.0); -- to check the available balance if enough, this should fail
--- COMMIT;
+INSERT INTO `escrow` (`escrow_id`, `payer_id`, `receiving_id`, `amount`) VALUES
+(1, 1, 2, 1.0), -- check if can pay when person has no money
+(2, 2, 3, 1.0),
+(3, 3, 4, 1.0), 
+(4, 4, 5, 1.0),
+(5, 5, 1, 45.0); -- to check the available balance if enough, this should fail
+COMMIT;
 
 --
 -- Table structure for table `error`
