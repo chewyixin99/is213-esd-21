@@ -30,11 +30,11 @@ class Order(db.Model):
         self.order_id = order_id
         self.user_id = user_id
         self.hawker_id = hawker_id
-        self.time = time
         self.status = status
         self.total_price = total_price
         self.discount = discount
         self.final_price = final_price
+        self.items = items
 
     def json(self):
         return {
