@@ -14,21 +14,21 @@ class User(db.Model):
     __tablename__ = "user"
 
     user_id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(64), nullable=False)
+    username = db.Column(db.String(64), nullable=False)
     password = db.Column(db.String(255), nullable=False)
     wallet_id = db.Column(db.String(64), nullable=True)
 
-    def __init__ (self, username, email, password):
-        self.username = username
+    def __init__ (self, email, username, password):
         self.email = email
+        self.username = username
         self.password = password
 
     def json(self):
         return {
             "user_id": self.user_id,
-            "username": self.username,
             "email": self.email,
+            "username": self.username,
             "password": self.password,
             "wallet_id": self.wallet_id,
         }
@@ -86,7 +86,7 @@ def create_user(email):
             }
         )
     data = request.get_json()
-    user = User(**data)
+    user = User(email, **data)
 
     try:
         db.session.add(user)

@@ -78,6 +78,7 @@ CREATE TABLE IF NOT EXISTS `item` (
   `price` float NOT NULL,
   `vegetarian` BOOLEAN DEFAULT FALSE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER TABLE item AUTO_INCREMENT=3000;
 
 --
 -- Dumping data for table `item`
@@ -98,9 +99,9 @@ COMMIT;
 
 DROP TABLE IF EXISTS `order`;
 CREATE TABLE IF NOT EXISTS `order` (
-  `order_id` varchar(64) NOT NULL PRIMARY KEY,
-  `user_id` varchar(64) NOT NULL,
-  `hawker_id` varchar(64) NOT NULL,
+  `order_id` INT PRIMARY KEY AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `hawker_id` INT NOT NULL,
   `status` varchar(10) NOT NULL,
   `total_price` float NOT NULL,
   `discount` float NOT NULL,
@@ -108,14 +109,15 @@ CREATE TABLE IF NOT EXISTS `order` (
   `items` varchar(255) NOT NULL,
   `time` DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER TABLE hawker AUTO_INCREMENT=4000;
 
 --
 -- Dumping data for table `order`
 --
 
-INSERT INTO `order` (`order_id`, `user_id`, `hawker_id`, `status`, `total_price`, `discount`, `final_price`, `items`) VALUES
-("order_2", "user_1", "hawker_2", "pending", 10, 5, 5, "[{'item': 'item3', 'quantity': 1}, {'item': 'item4', 'quantity': 1}]"),
-("order_1", "user_1", "hawker_1", "pending", 10, 0, 10, "[{'item': 'item1', 'quantity': 2}, {'item': 'item2', 'quantity': 1}, {'item': 'item2', 'quantity': 1}, {'item': 'item3', 'quantity': 1}, {'item': 'item4', 'quantity': 1}]");
+INSERT INTO `order` (`user_id`, `hawker_id`, `status`, `total_price`, `discount`, `final_price`, `items`) VALUES
+(1000, 2001, "pending", 10, 5, 5, "[{'item_id': 3001, 'quantity': 1}, {'item_id': 3002, 'quantity': 1}]"),
+(1000, 2000, "pending", 10, 0, 10, "[{'item_id': 3000, 'quantity': 2}, {'item_id': 3001, 'quantity': 1}, {'item_id': 3002, 'quantity': 1}, {'item_id': 3003, 'quantity': 1}, {'item_id': 3004, 'quantity': 1}]");
 COMMIT;
 
 --
