@@ -52,7 +52,7 @@ def get_all():
 # retrieve wallet by id
 @app.route("/wallet/<int:wallet_id>")
 def find_by_wallet_id(wallet_id):
-    wallet = wallet.query.filter_by(wallet_id=wallet_id).first()
+    wallet = Wallet.query.filter_by(wallet_id=wallet_id).first()
     if wallet:
         return jsonify(
             {
@@ -71,7 +71,7 @@ def find_by_wallet_id(wallet_id):
 #create wallet
 @app.route("/wallet/<int:wallet_id>", methods=['POST'])
 def create_wallet(wallet_id):
-    if (wallet.query.filter_by(wallet_id=wallet_id).first()):
+    if (Wallet.query.filter_by(wallet_id=wallet_id).first()):
         return jsonify(
             {
                 "code": 400,
@@ -83,7 +83,7 @@ def create_wallet(wallet_id):
         ), 400
 
     data = request.get_json()
-    wallet = wallet(wallet_id, **data)
+    wallet = Wallet(wallet_id, **data)
 
     try:
         db.session.add(wallet)
@@ -110,7 +110,7 @@ def create_wallet(wallet_id):
 #add amount to wallet, can be in negative integers to simulate a deduction
 @app.route("/wallet/<int:wallet_id>", methods=['PUT'])
 def add_amount_to_wallet(wallet_id):
-    wallet = wallet.query.filter_by(wallet_id=wallet_id).first()
+    wallet = Wallet.query.filter_by(wallet_id=wallet_id).first()
     if not (wallet):
         return jsonify(
             {
@@ -123,12 +123,12 @@ def add_amount_to_wallet(wallet_id):
         ), 404
 
     data = request.get_json()
-    # data will come in 2 parts to be settled by each complex microservice.
-    # (place_order will update only user's AB, reject_order will update both user's AB & TB, complete_order will update user+hawker's AB & TB)
-    wallet.available_balance += data['amount_to_add_to_available_balance']
-    wallet.total_balance += data['amount_to_add_to_total_balance']
 
     try:
+        # data will come in 2 parts to be settled by each complex microservice.
+        # (place_order will update only user's AB, reject_order will update both user's AB & TB, complete_order will update user+hawker's AB & TB)
+        wallet.available_balance += data['amount_to_add_to_available_balance']
+        wallet.total_balance += data['amount_to_add_to_total_balance']
         db.session.commit()
     except:
         return jsonify(
@@ -152,7 +152,7 @@ def add_amount_to_wallet(wallet_id):
 #delete wallet
 @app.route("/wallet/<int:wallet_id>", methods=['DELETE'])
 def delete_wallet(wallet_id):
-    wallet = wallet.query.filter_by(wallet_id=wallet_id).first()
+    wallet = Wallet.query.filter_by(wallet_id=wallet_id).first()
     if not (wallet):
         return jsonify(
             {

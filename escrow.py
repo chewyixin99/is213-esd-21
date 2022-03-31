@@ -60,7 +60,7 @@ def get_all():
 # retrieve escrow by id
 @app.route("/escrow/<int:escrow_id>")
 def find_by_escrow_id(escrow_id):
-    escrow = escrow.query.filter_by(escrow_id=escrow_id).first()
+    escrow = Escrow.query.filter_by(escrow_id=escrow_id).first()
     if escrow:
         return jsonify(
             {
@@ -79,7 +79,7 @@ def find_by_escrow_id(escrow_id):
 #create escrow (only positive values, remember!)
 @app.route("/escrow/<int:escrow_id>", methods=['POST'])
 def create_escrow(escrow_id):
-    if (escrow.query.filter_by(escrow_id=escrow_id).first()):
+    if (Escrow.query.filter_by(escrow_id=escrow_id).first()):
         return jsonify(
             {
                 "code": 400,
@@ -119,7 +119,7 @@ def create_escrow(escrow_id):
 #delete escrow
 @app.route("/escrow/<int:escrow_id>", methods=['DELETE'])
 def delete_escrow(escrow_id):
-    escrow = escrow.query.filter_by(escrow_id=escrow_id).first()
+    escrow = E  scrow.query.filter_by(escrow_id=escrow_id).first()
     if not (escrow):
         return jsonify(
             {
