@@ -13,14 +13,14 @@ CORS(app)
 class Escrow(db.Model):
     __tablename__ = 'escrow'
 
-    escrow_id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, primary_key=True)
     payer_id = db.Column(db.Integer, nullable=False)
     receiving_id = db.Column(db.Integer, nullable=False)
     amount = db.Column(db.Float, nullable=False)
     time = db.Column(db.DateTime(timezone=True), nullable=False, server_default=func.now())
 
-    def __init__(self, escrow_id, payer_id, receiving_id, amount):
-        self.escrow_id = escrow_id
+    def __init__(self, order_id, payer_id, receiving_id, amount):
+        self.order_id = order_id
         self.payer_id = payer_id
         self.receiving_id = receiving_id
         self.amount = amount
@@ -28,7 +28,7 @@ class Escrow(db.Model):
 
     def json(self):
         return {
-            "escrow_id": self.escrow_id,
+            "order_id": self.order_id,
             "payer_id": self.payer_id,
             "receiving_id": self.receiving_id,
             "amount": self.amount,
@@ -57,9 +57,9 @@ def get_all():
 
 
 # retrieve escrow by id
-@app.route("/escrow/<int:escrow_id>")
-def find_by_escrow_id(escrow_id):
-    escrow = Escrow.query.filter_by(escrow_id=escrow_id).first()
+@app.route("/escrow/<int:order_id>")
+def find_by_order_id(order_id):
+    escrow = Escrow.query.filter_by(order_id=order_id).first()
     if escrow:
         return jsonify(
             {
@@ -76,21 +76,21 @@ def find_by_escrow_id(escrow_id):
 
 
 #create escrow (only positive values, remember!)
-@app.route("/escrow/<int:escrow_id>", methods=['POST'])
-def create_escrow(escrow_id):
-    if (Escrow.query.filter_by(escrow_id=escrow_id).first()):
+@app.route("/escrow/<int:order_id>", methods=['POST'])
+def create_escrow(order_id):
+    if (Escrow.query.filter_by(order_id=order_id).first()):
         return jsonify(
             {
                 "code": 400,
                 "data": {
-                    "escrow_id": escrow_id
+                    "order_id": order_id
                 },
                 "message": "escrow for this order_id already exists."
             }
         ), 400
 
     data = request.get_json()
-    escrow = Escrow(escrow_id, **data) #need to revise this, creation has error
+    escrow = Escrow(order_id, **data) #need to revise this, creation has error
 
     try:
         db.session.add(escrow)
@@ -100,7 +100,7 @@ def create_escrow(escrow_id):
             {
                 "code": 500,
                 "data": {
-                    "escrow_id": escrow_id
+                    "order_id": order_id
                 },
                 "message": "An error occurred creating the escrow."
             }
@@ -116,15 +116,15 @@ def create_escrow(escrow_id):
 
 
 #delete escrow
-@app.route("/escrow/<int:escrow_id>", methods=['DELETE'])
-def delete_escrow(escrow_id):
-    escrow = Escrow.query.filter_by(escrow_id=escrow_id).first()
+@app.route("/escrow/<int:order_id>", methods=['DELETE'])
+def delete_escrow(order_id):
+    escrow = Escrow.query.filter_by(order_id=order_id).first()
     if not (escrow):
         return jsonify(
             {
                 "code": 404,
                 "data": {
-                    "escrow_id": escrow_id
+                    "order_id": order_id
                 },
                 "message": "escrow not found."
             }
@@ -138,7 +138,7 @@ def delete_escrow(escrow_id):
             {
                 "code": 500,
                 "data": {
-                    "escrow_id": escrow_id
+                    "order_id": order_id
                 },
                 "message": "An error occurred deleting the escrow."
             }
@@ -147,7 +147,7 @@ def delete_escrow(escrow_id):
     return jsonify(
         {
             "code": 201,
-            "escrow_id": escrow_id
+            "order_id": order_id
         }
     ), 201
 

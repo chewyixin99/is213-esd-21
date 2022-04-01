@@ -171,13 +171,9 @@ def update_order(order_id):
     order = Order.query.filter_by(order_id=order_id).first()
     if (order):
         data = request.get_json()
-        # THE ENTIRE RECORD IS UPDATED
         order.status = data['status']
                 
         try:
-            # ONLY A FIELD IN THE RECORD IS UPDATED
-
-            # THE ENTIRE RECORD IS UPDATED
             db.session.merge(order)
             
             db.session.commit()

@@ -136,11 +136,11 @@ CREATE TABLE IF NOT EXISTS `wallet` (
 --
 
 INSERT INTO `wallet` (`wallet_id`, `total_balance`, `available_balance`) VALUES
-(1, 0.0, 0.0),
-(2, 100.0, 95.0),
-(3, 36.9, 13.4),
-(4, 15.3, 12.4),
-(5, 1337.0, 42.0);
+(1000, 0.0, 0.0),
+(1001, 100.0, 95.0),
+(2000, 36.9, 13.4),
+(2001, 15.3, 12.4),
+(1002, 1337.0, 42.0);
 COMMIT;
 
 --
@@ -149,7 +149,7 @@ COMMIT;
 
 DROP TABLE IF EXISTS `escrow`;
 CREATE TABLE IF NOT EXISTS `escrow` (
-  `escrow_id` INT PRIMARY KEY,
+  `order_id` INT PRIMARY KEY,
   `payer_id` INT NOT NULL,
   `receiving_id` INT NOT NULL,
   `amount` float NOT NULL,
@@ -160,12 +160,9 @@ CREATE TABLE IF NOT EXISTS `escrow` (
 -- Dumping data for table `escrow` <this shouldn't happen here, since escrow means got transactions.>
 --
 
-INSERT INTO `escrow` (`escrow_id`, `payer_id`, `receiving_id`, `amount`) VALUES
-(1, 1, 2, 1.0), -- check if can pay when person has no money
-(2, 2, 3, 1.0),
-(3, 3, 4, 1.0), 
-(4, 4, 5, 1.0),
-(5, 5, 1, 45.0); -- to check the available balance if enough, this should fail
+INSERT INTO `escrow` (`order_id`, `payer_id`, `receiving_id`, `amount`) VALUES
+(4000, 1, 2, 1.0), -- check if can pay when person has no money
+(4001, 2, 3, 1.0);
 COMMIT;
 
 --
