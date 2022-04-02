@@ -17,7 +17,7 @@ def receiveOrderLog():
     # set up a consumer and start to wait for coming messages
     amqp_setup.channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=True)
     amqp_setup.channel.start_consuming() # an implicit loop waiting to receive messages; 
-    #it doesn't exit by default. Use Ctrl+C in the command window to terminate it.
+    # it doesn't exit by default. Use Ctrl+C in the command window to terminate it.
 
 def callback(channel, method, properties, body): # required signature for the callback; no return
     print("\nReceived an notification log by " + __file__)
