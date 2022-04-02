@@ -1,5 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+import json
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -21,6 +23,8 @@ class Hawker(db.Model):
     cuisine = db.Column(db.String(64), nullable=True)
     halal = db.Column(db.Boolean(), nullable=False)
     has_vegetarian_option = db.Column(db.Boolean(), nullable=False)
+    opening_hours = db.Column(db.DateTime(), nullable=False)
+    closing_hours = db.Column(db.DateTime(), nullable=False)
 
     def __init__ (self, username, email, password):
         self.username = username
@@ -37,6 +41,8 @@ class Hawker(db.Model):
             "cuisine": self.cuisine,
             "halal": self.halal,
             "has_vegetarian_option": self.has_vegetarian_option,
+            "opening_hours": self.opening_hours.__str__(),
+            "closing_hours": self.closing_hours.__str__(),
         }
 
 # Get all hawkers
@@ -77,6 +83,32 @@ def find_by_hawker_id(hawker_id):
         {
             "code": "404",
             "message": "hawker does not exist."
+        }
+    )
+
+# Get hawker by halal
+@app.route("/hawker/halal/<int:is_halal>")
+def find_by_halal(is_halal):
+    if is_halal: 
+        hawkers = Hawker.query.filter(Hawker.halal.is_(True)).all()
+    else:
+        hawkers = Hawker.query.filter(Hawker.halal.is_(False)).all()
+
+    if hawkers:
+        return jsonify(
+            {
+                "code":200,
+                "data": {
+                    "hawkers": [
+                        hawker.json() for hawker in hawkers
+                    ]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": "404",
+            "message": f"No {'halal' if is_halal else 'non-halal'} hawkers found."
         }
     )
 

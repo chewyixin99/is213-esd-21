@@ -21,15 +21,17 @@ class Item(db.Model):
     course = db.Column(db.String(64), nullable=False)
     price = db.Column(db.Float, nullable=False)
     vegetarian = db.Column(db.Boolean, nullable=False, default=False)
+    available = db.Column(db.Boolean, nullable=False, default=True)
 
-    def __init__ (self, hawker_id, name, description, price, cuisine, course, vegetarian):
+    def __init__ (self, hawker_id, name, description, price, cuisine, course, vegetarian, available):
         self.hawker_id = hawker_id
         self.name = name
-        self.description = description
-        self.price = price
         self.cuisine = cuisine
+        self.description = description
         self.course = course
+        self.price = price
         self.vegetarian = vegetarian
+        self.available = available
 
     def json(self):
         return {
@@ -41,6 +43,7 @@ class Item(db.Model):
             "cuisine": self.cuisine,
             "course": self.course,
             "vegetarian": self.vegetarian,
+            "available": self.available
         }
 
 # Get all items

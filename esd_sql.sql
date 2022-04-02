@@ -48,7 +48,9 @@ CREATE TABLE IF NOT EXISTS `hawker` (
   `wallet_id` INT DEFAULT NULL,
   `cuisine` varchar(64) NOT NULL,
   `halal` BOOLEAN DEFAULT FALSE,
-  `has_vegetarian_option` BOOLEAN DEFAULT FALSE
+  `has_vegetarian_option` BOOLEAN DEFAULT FALSE,
+  `opening_hours` time(6) DEFAULT '07:00:00',
+  `closing_hours` time(6) DEFAULT '20:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE hawker AUTO_INCREMENT=2000;
 
@@ -56,11 +58,11 @@ ALTER TABLE hawker AUTO_INCREMENT=2000;
 -- Dumping data for table `user`
 --
 
-INSERT INTO `hawker` (`username`, `email`, `password`) VALUES
-('hawker_username_1', 'hawker1@mail.com', 'hawker_password_1'), 
-('hawker_username_2', 'hawker2@mail.com', 'hawker_password_2'),
-('hawker_username_3', 'hawker3@mail.com', 'hawker_password_3'),
-('hawker_username_4', 'hawker4@mail.com', 'hawker_password_4');
+INSERT INTO `hawker` (`username`, `email`, `password`, `opening_hours`, `closing_hours`) VALUES
+('hawker_username_1', 'hawker1@mail.com', 'hawker_password_1', '09:00:00', '21:00:00'), 
+('hawker_username_2', 'hawker2@mail.com', 'hawker_password_2', '08:00:00', '22:00:00'),
+('hawker_username_3', 'hawker3@mail.com', 'hawker_password_3', '07:30:00', '19:00:00'),
+('hawker_username_4', 'hawker4@mail.com', 'hawker_password_4', '10:00:00', '20:00:00');
 COMMIT;
 
 --
@@ -76,7 +78,8 @@ CREATE TABLE IF NOT EXISTS `item` (
   `description` varchar(255) NOT NULL,
   `course` varchar(64) NOT NULL,
   `price` float NOT NULL,
-  `vegetarian` BOOLEAN DEFAULT FALSE
+  `vegetarian` BOOLEAN DEFAULT FALSE,
+  `available` BOOLEAN DEFAULT TRUE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE item AUTO_INCREMENT=3000;
 
@@ -84,13 +87,14 @@ ALTER TABLE item AUTO_INCREMENT=3000;
 -- Dumping data for table `item`
 --
 
-INSERT INTO `item` (`hawker_id`, `name`, `description`, `price`, `cuisine`, `course`, `vegetarian`) VALUES
-(2001, 'item_name_1', 'item_description_1', 1.0, 'chinese', 'main', TRUE), 
-(2001, 'item_name_1', 'item_description_1_alt', 1.0, 'chinese', 'side', TRUE), 
-(2002, 'item_name_2', 'item_description_2', 2.0, 'muslim', 'side', FALSE), 
-(2003, 'item_name_3', 'item_description_3', 3.0, 'indian', 'main', FALSE), 
-(2004, 'item_name_4', 'item_description_4', 4.0, 'korean', 'main', FALSE), 
-(2005, 'item_name_5', 'item_description_5', 5.0, 'any', 'drinks', TRUE);
+INSERT INTO `item` (`hawker_id`, `name`, `description`, 
+`price`, `cuisine`, `course`, `vegetarian`, `available`) VALUES
+(2001, 'item_name_1', 'item_description_1', 1.0, 'chinese', 'main', TRUE, TRUE), 
+(2001, 'item_name_1', 'item_description_1_alt', 1.0, 'chinese', 'side', TRUE, TRUE), 
+(2002, 'item_name_2', 'item_description_2', 2.0, 'muslim', 'side', FALSE, TRUE), 
+(2003, 'item_name_3', 'item_description_3', 3.0, 'indian', 'main', FALSE, FALSE), 
+(2004, 'item_name_4', 'item_description_4', 4.0, 'korean', 'main', FALSE, TRUE), 
+(2005, 'item_name_5', 'item_description_5', 5.0, 'any', 'drinks', TRUE, FALSE);
 COMMIT;
 
 --
