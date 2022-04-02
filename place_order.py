@@ -172,14 +172,14 @@ def process_place_order(order):
 
         message = {
             "code": 400,
-            "message_type": "notification",
+            "message_type": "order_notification",
             "data": {
                 "order_data": order_data,
             },
         }
 
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.notify", 
-        body=message)
+        body=message,  properties=pika.BasicProperties(delivery_mode = 2)) 
     
         print("\nOrder notification published to RabbitMQ Exchange.\n")
 
@@ -234,21 +234,21 @@ def process_place_order(order):
             print("\nEscrow failed - Code {} - published to the RabbitMQ Exchange:".format(code))
 
         else:
-            print('\n\n-----Publishing the order notification message with routing_key=order.notify-----')        
+            print('\n\n-----Publishing the escrow notification message with routing_key=escrow.notify-----')        
 
             # message = "\nOrder ID: {} is sent to the kitchen.. Please wait for confirmation. Thank you".format(order_id)
 
             message = {
                 "code": 400,
-                "message_type": "notification",
+                "message_type": "escrow_notification",
                 "data": {
-                    "order_data": order_data,
+                    "order_data": escrow_data,
                 },
             }
 
 
-            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.notify", 
-                body=message)
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="escrow.notify", 
+            body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
         
             print("\nOrder notification published to RabbitMQ Exchange.\n")
 
