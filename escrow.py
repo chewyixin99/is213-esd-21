@@ -109,7 +109,8 @@ def create_escrow(order_id):
     return jsonify(
         {
             "code": 201,
-            "data": escrow.json()
+            "data": escrow.json(),
+            "message": f"Escrow successfully created for order {order_id}."
         }
     ), 201
 

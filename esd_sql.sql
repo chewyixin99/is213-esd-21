@@ -121,7 +121,7 @@ ALTER TABLE `order` AUTO_INCREMENT=4000;
 
 INSERT INTO `order` (`user_id`, `hawker_id`, `status`, `total_price`, `discount`, `final_price`, `items`) VALUES
 (1000, 2001, "pending", 10, 5, 5, "[{'item_id': 3001, 'quantity': 1}, {'item_id': 3002, 'quantity': 1}]"),
-(1000, 2000, "pending", 10, 0, 10, "[{'item_id': 3000, 'quantity': 2}, {'item_id': 3001, 'quantity': 1}, {'item_id': 3002, 'quantity': 1}, {'item_id': 3003, 'quantity': 1}, {'item_id': 3004, 'quantity': 1}]");
+(1000, 2000, "accepted", 10, 0, 10, "[{'item_id': 3000, 'quantity': 2}, {'item_id': 3001, 'quantity': 1}, {'item_id': 3002, 'quantity': 1}, {'item_id': 3003, 'quantity': 1}, {'item_id': 3004, 'quantity': 1}]");
 COMMIT;
 
 --
@@ -141,8 +141,8 @@ CREATE TABLE IF NOT EXISTS `wallet` (
 
 INSERT INTO `wallet` (`wallet_id`, `total_balance`, `available_balance`) VALUES
 (1000, 0.0, 0.0),
-(1001, 100.0, 95.0),
-(2000, 36.9, 13.4),
+(1001, 100.0, 100.0),
+(2000, 50.0, 50.0),
 (2001, 15.3, 12.4),
 (1002, 1337.0, 42.0);
 COMMIT;

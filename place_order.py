@@ -49,10 +49,10 @@ def place_order():
             ex_str = f"{str(e)} at {str(exc_type)}: {fname}: line {str(exc_tb.tb_lineno)}"
             print(ex_str)
         
-        return jsonify({
-            "code": 500,
-            "message": f"place_order.py internal error: {ex_str}" 
-        })
+            return jsonify({
+                "code": 500,
+                "message": f"place_order.py internal error: {ex_str}" 
+            })
 
 
     return jsonify({
@@ -78,48 +78,63 @@ def process_place_order(order):
         f"{wallet_url}/{order['user_id']}",
         method="GET"
     )
-        # wallet_result return format
-            # {
-            #     "code": int,
-            #     "data": {
-            #         "available_balance": float,
-            #         "total_balance": float,
-            #         "wallet_id": int,
-            #     }
-            # }
+    if wallet_result["code"] not in range(200,300):
+        return wallet_result
+
     wallet_data = wallet_result["data"]
+    # wallet_result return format
+        # {
+        #     "code": int,
+        #     "data": {
+        #         "available_balance": float,
+        #         "total_balance": float,
+        #         "wallet_id": int,
+        #     }
+        # }
     #! validation check: available_balance >= order["final_price"]
     available_balance = wallet_data["available_balance"]
     if available_balance >= order["final_price"]:
         order["status"] = "pending"
-
+        wallet_update_json = {
+            "amount_to_add_to_available_balance": -order["final_price"],
+            "amount_to_add_to_total_balance": 0
+        }
+        wallet_update_result = invoke_http(
+            f"{wallet_url}/{order['user_id']}",
+            method="PUT",
+            json=wallet_update_json
+        )
+        if wallet_update_result["code"] not in range(200,300):
+            return wallet_update_result
     else:
         order["status"] = "failed"
-
+    
     # order microservice ---------------------------
     order_result = invoke_http(
         f"{order_url}",
         method="POST",
         json=order
     )
-    # example order_result return format
-        # {
-        #     "code": 201,
-        #     "data": {
-        #         "discount": 0.0,
-        #         "final_price": 10.0,
-        #         "hawker_id": 2000,
-        #         "items": "[{'item_id': 3000,'quantity' : 1 }]",
-        #         "order_id": 4003,
-        #         "status": "pending",
-        #         "time": "Fri, 01 Apr 2022 11:09:40 GMT",
-        #         "total_price": 10.0,
-        #         "user_id": 1001
-        #     },
-        #     "message": "Created order."
-        # }
-    order_data = order_result["data"]
+    if order_result["code"] not in range(200,300):
+        return order_result
 
+    order_data = order_result["data"]
+    # example order_result return format
+    # {
+    #     "code": 201,
+    #     "data": {
+    #         "discount": 0.0,
+    #         "final_price": 10.0,
+    #         "hawker_id": 2000,
+    #         "items": "[{'item_id': 3000,'quantity' : 1 }]",
+    #         "order_id": 4003,
+    #         "status": "pending",
+    #         "time": "Fri, 01 Apr 2022 11:09:40 GMT",
+    #         "total_price": 10.0,
+    #         "user_id": 1001
+    #     },
+    #     "message": "Created order."
+    # }
     # escrow microservice ---------------------------
     #! validation check: if order["status"]="pending", create escrow and extract payment from user, else don't escrow
     if order["status"] == "pending":
@@ -133,23 +148,20 @@ def process_place_order(order):
             method="POST",
             json=escrow_json
         )
-        # sample escrow_result return format
-            # {
-            #     "code": 201,
-            #     "data": {
-            #         "amount": 10.0,
-            #         "order_id": 4010,
-            #         "payer_id": 1001,
-            #         "receiving_id": 2000,
-            #         "time": "Fri, 01 Apr 2022 11:45:53 GMT"
-            #     }
-            # }
+        if escrow_result["code"] not in range(200,300):
+            return escrow_result
 
-    # notification microservice ---------------------------
+        print("Escrow successfully created -----------------------")
 
-    # error microservice ---------------------------
+        # notification microservice ---------------------------
 
+        # error microservice ---------------------------
+
+        return escrow_result
+           
     return order_result
+    
+
 
 
 if __name__ == "__main__":
