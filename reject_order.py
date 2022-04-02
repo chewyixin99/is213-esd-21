@@ -61,11 +61,13 @@ def process_reject_order(order_id):
         #     "message": "Created order."
         # }
     if old_order_result["code"] not in range(200,300):
+        # -------------------- FOR JIAN LIN TO ADD AMQP FAIL
         return old_order_result
+    
+    # -------------------- FOR JIAN LIN TO ADD AMQP PASS
 
     old_order_data = old_order_result["data"]
     if old_order_data["status"] == "pending":
-
         # escrow microservice ----------------------------
         # get data of $ in escrow
         escrow_result = invoke_http(
@@ -73,7 +75,10 @@ def process_reject_order(order_id):
             method="GET"
         )
         if escrow_result["code"] not in range(200,300):
+            # -------------------- FOR JIAN LIN TO ADD AMQP FAIL
             return escrow_result
+        
+        # # -------------------- FOR JIAN LIN TO ADD AMQP PASS
 
         escrow_amount = escrow_result["data"]["amount"]
         # wallet microservice ----------------------------
@@ -89,14 +94,20 @@ def process_reject_order(order_id):
         )
 
         if wallet_result["code"] not in range(200,300):
+            # -------------------- FOR JIAN LIN TO ADD AMQP FAIL
             return wallet_result
+        
+        # -------------------- FOR JIAN LIN TO ADD AMQP PASS
 
         escrow_delete_result = invoke_http(
             f"{escrow_url}/{old_order_data['order_id']}",
             method="DELETE"
         )
         if escrow_delete_result["code"] not in range(200,300):
+            # -------------------- FOR JIAN LIN TO ADD AMQP FAIL
             return escrow_delete_result
+
+        # -------------------- FOR JIAN LIN TO ADD AMQP PASS
 
         order_status = {
         "status": "rejected"
@@ -108,8 +119,13 @@ def process_reject_order(order_id):
         )
         
         if new_order_result["code"] in range(200,300):
+            # -------------------- FOR JIAN LIN TO ADD AMQP FAIL
             return new_order_result
 
+        # -------------------- FOR JIAN LIN TO ADD AMQP PASS
+
+
+    # -------------------- FOR JIAN LIN TO ADD AMQP FAIL IF STATUS NOT PENDING
     return jsonify({
         "code": 403,
         "message": f"Unable to reject order. Order status is already {old_order_data['status']}."
