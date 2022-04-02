@@ -11,9 +11,9 @@ import requests
 from invokes import invoke_http
 
 # AMQP imports
-# import amqp_setup
-# import pika
-# import json
+import amqp_setup
+import pika
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -72,6 +72,10 @@ def process_place_order(order):
             #     'final_price': float,
             # }
 
+    # check AMQP connection - if not active, activate it
+    amqp_setup.check_setup()
+
+
     # wallet microservice ---------------------------
     # get balance of user
     wallet_result = invoke_http(
@@ -96,6 +100,25 @@ def process_place_order(order):
     else:
         order["status"] = "failed"
 
+        # handle business error
+
+        print('\n\n-----Publishing order status failed message with routing_key=order.error-----')
+        
+        message = {
+            "code": 400,
+            "message_type": "business_error",
+            "data": {
+                "order_data": "Insufficient wallet funds",
+            },
+        }
+
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.error", 
+        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+        
+        print("\nOrder error - Insufficient wallet funds - published to the RabbitMQ Exchange:")
+
+
+    
     # order microservice ---------------------------
     order_result = invoke_http(
         f"{order_url}",
@@ -119,6 +142,47 @@ def process_place_order(order):
         #     "message": "Created order."
         # }
     order_data = order_result["data"]
+    
+    # handle programming error
+
+    code = order_result["code"]
+    order_id = order_data["order_id"]
+
+    if code not in range(200, 300):
+
+        print('\n\n-----Publishing the (order error) message with routing_key=order.error-----')
+
+        message = {
+            "code": 400,
+            "message_type": "order_error",
+            "data": {
+                "order_data": order_data,
+            },
+        }
+
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.error", 
+        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+     
+        print("\nOrder error - Code {} - published to the RabbitMQ Exchange:".format(code))
+
+    else:
+        print('\n\n-----Publishing the order notification message with routing_key=order.notify-----')        
+
+        # message = "\nOrder ID: {} is sent to the kitchen.. Please wait for confirmation. Thank you".format(order_id)
+
+        message = {
+            "code": 400,
+            "message_type": "notification",
+            "data": {
+                "order_data": order_data,
+            },
+        }
+
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.notify", 
+        body=message)
+    
+        print("\nOrder notification published to RabbitMQ Exchange.\n")
+
 
     # escrow microservice ---------------------------
     #! validation check: if order["status"]="pending", create escrow and extract payment from user, else don't escrow
@@ -144,6 +208,50 @@ def process_place_order(order):
             #         "time": "Fri, 01 Apr 2022 11:45:53 GMT"
             #     }
             # }
+
+       
+        # handle programming error
+
+        escrow_data = escrow_result["data"]
+
+        if escrow_result['code'] not in range(200, 300):
+
+            print('\n\n-----Publishing escrow failure message with routing_key=escrow.error-----')
+            
+            # message = 'Escrow failed - Code {}.'.format(code)
+
+            message = {
+                "code": 400,
+                "message_type": "escrow_error",
+                "data": {
+                    "order_data": escrow_data,
+                },
+            }   
+
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="escrow.error", 
+            body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+            
+            print("\nEscrow failed - Code {} - published to the RabbitMQ Exchange:".format(code))
+
+        else:
+            print('\n\n-----Publishing the order notification message with routing_key=order.notify-----')        
+
+            # message = "\nOrder ID: {} is sent to the kitchen.. Please wait for confirmation. Thank you".format(order_id)
+
+            message = {
+                "code": 400,
+                "message_type": "notification",
+                "data": {
+                    "order_data": order_data,
+                },
+            }
+
+
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.notify", 
+                body=message)
+        
+            print("\nOrder notification published to RabbitMQ Exchange.\n")
+
 
     # notification microservice ---------------------------
 
