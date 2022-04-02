@@ -116,7 +116,7 @@ def process_place_order(order):
         order["status"] = "failed"
 
         # ##################### AMQP code
-        # # handle business error
+        # # handle error -> wallet insufficient funds
         print('\n\n-----Publishing order status failed message with routing_key=order.error-----')
         message = {
             "code": 400,
@@ -140,12 +140,9 @@ def process_place_order(order):
 
     if order_result["code"] not in range(200,300):
 
-        # ##################### AMQP code
-
-        # order_id = order["order_id"]
-        
+        # ##################### AMQP code      
     
-    # handle programming error
+        # handle error -> order was not processed successfully
 
         order_data = order_result["data"]
         code = order_result["code"]
@@ -167,9 +164,10 @@ def process_place_order(order):
         print("\nOrder error - Code {} - published to the RabbitMQ Exchange:".format(code))
 
     else:
-        print('\n\n-----Publishing the order notification message with routing_key=order.notify-----')        
 
-        # message = "\nOrder ID: {} is sent to the kitchen.. Please wait for confirmation. Thank you".format(order_id)
+        # handle notification -> order processed successfully
+
+        print('\n\n-----Publishing the order notification message with routing_key=order.notify-----')        
 
         message = {
             "code": 201,
@@ -184,28 +182,10 @@ def process_place_order(order):
     
         print("\nOrder notification published to RabbitMQ Exchange.\n")
 
-        # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.error", 
-        # body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
-        # print("\nOrder error - Code {} - published to the RabbitMQ Exchange:".format(order_result["code"]))
         # ##################### END OF AMQP code
 
 
         return order_result
-        
-    # ##################### AMQP code
-    # print('\n\n-----Publishing the order notification message with routing_key=order.notify-----')        
-    # # message = "\nOrder ID: {} is sent to the kitchen.. Please wait for confirmation. Thank you".format(order_id)
-    # message = {
-    #     "code": 400,
-    #     "message_type": "notification",
-    #     "data": {
-    #         "order_data": order,
-    #     },
-    # }
-    # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.notify", 
-    # body=message)
-    # print("\nOrder notification published to RabbitMQ Exchange.\n")
-    # ##################### end of AMQP code
 
 # example order_result return format
     # {
@@ -224,7 +204,6 @@ def process_place_order(order):
     #     "message": "Created order."
     # }
 
-    order_data = order_result["data"]
     # escrow microservice ---------------------------
     #! validation check: if order["status"]="pending", create escrow and extract payment from user, else don't escrow
     if order["status"] == "pending":
@@ -241,6 +220,9 @@ def process_place_order(order):
         if escrow_result["code"] not in range(200,300):
 
             # ##################### AMQP code
+
+            # handle error -> escrow was not processed successfully
+
             escrow_data = escrow_result["data"]
             
             print('\n\n-----Publishing escrow failure message with routing_key=escrow.error-----')
@@ -262,6 +244,9 @@ def process_place_order(order):
             return escrow_result
 
         else:
+
+            # handle notification -> escrow was processed successfully
+
             print('\n\n-----Publishing the escrow notification message with routing_key=escrow.notify-----')        
 
             message = {
@@ -284,23 +269,6 @@ def process_place_order(order):
 
         print("Escrow successfully created -----------------------")
        
-        # handle programming error
-        # ##################### AMQP code
-        # print('\n\n-----Publishing the order notification message with routing_key=order.notify-----')        
-        # # message = "\nOrder ID: {} is sent to the kitchen.. Please wait for confirmation. Thank you".format(order_id)
-        # message = {
-        #     "code": 400,
-        #     "message_type": "notification",
-        #     "data": {
-        #         "order_data": order_data,
-        #     },
-        # }
-        # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.notify", 
-        #     body=message)
-        # print("\nOrder notification published to RabbitMQ Exchange.\n")
-        # ##################### end of AMQP code
-
-
         return escrow_result
            
     return order_result
