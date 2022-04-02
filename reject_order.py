@@ -60,61 +60,60 @@ def process_reject_order(order_id):
         #     },
         #     "message": "Created order."
         # }
-    if old_order_result["code"] in range(200,300):
-        old_order_data = old_order_result["data"]
-        if old_order_data["status"] == "pending":
+    if old_order_result["code"] not in range(200,300):
+        return old_order_result
 
-            # escrow microservice ----------------------------
-            # get data of $ in escrow
-            escrow_result = invoke_http(
-                f"{escrow_url}/{old_order_data['order_id']}",
-                method="GET"
-            )
-            if escrow_result["code"] in range(200,300):
-                escrow_amount = escrow_result["data"]["amount"]
-                # wallet microservice ----------------------------
-                # return money to user
-                wallet_update_json = {
-                    "amount_to_add_to_available_balance": escrow_amount,
-                    "amount_to_add_to_total_balance": 0
-                }
-                wallet_result = invoke_http(
-                    f"{wallet_url}/{old_order_data['user_id']}",
-                    method="PUT",
-                    json=wallet_update_json
-                )
+    old_order_data = old_order_result["data"]
+    if old_order_data["status"] == "pending":
 
-                if wallet_result["code"] in range(200,300):
-                    escrow_delete_result = invoke_http(
-                        f"{escrow_url}/{old_order_data['order_id']}",
-                        method="DELETE"
-                    )
-                    if escrow_delete_result["code"] in range(200,300):
-                        order_status = {
-                        "status": "rejected"
-                        }
-                        new_order_result = invoke_http(
-                            f"{order_url}/{order_id}",
-                            method="PUT",
-                            json=order_status
-                        )
-                        
-                        if new_order_result["code"] in range(200,300):
-                            return new_order_result
-
-                    return escrow_delete_result
-
-                return wallet_result
-            
+        # escrow microservice ----------------------------
+        # get data of $ in escrow
+        escrow_result = invoke_http(
+            f"{escrow_url}/{old_order_data['order_id']}",
+            method="GET"
+        )
+        if escrow_result["code"] not in range(200,300):
             return escrow_result
+
+        escrow_amount = escrow_result["data"]["amount"]
+        # wallet microservice ----------------------------
+        # return money to user
+        wallet_update_json = {
+            "amount_to_add_to_available_balance": escrow_amount,
+            "amount_to_add_to_total_balance": 0
+        }
+        wallet_result = invoke_http(
+            f"{wallet_url}/{old_order_data['user_id']}",
+            method="PUT",
+            json=wallet_update_json
+        )
+
+        if wallet_result["code"] not in range(200,300):
+            return wallet_result
+
+        escrow_delete_result = invoke_http(
+            f"{escrow_url}/{old_order_data['order_id']}",
+            method="DELETE"
+        )
+        if escrow_delete_result["code"] not in range(200,300):
+            return escrow_delete_result
+
+        order_status = {
+        "status": "rejected"
+        }
+        new_order_result = invoke_http(
+            f"{order_url}/{order_id}",
+            method="PUT",
+            json=order_status
+        )
         
-        return jsonify({
-            "code": 403,
-            "message": f"Unable to reject order. Order status is already {old_order_data['status']}."
-        })
+        if new_order_result["code"] in range(200,300):
+            return new_order_result
 
-    return old_order_result
-
+    return jsonify({
+        "code": 403,
+        "message": f"Unable to reject order. Order status is already {old_order_data['status']}."
+    })
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5102, debug=True)
