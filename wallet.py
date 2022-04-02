@@ -63,7 +63,7 @@ def find_by_wallet_id(wallet_id):
     return jsonify(
         {
             "code": 404,
-            "message": "wallet not found."
+            "message": f"Requested wallet {wallet_id} does not exist."
         }
     ), 404
 
@@ -78,7 +78,7 @@ def create_wallet(wallet_id):
                 "data": {
                     "wallet_id": wallet_id
                 },
-                "message": "wallet for this user_id already exists."
+                "message": f"Wallet for this wallet_id {wallet_id} already exists."
             }
         ), 400
 
@@ -118,7 +118,7 @@ def add_amount_to_wallet(wallet_id):
                 "data": {
                     "wallet_id": wallet_id
                 },
-                "message": "wallet not found."
+                "message": f"Wallet {wallet_id} does not exist to be updated."
             }
         ), 404
 
@@ -137,7 +137,7 @@ def add_amount_to_wallet(wallet_id):
                 "data": {
                     "wallet_id": wallet_id
                 },
-                "message": "An error occurred updating the wallet."
+                "message": f"An error occurred updating the wallet {wallet_id}."
             }
         ), 500
 
@@ -160,7 +160,7 @@ def delete_wallet(wallet_id):
                 "data": {
                     "wallet_id": wallet_id
                 },
-                "message": "wallet not found."
+                "message": f"No wallet of {wallet_id} found."
             }
         ), 404
 
