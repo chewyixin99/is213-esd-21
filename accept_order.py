@@ -42,27 +42,26 @@ def process_accept_order(order_id):
         f"{order_url}/{order_id}",
         method="GET"
     )
-    if old_order_result["code"] in range(200, 300):
-        old_order_data = old_order_result["data"]
-        if old_order_data["status"] == "pending":
-            order_status = {
-                "status": "accepted"
-            }
-            new_order_result = invoke_http(
-                f"{order_url}/{order_id}",
-                method="PUT",
-                json=order_status
-            )
-
-            return new_order_result
+    if old_order_result["code"] not in range(200, 300):
+        return old_order_result
         
-        return jsonify({
-            "code": 403,
-            "message": f"Unable to accept order. Order status is already {old_order_data['status']}."
-        })
+    old_order_data = old_order_result["data"]
+    if old_order_data["status"] == "pending":
+        order_status = {
+            "status": "accepted"
+        }
+        new_order_result = invoke_http(
+            f"{order_url}/{order_id}",
+            method="PUT",
+            json=order_status
+        )
 
-    return old_order_result
-
+        return new_order_result
+    
+    return jsonify({
+        "code": 403,
+        "message": f"Unable to accept order. Order status is already {old_order_data['status']}."
+    })
 
     
 if __name__ == "__main__":

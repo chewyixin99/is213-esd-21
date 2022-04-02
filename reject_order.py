@@ -124,7 +124,6 @@ def process_reject_order(order_id):
 
         # -------------------- FOR JIAN LIN TO ADD AMQP PASS
 
-
     # -------------------- FOR JIAN LIN TO ADD AMQP FAIL IF STATUS NOT PENDING
     return jsonify({
         "code": 403,
