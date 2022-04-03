@@ -1,0 +1,184 @@
+## Useful commands
+# docker-compose up -d
+# docker-compose down
+
+## To remove images
+# docker images -q
+# copy and paste ids and use docker rmi
+
+version: "3.8"
+
+volumes:
+  rabbitmq_data:
+
+services:
+  #######################################################################
+  # Simple microservices
+  #######################################################################
+
+  ###################################
+  # User microservice
+  ###################################
+  user:
+    build:
+      context: ./microservices/user
+      dockerfile: user.Dockerfile
+    image: koguwee/user:esd
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/esd
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5001:5001"
+ 
+  ###################################
+  # Hawker microservice
+  ###################################
+  hawker:
+    build:
+      context: ./microservices/hawker
+      dockerfile: hawker.Dockerfile
+    image: koguwee/hawker:esd
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/esd
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5002:5002"
+
+  ###################################
+  # Item microservice
+  ###################################
+  item:
+    build:
+      context: ./microservices/item
+      dockerfile: item.Dockerfile
+    image: koguwee/item:esd
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/esd
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5003:5003"
+
+  ###################################
+  # Order microservice
+  ###################################
+  order:
+    build:
+      context: ./microservices/order
+      dockerfile: order.Dockerfile
+    image: koguwee/order:esd
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/esd
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5004:5004"
+  
+  ###################################
+  # Wallet microservice
+  ###################################
+  wallet:
+    build:
+      context: ./microservices/wallet
+      dockerfile: wallet.Dockerfile
+    image: koguwee/wallet:esd
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/esd
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5005:5005"
+
+  ###################################
+  # Escrow microservice
+  ###################################
+  escrow:
+    build:
+      context: ./microservices/escrow
+      dockerfile: escrow.Dockerfile
+    image: koguwee/escrow:esd
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/esd
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5006:5006"
+      
+  #######################################################################
+  # AMQP microservices
+  #######################################################################
+
+  ####################################
+  # RabbitMQ
+  ####################################
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: esd-rabbit
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes: 
+      - rabbitmq_data:/var/lib/rabbitmq
+      
+  ####################################
+  # Notification
+  ####################################
+  notification:
+    build:
+      context: ./microservices/notification
+      dockerfile: notification.Dockerfile
+    image: ganjl/notification:esd
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      PYTHONUNBUFFERED: 1
+
+  ###################################
+  # Error
+  ###################################
+  error:
+    build:
+      context: ./microservices/error
+      dockerfile: error.Dockerfile
+    image: ganjl/error:esd
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      PYTHONUNBUFFERED: 1
+
+  #######################################################################
+  # Complex microservices
+  #######################################################################      
+
+  ###############################################
+  # Place Order: The Place Order microservice
+  ###############################################
+  # place_order:
+  #   build:
+  #     context: ./
+  #     dockerfile: place_order.Dockerfile
+  #   image: ganjl/place_order:esd
+  #   restart: always
+  #   depends_on:
+  #     - order
+  #     - shipping_record
+  #     - activity_log
+  #     - error
+  #     - rabbitmq
+  #   environment:
+  #     rabbit_host: rabbitmq
+  #     rabbit_port: 5672
+  #     order_URL: http://order:5001/order
+  #     shipping_record_URL: http://shipping_record:5002/shipping_record 
+  #     PYTHONUNBUFFERED: 1
+  #   ports:
+  #     - "5100:5100"

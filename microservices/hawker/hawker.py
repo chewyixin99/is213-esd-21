@@ -1,8 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-import json
-from datetime import datetime
 from os import environ
+from datetime import datetime
+import json
 
 app = Flask(__name__)
 
