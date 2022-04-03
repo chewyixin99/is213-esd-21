@@ -11,9 +11,9 @@ import requests
 from invokes import invoke_http
 
 # # # AMQP imports
-# import amqp_setup
-# import pika
-# import json
+from amqp import amqp_setup
+import pika
+import json
 
 app = Flask(__name__)
 CORS(app)
