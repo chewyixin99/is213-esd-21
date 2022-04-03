@@ -7,10 +7,10 @@
       <div class="text-center">
         <ul class="nav nav-pills">
           <li class="nav-item">
-            <a class="nav-link active bg-warning text-dark" aria-current="page" href="#">User</a>
+              <a class="nav-link text-dark" aria-current="page" href="#">User</a>  
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark" href="#">Hawker</a>
+            <a class="nav-link active bg-warning text-dark" href="#/loginhawker">Hawker</a>
           </li>
         </ul>
       </div>
@@ -47,6 +47,6 @@
 
 <script>
 export default {
-  name: 'Login',
+  name: 'LoginHawker',
 }
 </script>
