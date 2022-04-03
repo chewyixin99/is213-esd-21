@@ -1,21 +1,6 @@
 import pika
 from os import environ ###
 
-
-
-## WORK IN PROGRESS 
-# ADDED NOTIFICATION QUEUE TO LAB 9 MATERIALS
-
-
-
-
-
-
-
-
-
-
-
 # These module-level variables are initialized whenever a new instance of python interpreter imports the module;
 # In each instance of python interpreter (i.e., a program run), the same module is only imported once (guaranteed by the interpreter).
 
@@ -45,6 +30,7 @@ channel.exchange_declare(exchange=exchangename, exchange_type=exchangetype, dura
 # - instead of setting up the queues using RabbitMQ UI.
 
 ############   Error queue   #############
+
 #delcare Error queue
 queue_name = 'Error' #?##
 channel.queue_declare(queue=queue_name, durable=True) 
@@ -56,28 +42,21 @@ channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key=routing_
     # bind the queue to the exchange via the key
     # any routing_key with two words and ending with '.error' will be matched
 
-############   Activity_Log queue    #############
-#delcare Activity_Log queue
-queue_name = 'Activity_Log' #?##
-channel.queue_declare(queue=queue_name, durable=True)
-    # 'durable' makes the queue survive broker restarts
-
-#bind Activity_Log queue
-channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='#') #?##
-    # bind the queue to the exchange via the key
-    # 'routing_key=#' => any routing_key would be matched
     
 ############   Notification queue    #############
-#delcare Notification queue
-routing_key = '*.notify'
-queue_name = 'Notification' #?##
-channel.queue_declare(queue=queue_name, durable=True)
-    # 'durable' makes the queue survive broker restarts
 
-#bind Activity_Log queue
-channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key=routing_key) #?##
-    # bind the queue to the exchange via the key
-    # 'routing_key=#' => any routing_key would be matched
+routing_key = '*.notify'
+queue_name = 'Notification' 
+channel.queue_declare(queue=queue_name, durable=True)
+channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key=routing_key) 
+
+
+############   Escrow queue    #############
+
+routing_key = '*.notify'
+queue_name = 'Notification' 
+channel.queue_declare(queue=queue_name, durable=True)
+channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key=routing_key) 
 
 """
 This function in this module sets up a connection and a channel to a local AMQP broker,

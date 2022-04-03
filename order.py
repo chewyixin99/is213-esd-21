@@ -80,7 +80,7 @@ def find_by_order_id(order_id):
         return jsonify(
             {
                 "code": 200,
-                "order": order.json()
+                "data": order.json()
             }
         )
     return jsonify(
@@ -160,7 +160,7 @@ def create_order():
         {
             "code": 201,
             "data": order.json(),
-            "message": "Created order."
+            "message": f"Created order, status:{order.json()['status']}."
         }
     )
 
@@ -175,13 +175,12 @@ def update_order(order_id):
                 
         try:
             db.session.merge(order)
-            
             db.session.commit()
             return jsonify(
                 {
                     "code": 200,
                     "data": order.json(),
-                    "message": f"Successfully updated status to: {data['status']}."
+                    "message": f"Successfully updated order {order.order_id} status to: {data['status']}."
                 }
             )
         except:
@@ -200,7 +199,7 @@ def update_order(order_id):
             "data": {
                 "order": order
             },
-            "message": "Order not found."
+            "message": f"Order {order_id} not found."
 
         }
     )

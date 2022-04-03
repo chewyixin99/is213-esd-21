@@ -51,7 +51,7 @@ def get_all():
     return jsonify(
         {
             "code": 404,
-            "message": "No escrows found."
+            "message": "No escrow records found."
         }
     ), 404
 
@@ -70,7 +70,7 @@ def find_by_order_id(order_id):
     return jsonify(
         {
             "code": 404,
-            "message": "escrow not found."
+            "message": f"Requested escrow record (order id {order_id}) does not exist."
         }
     ), 404
 
@@ -85,7 +85,7 @@ def create_escrow(order_id):
                 "data": {
                     "order_id": order_id
                 },
-                "message": "escrow for this order_id already exists."
+                "message": f"Escrow record for this order_id ({order_id}) already exists."
             }
         ), 400
 
@@ -109,7 +109,8 @@ def create_escrow(order_id):
     return jsonify(
         {
             "code": 201,
-            "data": escrow.json()
+            "data": escrow.json(),
+            "message": f"Escrow successfully created for order {order_id}."
         }
     ), 201
 
@@ -126,7 +127,7 @@ def delete_escrow(order_id):
                 "data": {
                     "order_id": order_id
                 },
-                "message": "escrow not found."
+                "message": f"No escrow record of {order_id} found."
             }
         ), 404
 
