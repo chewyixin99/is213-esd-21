@@ -10,9 +10,9 @@ import requests
 from invokes import invoke_http
 
 # AMQP imports
-# import amqp_setup
-# import pika
-# import json
+import amqp_setup
+import pika
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -42,10 +42,55 @@ def process_accept_order(order_id):
         f"{order_url}/{order_id}",
         method="GET"
     )
-    if old_order_result["code"] not in range(200, 300):
-        return old_order_result
-        
+
     old_order_data = old_order_result["data"]
+
+    if old_order_result["code"] not in range(200, 300):
+
+    # ##################### AMQP code      
+
+    # handle error -> order retrieval fail
+
+        print('\n\n-----Publishing the order retrieval error message with routing_key=retrieval.error-----')        
+
+        message = {
+            "code": 400,
+            "message_type": "retrieval_error",
+            "data": {
+                "order_data": old_order_data,
+            },
+        }
+
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="retrieval.error", 
+        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+
+        print("\nOrder retrieval error published to RabbitMQ Exchange.\n")
+
+        # ##################### END OF AMQP code
+
+        return old_order_result
+
+        # ##################### AMQP code      
+
+    # handle error -> order retrieval success
+
+    print('\n\n-----Publishing the order retrieval notification message with routing_key=retrieval.notify-----')        
+
+    message = {
+        "code": 201,
+        "message_type": "retrieval_notification",
+        "data": {
+            "order_data": old_order_data,
+        },
+    }
+
+    amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="retrieval.notify", 
+    body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+
+    print("\nOrder retrieval notification published to RabbitMQ Exchange.\n")
+
+    # ##################### END OF AMQP code
+
     if old_order_data["status"] == "pending":
         order_status = {
             "status": "accepted"
@@ -56,8 +101,54 @@ def process_accept_order(order_id):
             json=order_status
         )
 
-        return new_order_result
+        # ##################### AMQP code      
     
+        # handle notification -> order acceptance successful
+
+        print('\n\n-----Publishing the order accept notification message with routing_key=accept.notify-----')        
+
+        new_order_data = new_order_result["data"]
+
+        message = {
+            "code": 201,
+            "message_type": "accept_notification",
+            "data": {
+                "order_data": new_order_data,
+            },
+        }
+
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="accept.notify", 
+        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+    
+        print("\nOrder accept notification published to RabbitMQ Exchange.\n")
+
+        # ##################### END OF AMQP code
+
+        return new_order_result
+
+    # ##################### AMQP code      
+
+    # handle error -> order acceptance fail
+
+    print('\n\n-----Publishing the order accept error message with routing_key=accept.error-----')        
+
+    new_order_data = new_order_result["data"]
+
+    message = {
+        "code": 400,
+        "message_type": "accept_error",
+        "data": {
+            "order_data": new_order_data,
+        },
+    }
+
+    amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="accept.error", 
+    body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+
+    print("\nOrder accept error published to RabbitMQ Exchange.\n")
+
+    # ##################### END OF AMQP code
+
     return jsonify({
         "code": 403,
         "message": f"Unable to accept order. Order status is already {old_order_data['status']}."

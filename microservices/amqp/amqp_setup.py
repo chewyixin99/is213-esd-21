@@ -31,32 +31,23 @@ channel.exchange_declare(exchange=exchangename, exchange_type=exchangetype, dura
 
 ############   Error queue   #############
 
-#delcare Error queue
-queue_name = 'Error' #?##
-channel.queue_declare(queue=queue_name, durable=True) 
-    # 'durable' makes the queue survive broker restarts
+# for order and escrow failures
 
 routing_key = '*.error' #?##
-#bind Error queue
+queue_name = 'Error' #?##
+channel.queue_declare(queue=queue_name, durable=True) 
 channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key=routing_key) 
-    # bind the queue to the exchange via the key
-    # any routing_key with two words and ending with '.error' will be matched
-
     
+
 ############   Notification queue    #############
 
-routing_key = '*.notify'
-queue_name = 'Notification' 
-channel.queue_declare(queue=queue_name, durable=True)
-channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key=routing_key) 
-
-
-############   Escrow queue    #############
+# for order and escrow successes
 
 routing_key = '*.notify'
 queue_name = 'Notification' 
 channel.queue_declare(queue=queue_name, durable=True)
 channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key=routing_key) 
+
 
 """
 This function in this module sets up a connection and a channel to a local AMQP broker,

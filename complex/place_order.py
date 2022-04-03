@@ -116,19 +116,22 @@ def process_place_order(order):
         order["status"] = "failed"
 
         # ##################### AMQP code
-        # # handle error -> wallet insufficient funds
-        # print('\n\n-----Publishing order status failed message with routing_key=order.error-----')
-        # message = {
-        #     "code": 400,
-        #     "message_type": "business_error",
-        #     "data": {
-        #         "order_data": "Insufficient wallet funds",
-        #     },
-        # }
-        # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.error", 
-        # body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
-        # print("\nOrder error - Insufficient wallet funds - published to the RabbitMQ Exchange:")
+        # # handle error -> wallet insufficient funds
+        
+        print('\n\n-----Publishing order status failed message with routing_key=order.error-----')
+        message = {
+            "code": 400,
+            "message_type": "business_error",
+            "data": {
+                "order_data": "Insufficient wallet funds",
+            },
+        }
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.error", 
+        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+
+        print("\nOrder error - Insufficient wallet funds - published to the RabbitMQ Exchange:")
+
         # ##################### END OF AMQP code
 
     # order microservice ---------------------------
@@ -248,6 +251,7 @@ def process_place_order(order):
                 "code": 409,
                 "message": f"Cannot create escrow, order with order id {order_data['order_id']} deleted."
             })
+            # return escrow_result
 
         else:
 
@@ -268,6 +272,7 @@ def process_place_order(order):
         
             # print("\nOrder notification published to RabbitMQ Exchange.\n")
 
+            # ##################### end of AMQP code
 
     # notification microservice ---------------------------
 
