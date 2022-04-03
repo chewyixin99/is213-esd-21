@@ -110,7 +110,7 @@ def process_reject_order(order_id):
         # -------------------- FOR JIAN LIN TO ADD AMQP PASS
 
         order_status = {
-        "status": "rejected"
+            "status": "rejected"
         }
         new_order_result = invoke_http(
             f"{order_url}/{order_id}",
