@@ -81,7 +81,7 @@ def find_by_hawker_id(hawker_id):
         )
     return jsonify(
         {
-            "code": "404",
+            "code": 404,
             "message": "hawker does not exist."
         }
     )
@@ -107,7 +107,7 @@ def find_by_halal(is_halal):
         )
     return jsonify(
         {
-            "code": "404",
+            "code": 404,
             "message": f"No {'halal' if is_halal else 'non-halal'} hawkers found."
         }
     )
