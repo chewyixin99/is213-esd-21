@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <!-- Welcome Message and Wallet -->
     <div class="grid grid-cols-5 shadow bgimg">
       <div class="col-span-3 text-left p-3 my-auto">
@@ -25,66 +25,51 @@
 </template>
 
 <script>
-  // @ is an alias to /src
-  import Hawker from '@/components/Hawker-comp.vue'
-  import Wallet from '@/components/Wallet-comp.vue'
+// @ is an alias to /src
+import Hawker from '@/components/Hawker-comp.vue'
+import Wallet from '@/components/Wallet-comp.vue'
 
-  export default {
-    name: 'Hawkers',
-    components: {
-      Hawker,
-      Wallet,
-    }
-  }
-  console.log("Hello")
+const get_Hawker_URL = "http://localhost:5002/hawkers";
 
-  const get_hawker_URL = "http://localhost:5002/hawker";
+export default {
+  name: 'Hawkers',
+  components: {
+    Hawker,
+    Wallet,
+  },
+  // data(){
+  //   return{
+  //     hawkers: [],
+  //     message: "",
+  //     closing_hours: "", 
+  //     cuisine: "", 
+  //     email: "", 
+  //     halal: false, 
+  //     has_vegetarian_option: false, 
+  //     hawker_id: "", 
+  //     opening_hours: "", 
+  //     password: "", 
+  //     username: "", 
+  //     wallet_id: null
+  //   }
+  // }
+}
 
-  const app = Vue.createApp({
-    computed: {
-      hasHawkers: function(){
-        console.log("Compute Hawker")
-        // return this.hawkers.length > 0;
-      }
-    },
-    data(){
-      return {
-        hawkers: [],
-        // closing_hours: "", 
-        // cuisine: "", 
-        // email: "", 
-        // halal: false, 
-        // has_vegetarian_option: false, 
-        // hawker_id: "", 
-        // opening_hours: "", 
-        // password: "", 
-        // username: "", 
-        // wallet_id: null
-      };
-    },
-    methods: {
-      getAllHawkers(){
-        console.log("=== Open Hawker ===")
-        const response =
-          fetch(get_hawker_URL)
-            .then( data => {
-              console.log(response);
-              if (data.code === 404){
-                this.message = data.message;
-              } else {
-                this.hawkers = data.data.hawkers;
-              }
-            })
-            .catch(error => {
-              console.log(this.message + error);
-            });
-      },
+// fetch(get_Hawker_URL)
+//   .then (response => response.json())
+//   .then(data => {
+//     console.log(response);
+//     if (data.code === 404){
+//       this.message = data.message;
+//     } else {
+//       this.hawkers = data.data.hawker;
+//     }
+//   })
+//   .catch(error => {
+//     console.log(this.message + error)
+//   })
 
-    }
-    
-
-  });
-  app.mount('#app');
+// console.log(get_Hawker_URL)
 
 </script>
 
