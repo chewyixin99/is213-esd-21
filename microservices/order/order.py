@@ -204,6 +204,41 @@ def update_order(order_id):
         }
     )
 
+# delete order
+@app.route("/order/<int:order_id>", methods=["DELETE"])
+def delete_order(order_id):
+    order = Order.query.filter_by(order_id=order_id).first()
+    if not (order):
+        return jsonify(
+            {
+                "code": 404,
+                "data": {
+                    "order_id": order_id
+                },
+                "message": f"Requested Order (with item id {order_id}) does not exist."
+            }
+        )
+    try:
+        db.session.delete(order)
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "data": {
+                    "order_id": order_id
+                },
+                "message": "An error occurred while deleting the order."
+            }
+        ),
+    return jsonify(
+        {
+            "code": 201,
+            "order_id": order_id,
+            "message": f"Successfully deleted item (with order id {order_id})."
+        }
+    )
+
 
 
 
