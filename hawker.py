@@ -107,7 +107,7 @@ def find_by_halal(is_halal):
         )
     return jsonify(
         {
-            "code": "404",
+            "code": 404,
             "message": f"No {'halal' if is_halal else 'non-halal'} hawkers found."
         }
     )
