@@ -137,6 +137,31 @@ def find_by_hawker_id(hawker_id):
         }
     )
 
+@app.route("/order/hawker/<string:hawker_id>/<string:status>")
+def find_by_hawker_id_by_status(hawker_id, status):
+    orders = Order.query.filter_by(
+        hawker_id=hawker_id,
+        status=status
+    ).all()
+    
+    if len(orders):
+        return jsonify(
+            {
+                "code":200,
+                "data": {
+                    "orders": [
+                        order.json() for order in orders
+                    ]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 400,
+            "message": f"Order with hawker id:{hawker_id} and status:{status} not found."
+        }
+    )
+
 
 # Create a order record
 @app.route("/order", methods=["POST"])
