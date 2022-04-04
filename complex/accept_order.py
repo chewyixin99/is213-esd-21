@@ -65,7 +65,7 @@ def process_accept_order(order_id):
 
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="retrieval.error", 
         body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
-
+        message = json.dumps(message)
         print("\nOrder retrieval error published to RabbitMQ Exchange.\n")
 
         # ##################### END OF AMQP code
@@ -85,7 +85,7 @@ def process_accept_order(order_id):
             "order_data": old_order_data,
         },
     }
-
+    message = json.dumps(message)
     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="retrieval.notify", 
     body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
@@ -119,6 +119,8 @@ def process_accept_order(order_id):
             },
         }
 
+        message = json.dumps(message)
+
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="accept.notify", 
         body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
     
@@ -143,7 +145,7 @@ def process_accept_order(order_id):
             "order_data": new_order_data,
         },
     }
-
+    message = json.dumps(message)
     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="accept.error", 
     body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 

@@ -163,21 +163,23 @@ def process_place_order(order):
         # handle error -> order was not processed successfully
 
         code = order_result["code"]
-        # order_data = order_result["data"]["order"]
+        order_data = order_result["data"]
         # order_id = order_data["order_id"]
 
-        # print('\n\n-----Publishing the (order error) message with routing_key=order.error-----')
+        print('\n\n-----Publishing the (order error) message with routing_key=order.error-----')
 
-        # message = {
-        #     "code": 400,
-        #     "message_type": "order_error",
-        #     "data": {
-        #         "order_data": order_data,
-        #     },
-        # }
+        message = {
+            "code": 400,
+            "message_type": "order_error",
+            "data": {
+                "order_data": order_data,
+            },
+        }
 
-        # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.error", 
-        # body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+        message = json.dumps(message)
+        
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.error", 
+        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
      
         print("\nOrder error - Code {} - published to the RabbitMQ Exchange:".format(code))
         return order_result
@@ -194,9 +196,9 @@ def process_place_order(order):
             "order_data": order_data,
         },
     }
-    print("Pre-Message -------")
+
     message = json.dumps(message)
-    print("Post-Message -------")    
+
     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.notify", 
     body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
@@ -243,30 +245,32 @@ def process_place_order(order):
             # ##################### AMQP code
 
             # handle error -> escrow was not processed successfully
-            # print('\n\n-----Publishing escrow failure message with routing_key=escrow.error-----')
+            print('\n\n-----Publishing escrow failure message with routing_key=escrow.error-----')
 
-            # message = {
-            #     "code": 400,
-            #     "message_type": "escrow_error",
-            #     "data": {
-            #         "order_data": escrow_data,
-            #     },
-            # }   
-            # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="escrow.error", 
-            # body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+            message = {
+                "code": 400,
+                "message_type": "escrow_error",
+                "data": {
+                    "order_data": escrow_data,
+                },
+            }
+            message = json.dumps(message)
+
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="escrow.error", 
+            body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
             
-            # print("\nEscrow failed - Code {} - published to the RabbitMQ Exchange:".format(escrow_result["code"]))
+            print("\nEscrow failed - Code {} - published to the RabbitMQ Exchange:".format(escrow_result["code"]))
 
             # ##################### end of AMQP code
             
-            delete_order_result = invoke_http(
-                f"{order_url}/order/{order_data['order_id']}",
-                method="DELETE",
-            )
-            return jsonify({
-                "code": 409,
-                "message": f"Cannot create escrow, order with order id {order_data['order_id']} deleted."
-            })
+            # delete_order_result = invoke_http(
+            #     f"{order_url}/order/{order_data['order_id']}",
+            #     method="DELETE",
+            # )
+            # return jsonify({
+            #     "code": 409,
+            #     "message": f"Cannot create escrow, order with order id {order_data['order_id']} deleted."
+            # })
             # return escrow_result
 
         else:
@@ -283,10 +287,12 @@ def process_place_order(order):
                 },
             }
 
-            # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="escrow.notify", 
-            # body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+            message = json.dumps(message)
+
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="escrow.notify", 
+            body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
         
-            # print("\nOrder notification published to RabbitMQ Exchange.\n")
+            print("\nOrder notification published to RabbitMQ Exchange.\n")
 
             # ##################### end of AMQP code
 

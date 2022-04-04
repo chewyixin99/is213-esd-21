@@ -80,7 +80,7 @@ def process_reject_order(order_id):
                 "order_data": old_order_data,
             },
         }
-
+        message = json.dumps(message)
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="retrieval.error", 
         body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
     
@@ -107,7 +107,7 @@ def process_reject_order(order_id):
             "order_data": old_order_data,
         },
     }
-
+    message = json.dumps(message)
     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="retrieval.notify", 
     body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
@@ -141,7 +141,7 @@ def process_reject_order(order_id):
                     "order_data": escrow_data,
                 },
             }
-
+            message = json.dumps(message)
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="escrow.error", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
@@ -168,7 +168,7 @@ def process_reject_order(order_id):
             "order_data": escrow_data,
             },
         }
-
+        message = json.dumps(message)
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="escrow.notify", 
         body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
@@ -207,7 +207,7 @@ def process_reject_order(order_id):
                     "order_data": wallet_data,
                 },
             }
-
+            message = json.dumps(message)
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="wallet.error", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
@@ -234,7 +234,7 @@ def process_reject_order(order_id):
                 "order_data": wallet_data,
             },
         }
-
+        message = json.dumps(message)
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="wallet.notify", 
         body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
@@ -265,7 +265,7 @@ def process_reject_order(order_id):
                     "order_data": escrow_delete_data,
                 },
             }
-
+            message = json.dumps(message)
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="escrow_deletion.error", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
@@ -292,7 +292,7 @@ def process_reject_order(order_id):
                 "order_data": escrow_delete_data,
             },
         }
-
+        message = json.dumps(message)
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="escrow_deletion.notify", 
         body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
@@ -327,7 +327,7 @@ def process_reject_order(order_id):
                     "order_data": new_order_data,
                 },
             }
-
+            message = json.dumps(message)
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="reject.error", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
@@ -354,7 +354,7 @@ def process_reject_order(order_id):
                 "order_data": new_order_data,
             },
         }
-
+        message = json.dumps(message)
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="reject.notification", 
         body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
@@ -380,7 +380,7 @@ def process_reject_order(order_id):
             "order_data": new_order_data,
         },
     }
-
+    message = json.dumps(message)
     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="reject_status.error", 
     body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 

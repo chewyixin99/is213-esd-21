@@ -136,9 +136,56 @@ def process_complete_order(order_id):
         method="PUT",
         json=order_status
     )
+
+    new_order_data = new_order_result["data"]
+
     if new_order_result["code"] not in range(200,300):
+
+        # ##################### AMQP code
+
+        # # handle error -> order status fail
+        
+        print('\n\n-----Publishing order completion status error message with routing_key=order_status.error-----')
+        message = {
+            "code": 400,
+            "message_type": "order_status_error",
+            "data": {
+                "order_data": new_order_data,
+            },
+        }
+        message = json.dumps(message)
+
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order_status.error", 
+        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+
+        print("\nOrder completion status error published to RabbitMQ Exchange.\n")
+
+        # ##################### END OF AMQP code
+
         return new_order_result
 
+    # ##################### AMQP code
+
+    # handle notification -> order completed successfully
+
+    print('\n\n-----Publishing the order completion message with routing_key=order_completion.notify-----')        
+
+    message = {
+        "code": 201,
+        "message_type": "order_completion_notification",
+        "data": {
+            "order_data": new_order_result,
+        },
+    }
+
+    message = json.dumps(message)
+
+    amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order_completion.notify", 
+    body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+
+    print("\nOrder completion notification published to RabbitMQ Exchange.\n")
+
+    # ##################### END OF AMQP code
 
     return new_order_result
 

@@ -25,33 +25,63 @@ def callback(channel, method, properties, body): # required signature for the ca
     print() # print a new line feed
 
 def processNotificationLog(notificationBody):
-    
+
+
     client = Client(account_sid, auth_token)
 
-    # if notificationBody['message_type'] == "order_notification":
-    #     body = "\nHello User {}, your order {} is currently being processed. Details are as follows:\n".format(notificationBody["data"]["user_id"],notificationBody["data"]["order_id"])
-    #     body += "\n--------------"
-    #     body += "\nHawker ID: {}".format(notificationBody["data"]["hawker_id"])
-    #     body += "\nItems: {}".format(notificationBody["data"]["items"])
-    #     body += "\nTotal Price: ${}".format(notificationBody["data"]["total_price"])
-    #     body += "\nDiscount: ${}".format(notificationBody["data"]["discount"])
-    #     body += "\n\Final Price: ${}".format(notificationBody["data"]["final_price"])
-    #     body += "\n--------------"
-    #     body += "\nTime of Order: {}".format(notificationBody["data"]["time"])
+    loaded_body = json.loads(notificationBody)
+    message_type = loaded_body['message_type']
+    data = loaded_body["data"]["order_data"]
+    body = ""
 
-    # elif notificationBody['message_type'] == "escrow_notification":
-    #     body = "\nHello User {}, your payment {} to {} currently being processed. Details are as follows:\n".format(notificationBody["data"]["payer_id"],notificationBody["data"]["receiving_id"],notificationBody["data"]["order_id"])
-    #     body += "\n--------------"
-    #     body += "\n\Payment Amount: ${}".format(notificationBody["data"]["amount"])
-    #     body += "\n--------------"
-    #     body += "\nTime of Payment: {}".format(notificationBody["data"]["time"])
+    if loaded_body['message_type'] == "order_notification":
+
+        body = "\n"
+        body += "\nHello User {}, your order {} is sent to the kitchen. \n\nDetails are as follows:\n".format(data["user_id"],data["order_id"])
+        body += "\n--------------"
+        body += "\nHawker ID: {}".format(data["hawker_id"])
+        body += "\nItems:\n"
+        
+        for item in data["items"]:
+            body += "Item ID: {}, Qty: {}\n".format(item["item_id"],item["quantity"])
+
+        body += "\nTotal Price: ${}".format(data["total_price"])
+        body += "\nDiscount: ${}".format(data["discount"])
+        body += "\nFinal Price: ${}".format(data["final_price"])
+        body += "\n--------------"
+        body += "\nTime of Order: {}".format(data["time"])
+        
+
+    elif loaded_body['message_type'] == "accept_notification":
+        body = "\n"
+        body += "\nHello User {}, your order {} is being processed.\n".format(data["user_id"],data["order_id"])
+        body += "\n--------------"
+        body += "\nHawker ID: {}".format(data["hawker_id"])
+        body += "\nItems:\n"
+        
+        for item in data["items"]:
+            body += "Item ID: {}, Qty: {}\n".format(item["item_id"],item["quantity"])
+
+        body += "\n--------------"
+        body += "\nTime of Order: {}".format(data["time"])
+
+    elif loaded_body['message_type'] == "order_completion_notification":
+        body = "\n"
+        body += "\nHello User {}, your order {} is completed.\n\nPayment details are as follows:".format(data["user_id"],data["order_id"])
+        body += "\n--------------"
+        body += "\nTotal Price: ${}".format(data["total_price"])
+        body += "\nDiscount: ${}".format(data["discount"])
+        body += "\nFinal Price: ${}".format(data["final_price"])
+        body += "\n--------------"
+        body += "\nTime of Order: {}".format(data["time"])
     
-    client.messages.create(
-        body=notificationBody,
-        from_=twilio_number,
-        to=target_number
-    )
-    print("Notification sent successfully..")
+    if body != "":
+        client.messages.create(
+            body=body,
+            from_=twilio_number,
+            to=target_number
+        )
+        print("Notification: {} sent successfully..".format(message_type))
 
     
 
