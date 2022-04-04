@@ -20,8 +20,8 @@ app = Flask(__name__)
 CORS(app)
 
 order_url = environ.get('order_URL') or "http://localhost:5004/order"
-escrow_url = environ.get('escrow_URL') or "http://localhost:5006/escrow"
 wallet_url = environ.get('wallet_URL') or "http://localhost:5005/wallet"
+escrow_url = environ.get('escrow_URL') or "http://localhost:5006/escrow"
 
 
 @app.route("/place_order", methods=["POST"])

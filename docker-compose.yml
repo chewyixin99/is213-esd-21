@@ -178,8 +178,10 @@ services:
     environment:
       rabbit_host: rabbitmq
       rabbit_port: 5672
-      # order_URL: http://order:5004/order
-      # shipping_record_URL: http://shipping_record:5002/shipping_record 
+      order_URL: http://order:5004/order
+      wallet_URL: http://wallet:5005/wallet
+      escrow_URL: http://escrow:5006/escrow
+
       PYTHONUNBUFFERED: 1
     ports:
       - "5100:5100"
