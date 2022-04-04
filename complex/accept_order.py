@@ -10,7 +10,7 @@ import requests
 from invokes import invoke_http
 
 # AMQP imports
-from amqp import amqp_setup
+# import amqp_setup
 import pika
 import json
 

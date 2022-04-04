@@ -93,6 +93,7 @@ def process_place_order(order):
         f"{wallet_url}/{order['user_id']}",
         method="GET"
     )
+
     if wallet_result["code"] not in range(200,300):
         return wallet_result
 
