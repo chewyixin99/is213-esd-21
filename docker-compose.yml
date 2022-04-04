@@ -191,79 +191,79 @@ services:
     ports:
       - "5100:5100"
 
-  ###############################################
-  # Accept Order
-  ###############################################
-  accept_order:
-    build:
-      context: ./complex
-      dockerfile: accept_order.Dockerfile
-    image: koguwee/accept_order:esd
-    restart: always
-    depends_on:
-      - order
-      - notification
-      - error
-      - rabbitmq
-    environment:
-      rabbit_host: rabbitmq
-      rabbit_port: 5672
-      order_URL: http://order:5004/order
+  # ###############################################
+  # # Accept Order
+  # ###############################################
+  # accept_order:
+  #   build:
+  #     context: ./complex
+  #     dockerfile: accept_order.Dockerfile
+  #   image: koguwee/accept_order:esd
+  #   restart: always
+  #   depends_on:
+  #     - order
+  #     - notification
+  #     - error
+  #     - rabbitmq
+  #   environment:
+  #     rabbit_host: rabbitmq
+  #     rabbit_port: 5672
+  #     order_URL: http://order:5004/order
 
-      PYTHONUNBUFFERED: 1
-    ports:
-      - "5101:5101"
+  #     PYTHONUNBUFFERED: 1
+  #   ports:
+  #     - "5101:5101"
 
-  ###############################################
-  # Reject Order
-  ###############################################
-  reject_order:
-    build:
-      context: ./complex
-      dockerfile: reject_order.Dockerfile
-    image: koguwee/reject_order:esd
-    restart: always
-    depends_on:
-      - order
-      - escrow
-      - wallet
-      - notification
-      - error
-      - rabbitmq
-    environment:
-      rabbit_host: rabbitmq
-      rabbit_port: 5672
-      order_URL: http://order:5004/order
-      wallet_URL: http://wallet:5005/wallet
-      escrow_URL: http://escrow:5006/escrow
+  # ###############################################
+  # # Reject Order
+  # ###############################################
+  # reject_order:
+  #   build:
+  #     context: ./complex
+  #     dockerfile: reject_order.Dockerfile
+  #   image: koguwee/reject_order:esd
+  #   restart: always
+  #   depends_on:
+  #     - order
+  #     - escrow
+  #     - wallet
+  #     - notification
+  #     - error
+  #     - rabbitmq
+  #   environment:
+  #     rabbit_host: rabbitmq
+  #     rabbit_port: 5672
+  #     order_URL: http://order:5004/order
+  #     wallet_URL: http://wallet:5005/wallet
+  #     escrow_URL: http://escrow:5006/escrow
       
-      PYTHONUNBUFFERED: 1
-    ports:
-      - "5102:5102"
+  #     PYTHONUNBUFFERED: 1
+  #   ports:
+  #     - "5102:5102"
 
-  ###############################################
-  # Complete Order
-  ###############################################
-  complete_order:
-    build:
-      context: ./complex
-      dockerfile: complete_order.Dockerfile
-    image: koguwee/complete_order:esd
-    restart: always
-    depends_on:
-      - order
-      - escrow
-      - wallet
-      - notification
-      - error
-      - rabbitmq
-    environment:
-      rabbit_host: rabbitmq
-      rabbit_port: 5672
-      order_URL: http://order:5004/order
-      wallet_URL: http://wallet:5005/wallet
-      escrow_URL: http://escrow:5006/escrow
+  # ###############################################
+  # # Complete Order
+  # ###############################################
+  # complete_order:
+  #   build:
+  #     context: ./complex
+  #     dockerfile: complete_order.Dockerfile
+  #   image: koguwee/complete_order:esd
+  #   restart: always
+  #   depends_on:
+  #     - order
+  #     - escrow
+  #     - wallet
+  #     - notification
+  #     - error
+  #     - rabbitmq
+  #   environment:
+  #     rabbit_host: rabbitmq
+  #     rabbit_port: 5672
+  #     order_URL: http://order:5004/order
+  #     wallet_URL: http://wallet:5005/wallet
+  #     escrow_URL: http://escrow:5006/escrow
       
-      PYTHONUNBUFFERED: 1
-    ports:
-      - "5103:5103"
+  #     PYTHONUNBUFFERED: 1
+  #   ports:
+  #     - "5103:5103"

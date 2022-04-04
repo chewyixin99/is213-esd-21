@@ -85,7 +85,7 @@ def process_place_order(order):
 
     # ##################### AMQP code
     # # check AMQP connection - if not active, activate it
-    # amqp_setup.check_setup()
+    amqp_setup.check_setup()
     # ##################### end of AMQP code
 
     # wallet microservice ---------------------------
@@ -162,7 +162,7 @@ def process_place_order(order):
     
         # handle error -> order was not processed successfully
 
-        # code = order_result["code"]
+        code = order_result["code"]
         # order_data = order_result["data"]["order"]
         # order_id = order_data["order_id"]
 
@@ -179,26 +179,28 @@ def process_place_order(order):
         # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.error", 
         # body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
      
-        # print("\nOrder error - Code {} - published to the RabbitMQ Exchange:".format(code))
+        print("\nOrder error - Code {} - published to the RabbitMQ Exchange:".format(code))
         return order_result
 
     order_data = order_result["data"]
     # handle notification -> order processed successfully
 
-    # print('\n\n-----Publishing the order notification message with routing_key=order.notify-----')        
+    print('\n\n-----Publishing the order notification message with routing_key=order.notify-----')        
 
-    # message = {
-    #     "code": 201,
-    #     "message_type": "order_notification",
-    #     "data": {
-    #         "order_data": order_data,
-    #     },
-    # }
+    message = {
+        "code": 201,
+        "message_type": "order_notification",
+        "data": {
+            "order_data": order_data,
+        },
+    }
+    print("Pre-Message -------")
+    message = json.dumps(message)
+    print("Post-Message -------")    
+    amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.notify", 
+    body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
-    # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.notify", 
-    # body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
-
-    # print("\nOrder notification published to RabbitMQ Exchange.\n")
+    print("\nOrder notification published to RabbitMQ Exchange.\n")
 
     # ##################### END OF AMQP code
 

@@ -28,26 +28,26 @@ def processNotificationLog(notificationBody):
     
     client = Client(account_sid, auth_token)
 
-    if notificationBody['message_type'] == "order_notification":
-        body = "\nHello User {}, your order {} is currently being processed. Details are as follows:\n".format(notificationBody["data"]["user_id"],notificationBody["data"]["order_id"])
-        body += "\n--------------"
-        body += "\nHawker ID: {}".format(notificationBody["data"]["hawker_id"])
-        body += "\nItems: {}".format(notificationBody["data"]["items"])
-        body += "\nTotal Price: ${}".format(notificationBody["data"]["total_price"])
-        body += "\nDiscount: ${}".format(notificationBody["data"]["discount"])
-        body += "\n\Final Price: ${}".format(notificationBody["data"]["final_price"])
-        body += "\n--------------"
-        body += "\nTime of Order: {}".format(notificationBody["data"]["time"])
+    # if notificationBody['message_type'] == "order_notification":
+    #     body = "\nHello User {}, your order {} is currently being processed. Details are as follows:\n".format(notificationBody["data"]["user_id"],notificationBody["data"]["order_id"])
+    #     body += "\n--------------"
+    #     body += "\nHawker ID: {}".format(notificationBody["data"]["hawker_id"])
+    #     body += "\nItems: {}".format(notificationBody["data"]["items"])
+    #     body += "\nTotal Price: ${}".format(notificationBody["data"]["total_price"])
+    #     body += "\nDiscount: ${}".format(notificationBody["data"]["discount"])
+    #     body += "\n\Final Price: ${}".format(notificationBody["data"]["final_price"])
+    #     body += "\n--------------"
+    #     body += "\nTime of Order: {}".format(notificationBody["data"]["time"])
 
-    if notificationBody['message_type'] == "escrow_notification":
-        body = "\nHello User {}, your payment {} to {} currently being processed. Details are as follows:\n".format(notificationBody["data"]["payer_id"],notificationBody["data"]["receiving_id"],notificationBody["data"]["order_id"])
-        body += "\n--------------"
-        body += "\n\Payment Amount: ${}".format(notificationBody["data"]["amount"])
-        body += "\n--------------"
-        body += "\nTime of Payment: {}".format(notificationBody["data"]["time"])
+    # elif notificationBody['message_type'] == "escrow_notification":
+    #     body = "\nHello User {}, your payment {} to {} currently being processed. Details are as follows:\n".format(notificationBody["data"]["payer_id"],notificationBody["data"]["receiving_id"],notificationBody["data"]["order_id"])
+    #     body += "\n--------------"
+    #     body += "\n\Payment Amount: ${}".format(notificationBody["data"]["amount"])
+    #     body += "\n--------------"
+    #     body += "\nTime of Payment: {}".format(notificationBody["data"]["time"])
     
     client.messages.create(
-        body=body,
+        body=notificationBody,
         from_=twilio_number,
         to=target_number
     )
