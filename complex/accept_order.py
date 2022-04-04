@@ -55,13 +55,13 @@ def process_accept_order(order_id):
 
         print('\n\n-----Publishing the order retrieval error message with routing_key=retrieval.error-----')        
 
-        message = {
+        message = json.dumps({
             "code": 400,
             "message_type": "retrieval_error",
             "data": {
                 "order_data": old_order_data,
             },
-        }
+        })
 
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="retrieval.error", 
         body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
@@ -78,13 +78,13 @@ def process_accept_order(order_id):
 
     print('\n\n-----Publishing the order retrieval notification message with routing_key=retrieval.notify-----')        
 
-    message = {
+    message = json.dumps({
         "code": 201,
         "message_type": "retrieval_notification",
         "data": {
             "order_data": old_order_data,
         },
-    }
+    })
 
     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="retrieval.notify", 
     body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
@@ -111,13 +111,13 @@ def process_accept_order(order_id):
 
         new_order_data = new_order_result["data"]
 
-        message = {
+        message = json.dumps({
             "code": 201,
             "message_type": "accept_notification",
             "data": {
                 "order_data": new_order_data,
             },
-        }
+        })
 
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="accept.notify", 
         body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
@@ -134,15 +134,13 @@ def process_accept_order(order_id):
 
     print('\n\n-----Publishing the order accept error message with routing_key=accept.error-----')        
 
-    new_order_data = new_order_result["data"]
-
-    message = {
+    message = json.dumps({
         "code": 400,
         "message_type": "accept_error",
         "data": {
-            "order_data": new_order_data,
+            "order_data": old_order_data,
         },
-    }
+    })
 
     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="accept.error", 
     body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
