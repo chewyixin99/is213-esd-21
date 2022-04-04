@@ -9,8 +9,10 @@ from os import environ
 import requests
 from invokes import invoke_http
 
-# AMQP imports
-# import amqp_setup
+# # # AMQP imports
+## switch the comments for the amqp path to test locally with (python <filename>.py)
+# from amqp import amqp_setup # local path
+import amqp_setup # compose version
 import pika
 import json
 
