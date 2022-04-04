@@ -11,7 +11,8 @@ import requests
 from invokes import invoke_http
 
 # # # AMQP imports
-from amqp import amqp_setup
+# from amqp import amqp_setup
+import amqp_setup # compose version
 import pika
 import json
 
@@ -36,6 +37,16 @@ def place_order():
             #     'total_price': float,
             #     'discount': float
             #     'final_price': float,
+            # }
+            # e.g. 
+            # {
+            #     "user_id": 1001,
+            #     "hawker_id": 2010,
+            #     "items": [{"item_id": 3100, "quantity": 3}, {"item_id": 3200, "quantity": 4}],
+            #     "status": "pending",
+            #     "total_price": 100,
+            #     "discount": 0.0,
+            #     "final_price": 100.0
             # }
             order = request.get_json()
             result = process_place_order(order)
