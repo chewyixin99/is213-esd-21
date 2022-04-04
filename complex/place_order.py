@@ -138,6 +138,7 @@ def process_place_order(order):
                 "order_data": "Insufficient wallet funds",
             },
         }
+        message = json.dumps(message)
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.error", 
         body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
