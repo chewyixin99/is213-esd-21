@@ -10,26 +10,16 @@
       </div>
     </div>
 
-    <div class="mt-3">
-      <router-link to="/hawkerstall">
-            <Hawker/>
-      </router-link>
-      <router-link to="/hawkerstall">
-            <Hawker/>
-      </router-link>
-      <router-link to="/hawkerstall">
-            <Hawker/>
-      </router-link>
+  
+    <div v-for="hawker in hawkers" :key="hawker.hawker_id">
+      <Hawker :hawker_name="hawker.username" :opening_hours="hawker.opening_hours" :closing_hours="hawker.closing_hours"/>
     </div>
-    <!-- <span>{{info.data}}</span>
-    <span>{{getHawkers()}}</span>
-    <span>{{hawkers}}</span> -->
-
-    <ul>
-      <li v-for="hawker in hawkers" v-bind="hawker.hawker_id">
-        {{hawker}}
+        
+    <!-- <ul>
+      <li v-for="hawker in hawkers" :key="hawker.hawker_id">
+        <ul>{{hawker.username}}</ul>
       </li>
-    </ul>
+    </ul> -->
 
   </div>
 </template>
