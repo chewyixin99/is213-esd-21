@@ -10,73 +10,88 @@
       </div>
     </div>
 
-    <div class="mt-3">
-      <router-link to="/hawkerstall">
-            <Hawker/>
-      </router-link>
-      <router-link to="/hawkerstall">
-            <Hawker/>
-      </router-link>
-      <router-link to="/hawkerstall">
-            <Hawker/>
+  
+    <div v-for="hawker in hawkers" :key="hawker.hawker_id">
+      <router-link :to="{ path: '/hawkerstall', query: { hawker_id: hawker.hawker_id, hawker_name: hawker.username }}">      
+        <Hawker :hawker_name="hawker.username" :opening_hours="hawker.opening_hours" :closing_hours="hawker.closing_hours"/>
       </router-link>
     </div>
+        
+    <!-- <ul>
+      <li v-for="hawker in hawkers" :key="hawker.hawker_id">
+        <ul>{{hawker.username}}</ul>
+      </li>
+    </ul> -->
+
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Hawker from '@/components/Hawker-comp.vue'
-import Wallet from '@/components/Wallet-comp.vue'
-
-const get_Hawker_URL = "http://localhost:5002/hawkers";
+import axios from "axios";
+import Hawker from "@/components/Hawker-comp.vue";
+import Wallet from "@/components/Wallet-comp.vue";
 
 export default {
-  name: 'Hawkers',
+  name: "Hawkers",
   components: {
     Hawker,
     Wallet,
   },
-  // data(){
-  //   return{
-  //     hawkers: [],
-  //     message: "",
-  //     closing_hours: "", 
-  //     cuisine: "", 
-  //     email: "", 
-  //     halal: false, 
-  //     has_vegetarian_option: false, 
-  //     hawker_id: "", 
-  //     opening_hours: "", 
-  //     password: "", 
-  //     username: "", 
-  //     wallet_id: null
-  //   }
+
+  data() {
+    return {
+      // hawkers: [],
+      // message: "",
+      // closing_hours: "",
+      // cuisine: "",
+      // email: "",
+      // halal: false,
+      // has_vegetarian_option: false,
+      // hawker_id: "",
+      // opening_hours: "",
+      // password: "",
+      // username: "",
+      // wallet_id: null
+      hawkers: null,
+      // info: "",
+    };
+  },
+
+  created: function () {
+    this.getHawkers();
+  },
+
+  methods: {
+    getHawkers() {
+      console.log("=== open getHawker ===");
+      const get_Hawker_URL = "http://localhost:5002/hawker";
+      axios
+        .get(get_Hawker_URL)
+        .then((response) => {
+          console.log(response.data.data.hawkers);
+          this.hawkers = response.data.data.hawkers;
+        })
+        .catch((error) => {
+          console.log("=== error getHawker ===");
+          console.log(error.message);
+        });
+    },
+  },
+
+  // mounted () {
+  //   axios
+  //   .get(get_Hawker_URL)
+  //   .then(response => (this.info = response))
+  //   console.log(this.info)
   // }
-}
-
-// fetch(get_Hawker_URL)
-//   .then (response => response.json())
-//   .then(data => {
-//     console.log(response);
-//     if (data.code === 404){
-//       this.message = data.message;
-//     } else {
-//       this.hawkers = data.data.hawker;
-//     }
-//   })
-//   .catch(error => {
-//     console.log(this.message + error)
-//   })
-
-// console.log(get_Hawker_URL)
-
+};
 </script>
 
 
 <style scoped>
 .bgimg {
-  background-image: url('../assets/hawkerbg.jpg');
+  background-image: url("../assets/hawkerbg.jpg");
   background-size: 100%;
   /* filter: brightness(50%); */
 }
