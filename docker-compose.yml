@@ -138,6 +138,7 @@ services:
       - "15672:15672"
     volumes: 
       - rabbitmq_data:/var/lib/rabbitmq
+    container_name: rabbitmq
       
   ####################################
   # Notification
