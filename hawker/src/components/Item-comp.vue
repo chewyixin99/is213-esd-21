@@ -9,7 +9,7 @@
       </div>
       <!-- Item Detail -->
       <div class="p-2 col-span-2 md:col-span-3 grid grid-cols-3">
-        <span class="col-span-2">Item Name</span>
+        <span class="col-span-2">{{item_data.name}}</span>
         <div class="text-center">
           <span class="col-span-1 font-semibold">Price</span>
           <br>
@@ -24,5 +24,21 @@
 <script>
 export default {
   name: 'Item',
+  props : {
+    'item_data_prop': Object
+  }, 
+  // receives:
+  // item_data - object of item's data
+
+  data() {
+    return {
+      item_data: null  
+    }
+  },
+
+  created() {
+    this.item_data = this.item_data_prop
+    console.log(this.item_data)
+  },
 }
 </script>

@@ -149,9 +149,7 @@ def process_complete_order(order_id):
         message = {
             "code": 400,
             "message_type": "order_status_error",
-            "data": {
-                "order_data": new_order_data,
-            },
+            "data": new_order_data
         }
         message = json.dumps(message)
 
@@ -173,9 +171,7 @@ def process_complete_order(order_id):
     message = {
         "code": 201,
         "message_type": "order_completion_notification",
-        "data": {
-            "order_data": new_order_result,
-        },
+        "data": new_order_data
     }
 
     message = json.dumps(message)
