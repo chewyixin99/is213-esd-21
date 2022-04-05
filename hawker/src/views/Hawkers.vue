@@ -21,13 +21,13 @@
             <Hawker/>
       </router-link>
     </div>
-    <!-- <span>{{info.data}}</span> -->
-    <!-- <span>{{getHawkers()}}</span> -->
-    <!-- <span>{{hawkers}}</span> -->
+    <!-- <span>{{info.data}}</span>
+    <span>{{getHawkers()}}</span>
+    <span>{{hawkers}}</span> -->
 
     <ul>
-      <li v-for="hawker in hawkers">
-        {{hawker.cuisine}}
+      <li v-for="hawker in hawkers" v-bind="hawker.hawker_id">
+        {{hawker}}
       </li>
     </ul>
 
@@ -48,6 +48,7 @@ export default {
     Hawker,
     Wallet,
   },
+
   data(){
     return{
       // hawkers: [],
@@ -82,6 +83,7 @@ export default {
         this.hawkers = response.data.data.hawkers
       })
       .catch(error => {
+        console.log("=== error getHawker ===")
         console.log(error.message)
       })
     }
