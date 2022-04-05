@@ -36,7 +36,7 @@ def reject_order(order_id):
 
         return jsonify({
             "code": 500,
-            "message": f"accept_order.py internal error: {ex_str}"
+            "message": f"reject_order.py internal error: {ex_str}"
         })
 
 def process_reject_order(order_id):
@@ -76,9 +76,7 @@ def process_reject_order(order_id):
         message = {
             "code": 400,
             "message_type": "retrieval_error",
-            "data": {
-                "order_data": old_order_data,
-            },
+            "data": old_order_data,
         }
         message = json.dumps(message)
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="retrieval.error", 
@@ -103,9 +101,7 @@ def process_reject_order(order_id):
     message = {
         "code": 201,
         "message_type": "retrieval_notification",
-        "data": {
-            "order_data": old_order_data,
-        },
+        "data": old_order_data
     }
     message = json.dumps(message)
     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="retrieval.notify", 
@@ -123,6 +119,9 @@ def process_reject_order(order_id):
             f"{escrow_url}/{old_order_data['order_id']}",
             method="GET"
         )
+
+        escrow_data = escrow_result["data"]
+
         if escrow_result["code"] not in range(200,300):
             # -------------------- FOR JIAN LIN TO ADD AMQP FAIL
 
@@ -132,14 +131,11 @@ def process_reject_order(order_id):
 
             print('\n\n-----Publishing the escrow error message with routing_key=escrow.error-----')        
 
-            escrow_data = escrow_result["data"]
-
+            
             message = {
                 "code": 400,
                 "message_type": "escrow_error",
-                "data": {
-                    "order_data": escrow_data,
-                },
+                "data": escrow_data
             }
             message = json.dumps(message)
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="escrow.error", 
@@ -155,18 +151,14 @@ def process_reject_order(order_id):
 
         # ##################### AMQP code      
 
-        # handle error -> escrow processing pass
+        # handle notify -> escrow processing notification
 
         print('\n\n-----Publishing the escrow notification message with routing_key=escrow.notify-----')        
-
-        escrow_data = escrow_result["data"]
 
         message = {
             "code": 201,
             "message_type": "escrow_notification",
-            "data": {
-            "order_data": escrow_data,
-            },
+            "data": escrow_data
         }
         message = json.dumps(message)
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="escrow.notify", 
@@ -189,6 +181,8 @@ def process_reject_order(order_id):
             json=wallet_update_json
         )
 
+        wallet_data = wallet_result["data"]
+
         if wallet_result["code"] not in range(200,300):
             # -------------------- FOR JIAN LIN TO ADD AMQP FAIL
 
@@ -203,9 +197,8 @@ def process_reject_order(order_id):
             message = {
                 "code": 400,
                 "message_type": "wallet_error",
-                "data": {
-                    "order_data": wallet_data,
-                },
+                "data": wallet_data
+                
             }
             message = json.dumps(message)
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="wallet.error", 
@@ -225,14 +218,10 @@ def process_reject_order(order_id):
 
         print('\n\n-----Publishing the wallet notification message with routing_key=wallet.notify-----')        
 
-        wallet_data = wallet_result["data"]
-
         message = {
             "code": 201,
             "message_type": "wallet_notification",
-            "data": {
-                "order_data": wallet_data,
-            },
+            "data": wallet_data
         }
         message = json.dumps(message)
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="wallet.notify", 
@@ -242,11 +231,12 @@ def process_reject_order(order_id):
 
         # ##################### END OF AMQP code
 
-
         escrow_delete_result = invoke_http(
             f"{escrow_url}/{old_order_data['order_id']}",
             method="DELETE"
         )
+        escrow_delete_data = escrow_delete_result["order_id"]
+
         if escrow_delete_result["code"] not in range(200,300):
             # -------------------- FOR JIAN LIN TO ADD AMQP FAIL
 
@@ -256,14 +246,10 @@ def process_reject_order(order_id):
 
             print('\n\n-----Publishing the escrow deletion error message with routing_key=escrow_deletion.error-----')        
 
-            escrow_delete_data = escrow_delete_result["data"]
-
             message = {
                 "code": 400,
                 "message_type": "escrow_deletion_error",
-                "data": {
-                    "order_data": escrow_delete_data,
-                },
+                "data": escrow_delete_data
             }
             message = json.dumps(message)
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="escrow_deletion.error", 
@@ -279,18 +265,14 @@ def process_reject_order(order_id):
 
         # ##################### AMQP code      
 
-        # handle notification -> escrow deletion successful
+        # handle notification -> rejection successful
 
         print('\n\n-----Publishing the escrow deletion notification message with routing_key=escrow_deletion.notify-----')        
-
-        escrow_delete_data = escrow_delete_result["data"]
 
         message = {
             "code": 201,
             "message_type": "escrow_deletion_notification",
-            "data": {
-                "order_data": escrow_delete_data,
-            },
+            "data": escrow_delete_data
         }
         message = json.dumps(message)
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="escrow_deletion.notify", 
@@ -309,6 +291,8 @@ def process_reject_order(order_id):
             json=order_status
         )
         
+        new_order_data = new_order_result["data"]
+
         if new_order_result["code"] not in range(200,300):
             # -------------------- FOR JIAN LIN TO ADD AMQP FAIL
 
@@ -318,14 +302,10 @@ def process_reject_order(order_id):
 
             print('\n\n-----Publishing the order rejection error message with routing_key=reject.error-----')        
 
-            new_order_data = new_order_result["data"]
-
             message = {
                 "code": 400,
                 "message_type": "reject_error",
-                "data": {
-                    "order_data": new_order_data,
-                },
+                "data": new_order_data
             }
             message = json.dumps(message)
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="reject.error", 
@@ -341,24 +321,23 @@ def process_reject_order(order_id):
 
         # ##################### AMQP code      
 
-        # handle error -> order rejection success
+        # handle notification -> order rejection success
 
-        print('\n\n-----Publishing the order rejection notification message with routing_key=reject.notification-----')        
+        print('\n\n-----Publishing the order rejection notification message with routing_key=reject.notify-----')        
 
-        new_order_data = new_order_result["data"]
 
         message = {
             "code": 201,
             "message_type": "reject_notification",
-            "data": {
-                "order_data": new_order_data,
-            },
+            "data": new_order_data
         }
         message = json.dumps(message)
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="reject.notification", 
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="reject.notify", 
         body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
         print("\nOrder rejection notification published to RabbitMQ Exchange.\n")
+
+        return new_order_data
 
         # ##################### END OF AMQP code
 
@@ -371,14 +350,10 @@ def process_reject_order(order_id):
 
     print('\n\n-----Publishing the order rejection status error message with routing_key=reject_status.error-----')        
 
-    new_order_data = new_order_result["data"]
-
     message = {
         "code": 403,
         "message_type": "reject_status_error",
-        "data": {
-            "order_data": new_order_data,
-        },
+        "data": new_order_data
     }
     message = json.dumps(message)
     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="reject_status.error", 

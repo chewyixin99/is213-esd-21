@@ -6,6 +6,7 @@ app = Flask(__name__)
 
 # Flask SQLAlchemy config
 app.config["SQLALCHEMY_DATABASE_URI"] = environ.get('dbURL')
+# app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+mysqlconnector://is213@host.docker.internal:3306/esd"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
@@ -110,8 +111,27 @@ def create_user(email):
         }
     )
 
+@app.route("/user/authenticate", methods=["POST"])
+def authenticate_user():
+    data = request.get_json()
 
+    email = data["email"]
+    password = data["password"]
+    user = User.query.filter_by(email=email).first().json()
+    retrieved_password = user["password"]
+
+    if password == retrieved_password:
+
+        return jsonify({
+            "code": 203,
+            "data": True
+        })
     
+    return jsonify({
+        "code": 403,
+        "data": False
+    })
+
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True) 

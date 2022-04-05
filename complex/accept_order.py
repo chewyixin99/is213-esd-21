@@ -55,17 +55,17 @@ def process_accept_order(order_id):
 
         print('\n\n-----Publishing the order retrieval error message with routing_key=retrieval.error-----')        
 
-        message = json.dumps({
+        message = {
             "code": 400,
             "message_type": "retrieval_error",
-            "data": {
-                "order_data": old_order_data,
-            },
-        })
+            "data": old_order_data,
+        }
+
+        message = json.dumps(message)
 
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="retrieval.error", 
         body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
-        message = json.dumps(message)
+        
         print("\nOrder retrieval error published to RabbitMQ Exchange.\n")
 
         # ##################### END OF AMQP code
@@ -81,9 +81,7 @@ def process_accept_order(order_id):
     message = json.dumps({
         "code": 201,
         "message_type": "retrieval_notification",
-        "data": {
-            "order_data": old_order_data,
-        },
+        "data": old_order_data
     })
     message = json.dumps(message)
     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="retrieval.notify", 
@@ -111,13 +109,11 @@ def process_accept_order(order_id):
 
         new_order_data = new_order_result["data"]
 
-        message = json.dumps({
+        message = {
             "code": 201,
             "message_type": "accept_notification",
-            "data": {
-                "order_data": new_order_data,
-            },
-        })
+            "data": new_order_data
+        }
 
         message = json.dumps(message)
 
@@ -139,9 +135,7 @@ def process_accept_order(order_id):
     message = json.dumps({
         "code": 400,
         "message_type": "accept_error",
-        "data": {
-            "order_data": old_order_data,
-        },
+        "data": old_order_data
     })
     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="accept.error", 
     body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
