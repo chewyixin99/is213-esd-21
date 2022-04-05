@@ -21,15 +21,26 @@
             <Hawker/>
       </router-link>
     </div>
+    <!-- <span>{{info.data}}</span> -->
+    <!-- <span>{{getHawkers()}}</span> -->
+    <!-- <span>{{hawkers}}</span> -->
+
+    <ul>
+      <li v-for="hawker in hawkers">
+        {{hawker.cuisine}}
+      </li>
+    </ul>
+
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
+import axios from 'axios';
 import Hawker from '@/components/Hawker-comp.vue'
 import Wallet from '@/components/Wallet-comp.vue'
 
-const get_Hawker_URL = "http://localhost:5002/hawkers";
+const get_Hawker_URL = "http://localhost:5002/hawker";
 
 export default {
   name: 'Hawkers',
@@ -37,39 +48,53 @@ export default {
     Hawker,
     Wallet,
   },
-  // data(){
-  //   return{
-  //     hawkers: [],
-  //     message: "",
-  //     closing_hours: "", 
-  //     cuisine: "", 
-  //     email: "", 
-  //     halal: false, 
-  //     has_vegetarian_option: false, 
-  //     hawker_id: "", 
-  //     opening_hours: "", 
-  //     password: "", 
-  //     username: "", 
-  //     wallet_id: null
-  //   }
+  data(){
+    return{
+      // hawkers: [],
+      // message: "",
+      // closing_hours: "", 
+      // cuisine: "", 
+      // email: "", 
+      // halal: false, 
+      // has_vegetarian_option: false, 
+      // hawker_id: "", 
+      // opening_hours: "", 
+      // password: "", 
+      // username: "", 
+      // wallet_id: null
+      hawkers: [],
+      // info: "",
+    }
+  },
+
+  created: function(){
+    console.log("=== created ===")
+    this.getHawkers()
+  },
+
+  methods: {
+    getHawkers(){
+      console.log("=== Open getHawker ===")
+      axios
+      .get(get_Hawker_URL)
+      .then(response => {
+        console.log(response.data.data.hawkers)
+        this.hawkers = response.data.data.hawkers
+      })
+      .catch(error => {
+        console.log(error.message)
+      })
+    }
+  }
+
+  // mounted () {
+  //   axios
+  //   .get(get_Hawker_URL)
+  //   .then(response => (this.info = response))
+  //   console.log(this.info)
   // }
+
 }
-
-// fetch(get_Hawker_URL)
-//   .then (response => response.json())
-//   .then(data => {
-//     console.log(response);
-//     if (data.code === 404){
-//       this.message = data.message;
-//     } else {
-//       this.hawkers = data.data.hawker;
-//     }
-//   })
-//   .catch(error => {
-//     console.log(this.message + error)
-//   })
-
-// console.log(get_Hawker_URL)
 
 </script>
 
