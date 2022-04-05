@@ -19,24 +19,25 @@
       <form>
         <div class="my-3 text-start">
           <label for="formGroupExampleInput" class="form-label">Email</label>
-          <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Enter Email">
+          <input v-model="email" type="text" class="form-control" id="formGroupExampleInput" placeholder="Enter Email">
         </div>
         <div class="mb-5 text-start">
           <label for="formGroupExampleInput2" class="form-label">Password</label>
-          <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Enter Password">
+          <input v-model="password" type="text" class="form-control" id="formGroupExampleInput2" placeholder="Enter Password">
         </div>
       </form>
 
       <!-- Buttons -->
       <div class="text-center">
 
-          <!-- <button type="button" class="btn btn-danger w-24">Sign Up</button> -->
-          <router-link to="/Hawkers">
-            <button type="button" class="btn btn-warning w-full">Log In</button>
-          </router-link>
+          <!-- <router-link to="/Hawkers"> -->
+            <button @click="login()" type="button" class="btn btn-warning w-full">Log In</button>
+          <!-- </router-link> -->
 
           <div class="mt-2">
-            <span class="text-warning">Create an account</span>
+            <router-link to="account">
+              <span class="text-warning">Create an account</span>
+            </router-link>
           </div>
 
       </div>
@@ -46,7 +47,45 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'LoginUser',
+  data(){
+    return{
+      email: "",
+      password: "",
+      user_id: "",
+      error: "",
+    }
+  },
+
+  methods: {
+      setUserId(){
+        console.log("=== set user id ===")
+        localStorage.setItem("user_id", this.user_id)
+        console.log(this.user_id)
+      },
+
+      // async login(){
+      //   // console.log(this.email)
+      //   // console.log(this.password)
+      //   let params = {
+      //     email: this.email,
+      //     password: this.password,
+      //   }
+
+      //   let response = await axios.post('http://localhost:5001/user/', params);
+
+      //   console.log(response.data);
+
+      //   if (True){
+      //     this.setUserId()
+      //   } else {
+      //     this.error = "Unsuccessful login";
+      //   }
+      // }
+      
+  }
 }
 </script>

@@ -36,7 +36,9 @@
           </router-link>
 
           <div class="mt-2">
-            <span class="text-warning">Create an account</span>
+            <router-link to="account">
+              <span class="text-warning">Create an account</span>
+            </router-link>
           </div>
 
       </div>

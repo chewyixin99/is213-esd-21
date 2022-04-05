@@ -25,21 +25,52 @@
       <button type="button" class="btn btn-warning w-full md:w-48">Pay</button>
     </div>
 
+    {{order}}
+
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
+import axios from 'axios';
 import CartItem from '@/components/Cart-item-comp.vue'
 import Wallet from '@/components/Wallet-comp.vue'
 
+const get_Order_URL = "http://localhost:5004/order/user/1000";
 
 export default {
   name: 'Cart',
   components: {
     CartItem,
     Wallet
+  },
+  data(){
+    return {
+      orders: [],
+    }
+  },
+
+  created: function(){
+    console.log("=== created ===")
+    this.getOrders()
+  },
+
+  methods: {
+    getOrders(){
+      console.log("=== Open getOrders ===")
+      axios
+      .get(get_Order_URL)
+      .then(response => {
+        console.log(response.data.data.orders)
+        // this.orders = response.data.data.hawkers
+      })
+      .catch(error => {
+        console.log("=== error getOrders ===")
+        console.log(error.message)
+      })
+    }
   }
+
 }
 </script>
 
