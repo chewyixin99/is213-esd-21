@@ -11,7 +11,7 @@ target_number = '+6586862106'
 
 def receiveOrderLog():
     amqp_setup.check_setup()
-        
+    print("Notification is received in notification.py")
     queue_name = 'Notification'
     
     # set up a consumer and start to wait for coming messages
@@ -29,43 +29,47 @@ def processNotificationLog(notificationBody):
 
     client = Client(account_sid, auth_token)
 
+    print("Received Body: {}".format(notificationBody))
+
     loaded_body = json.loads(notificationBody)
-    message_type = loaded_body['message_type']
-    data = loaded_body["data"]["order_data"]
+    
+    # message_type = loaded_body['message_type']
+    data = loaded_body["data"]
     body = ""
 
-    if loaded_body['message_type'] == "order_notification":
+    print("Message Type: {} is received".format(loaded_body["message_type"]))
 
-        body = "\n"
-        body += "\nHello User {}, your order {} is sent to the kitchen. \n\nDetails are as follows:\n".format(data["user_id"],data["order_id"])
+    if loaded_body["message_type"] == "order_notification":
+
+        body = "\n\n"
+        body += "\nHello User {}, your order {} is sent to the kitchen. \n\nDetails are as follows:".format(data["user_id"],data["order_id"])
         body += "\n--------------"
         body += "\nHawker ID: {}".format(data["hawker_id"])
-        body += "\nItems:\n"
-        
-        for item in data["items"]:
-            body += "Item ID: {}, Qty: {}\n".format(item["item_id"],item["quantity"])
+        body += "\nItems: \n"
 
+        item_list = eval(data["items"])
+        for item in item_list:
+            body += "- Item ID: {}, Qty: {}\n".format(item["item_id"],item["quantity"])
+        body += "--------------"
         body += "\nTotal Price: ${}".format(data["total_price"])
         body += "\nDiscount: ${}".format(data["discount"])
         body += "\nFinal Price: ${}".format(data["final_price"])
         body += "\n--------------"
-        body += "\nTime of Order: {}".format(data["time"])
+        body += "\nTime of Order:\n{}".format(data["time"])
+
+        # print("Notification: {} sent successfully..".format(message_type))
         
 
-    elif loaded_body['message_type'] == "accept_notification":
+    elif loaded_body["message_type"] == "accept_notification":
         body = "\n"
-        body += "\nHello User {}, your order {} is being processed.\n".format(data["user_id"],data["order_id"])
-        body += "\n--------------"
-        body += "\nHawker ID: {}".format(data["hawker_id"])
-        body += "\nItems:\n"
-        
-        for item in data["items"]:
-            body += "Item ID: {}, Qty: {}\n".format(item["item_id"],item["quantity"])
+        body += "\nHello User {}, your order {} is being processed.".format(data["user_id"],data["order_id"])
+        body += "\n\n--------------"
+        body += "\nEstimated Waiting Time: 20mins"
 
-        body += "\n--------------"
-        body += "\nTime of Order: {}".format(data["time"])
+        # print("Notification: {} sent successfully..".format(message_type))
 
-    elif loaded_body['message_type'] == "order_completion_notification":
+
+    elif loaded_body["message_type"] == "order_completion_notification":
         body = "\n"
         body += "\nHello User {}, your order {} is completed.\n\nPayment details are as follows:".format(data["user_id"],data["order_id"])
         body += "\n--------------"
@@ -73,15 +77,24 @@ def processNotificationLog(notificationBody):
         body += "\nDiscount: ${}".format(data["discount"])
         body += "\nFinal Price: ${}".format(data["final_price"])
         body += "\n--------------"
-        body += "\nTime of Order: {}".format(data["time"])
-    
+        body += "\nTime of Order:\n{}".format(data["time"])
+
+        # print("Notification: {} sent successfully..".format(message_type))
+
+    elif loaded_body["message_type"] == "reject_notification":
+        body = "\n"
+        body += "\nHello User {}, your order {} was rejected.".format(data["user_id"],data["order_id"])
+        body += "\n\n--------------"
+        body += "\nPlease try again later.."
+
     if body != "":
         client.messages.create(
             body=body,
             from_=twilio_number,
             to=target_number
         )
-        print("Notification: {} sent successfully..".format(message_type))
+        
+        print("Notification was sent successfully..")
 
     
 

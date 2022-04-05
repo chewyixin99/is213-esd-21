@@ -124,10 +124,10 @@ def process_place_order(order):
 
         if wallet_update_result["code"] not in range(200,300):
             return wallet_update_result
-
+        print("------------ WALLET UPDATED SUCCESSFULLY - {} ------------".format(wallet_update_result))
     else:
         order["status"] = "failed"
-
+        print("------------ ORDER STATUS FAILED ------------")
         # ##################### AMQP code
 
         # # handle error -> wallet insufficient funds
@@ -136,15 +136,17 @@ def process_place_order(order):
         message = {
             "code": 400,
             "message_type": "business_error",
-            "data": {
-                "order_data": "Insufficient wallet funds",
-            },
+            "data": "Insufficient wallet funds"
         }
         message = json.dumps(message)
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.error", 
         body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
         print("\nOrder error - Insufficient wallet funds - published to the RabbitMQ Exchange:")
+
+        ## Added this part to prevent code from continuing even when failed <-----------
+
+        return wallet_data
 
         # ##################### END OF AMQP code
 
@@ -154,7 +156,7 @@ def process_place_order(order):
         method="POST",
         json=order
     )
-
+    order_data = order_result["data"]
     
     if order_result["code"] not in range(200,300):
 
@@ -163,7 +165,7 @@ def process_place_order(order):
         # handle error -> order was not processed successfully
 
         code = order_result["code"]
-        order_data = order_result["data"]
+        
         # order_id = order_data["order_id"]
 
         print('\n\n-----Publishing the (order error) message with routing_key=order.error-----')
@@ -171,9 +173,7 @@ def process_place_order(order):
         message = {
             "code": 400,
             "message_type": "order_error",
-            "data": {
-                "order_data": order_data,
-            },
+            "data": order_data
         }
 
         message = json.dumps(message)
@@ -184,27 +184,27 @@ def process_place_order(order):
         print("\nOrder error - Code {} - published to the RabbitMQ Exchange:".format(code))
         return order_result
 
-    order_data = order_result["data"]
-    # handle notification -> order processed successfully
+    # order_data = order_result["data"]
+    # # handle notification -> order processed successfully
 
-    print('\n\n-----Publishing the order notification message with routing_key=order.notify-----')        
+    # print('\n\n-----Publishing the order notification message with routing_key=order.notify-----')        
 
-    message = {
-        "code": 201,
-        "message_type": "order_notification",
-        "data": {
-            "order_data": order_data,
-        },
-    }
+    # message = {
+    #     "code": 201,
+    #     "message_type": "order_notification",
+    #     "data": {
+    #         "order_data": order_data,
+    #     },
+    # }
 
-    message = json.dumps(message)
+    # message = json.dumps(message)
 
-    amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.notify", 
-    body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+    # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.notify", 
+    # body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
-    print("\nOrder notification published to RabbitMQ Exchange.\n")
+    # print("\nOrder notification published to RabbitMQ Exchange.\n")
 
-    # ##################### END OF AMQP code
+    # # ##################### END OF AMQP code
 
 
         
@@ -250,9 +250,7 @@ def process_place_order(order):
             message = {
                 "code": 400,
                 "message_type": "escrow_error",
-                "data": {
-                    "order_data": escrow_data,
-                },
+                "data": escrow_data
             }
             message = json.dumps(message)
 
@@ -271,7 +269,7 @@ def process_place_order(order):
             #     "code": 409,
             #     "message": f"Cannot create escrow, order with order id {order_data['order_id']} deleted."
             # })
-            # return escrow_result
+            return escrow_result
 
         else:
 
@@ -282,9 +280,8 @@ def process_place_order(order):
             message = {
                 "code": 400,
                 "message_type": "escrow_notification",
-                "data": {
-                    "order_data": escrow_data,
-                },
+                "data": escrow_data
+
             }
 
             message = json.dumps(message)
@@ -295,6 +292,26 @@ def process_place_order(order):
             print("\nOrder notification published to RabbitMQ Exchange.\n")
 
             # ##################### end of AMQP code
+
+
+        # handle notification -> order processed successfully (moved all the way down to ensure escrow is successful before sending notification)
+
+        print('\n\n-----Publishing the order notification message with routing_key=order.notify-----')        
+
+        message = {
+            "code": 201,
+            "message_type": "order_notification",
+            "data": order_data
+        }
+
+        message = json.dumps(message)
+
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.notify", 
+        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+
+        print("\nOrder notification published to RabbitMQ Exchange.\n")
+
+        # ##################### END OF AMQP code
 
     # notification microservice ---------------------------
 
