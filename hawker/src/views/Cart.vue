@@ -20,7 +20,7 @@
     </div>
 
     <div class="mt-3 md:text-right px-3">
-      <button type="button" class="btn btn-warning w-full md:w-48">Pay</button>
+      <button type="button" @click="createOrder" class="btn btn-warning w-full md:w-48">Pay</button>
     </div>
 
   </div>
@@ -28,6 +28,7 @@
 
 <script>
 // @ is an alias to /src
+import axios from 'axios'
 import CartItem from '@/components/Cart-item-comp.vue'
 import Wallet from '@/components/Wallet-comp.vue'
 import { globalState, stateSetters } from '../store'
@@ -44,6 +45,8 @@ export default {
       globalState,
       stateSetters,
       totalAmount: 0.00,
+      selectedHawker: null,
+      isLoading: false,
     }
   },
 
@@ -60,10 +63,59 @@ export default {
 
     getTotalAmount() {
       this.totalAmount = 0
-      globalState.selected_items.map((item) => (
-        this.totalAmount += item.price
-      ))
+      if (globalState.selected_items.length !== 0) {
+        this.selectedHawker = globalState.selected_items[0].hawker_id
+        globalState.selected_items.map((item) => (
+          this.totalAmount += item.price
+        ))        
+      }
       this.totalAmount = Number.parseFloat(this.totalAmount).toFixed(2)
+    },
+
+    async createOrder() {
+      var finalItems = []
+      this.isLoading = true
+
+      globalState.selected_items.map((item) => {
+        finalItems.push({
+            'item_id': item.item_id,
+            'quantity': 1
+          }
+        )
+      })
+
+      finalItems = JSON.stringify(finalItems)
+      console.log(finalItems)
+      finalItems = finalItems.replace(/\\/g, "");
+      console.log(finalItems)
+
+    
+
+      const orderData = {
+        "user_id": globalState.user_id,
+        "hawker_id": this.selectedHawker,
+        "items": finalItems,
+        "status": "pending",
+        "total_price": this.totalAmount,
+        "discount": 0.0,
+        "final_price": this.totalAmount
+      }
+      console.log(orderData)
+
+      const place_order_URL = `localhost:5100/place_order`
+      axios
+      .post(place_order_URL, orderData)
+      .then((response) => {
+        this.isLoading = false
+        console.log(`=== order created ===`);
+        console.log(response.data.data)
+      })
+      .catch((error) => {
+        console.log(`=== ERROR creating items ===`);
+        console.log(error.message);
+      })
+
+      
     }
   }
 

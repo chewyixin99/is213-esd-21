@@ -1,7 +1,7 @@
 import { reactive } from 'vue'
 
 const globalState = reactive({
-  user_id: 2000,
+  user_id: 1001,
   selected_items: []
 })
 
