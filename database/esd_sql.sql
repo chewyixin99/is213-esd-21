@@ -33,10 +33,11 @@ ALTER TABLE user AUTO_INCREMENT=1000;
 --
 
 INSERT INTO `user` (`username`, `email`, `password`) VALUES
-('customer_username_1', 'customer1@mail.com', 'customer_password_1'), 
-('customer_username_2', 'customer2@mail.com', 'customer_password_2'),
-('customer_username_3', 'customer3@mail.com', 'customer_password_3'),
-('customer_username_4', 'customer4@mail.com', 'customer_password_4');
+('yixin', 'yixin@mail.com', 'password'), 
+('kokwee', 'kokwee@mail.com', 'password'),
+('biondi', 'biondi@mail.com', 'password'),
+('jianlin', 'jianlin@mail.com', 'password'),
+('joel', 'joel@mail.com', 'password');
 COMMIT;
 
 DROP TABLE IF EXISTS `hawker`;
@@ -59,10 +60,12 @@ ALTER TABLE hawker AUTO_INCREMENT=2000;
 --
 
 INSERT INTO `hawker` (`username`, `email`, `password`, `opening_hours`, `closing_hours`) VALUES
-('hawker_username_1', 'hawker1@mail.com', 'hawker_password_1', '09:00:00', '21:00:00'), 
-('hawker_username_2', 'hawker2@mail.com', 'hawker_password_2', '08:00:00', '22:00:00'),
-('hawker_username_3', 'hawker3@mail.com', 'hawker_password_3', '07:30:00', '19:00:00'),
-('hawker_username_4', 'hawker4@mail.com', 'hawker_password_4', '10:00:00', '20:00:00');
+('chinese', 'chinese@mail.com', 'password', '09:00:00', '21:00:00'), 
+('muslim', 'muslim@mail.com', 'password', '08:00:00', '22:00:00'),
+('vegetarian', 'vegetarian@mail.com', 'password', '07:30:00', '19:00:00'),
+('japanese', 'japanese@mail.com', 'password', '07:30:00', '19:00:00'),
+('korean', 'korean@mail.com', 'password', '10:00:00', '20:00:00'),
+('indian', 'indian@mail.com', 'password', '10:00:00', '20:00:00');
 COMMIT;
 
 --
@@ -89,12 +92,24 @@ ALTER TABLE item AUTO_INCREMENT=3000;
 
 INSERT INTO `item` (`hawker_id`, `name`, `description`, 
 `price`, `cuisine`, `course`, `vegetarian`, `available`) VALUES
-(2001, 'item_name_1', 'item_description_1', 1.0, 'chinese', 'main', TRUE, TRUE), 
-(2001, 'item_name_1', 'item_description_1_alt', 1.0, 'chinese', 'side', TRUE, TRUE), 
-(2002, 'item_name_2', 'item_description_2', 2.0, 'muslim', 'side', FALSE, TRUE), 
-(2003, 'item_name_3', 'item_description_3', 3.0, 'indian', 'main', FALSE, FALSE), 
-(2004, 'item_name_4', 'item_description_4', 4.0, 'korean', 'main', FALSE, TRUE), 
-(2005, 'item_name_5', 'item_description_5', 5.0, 'any', 'drinks', TRUE, FALSE);
+(2000, 'chicken rice', 'this is chicken and rice', 3.8, 'chinese', 'main', FALSE, TRUE), 
+(2000, 'chinese rojak', 'this is fruit and vege rojak', 4.9, 'chinese', 'side', TRUE, TRUE), 
+
+(2001, 'nasi lemak', 'this is nasi lemak', 4.9, 'muslim', 'main', FALSE, TRUE), 
+(2001, 'satay', 'meat on stick yum', 0.5, 'muslim', 'side', FALSE, TRUE), 
+
+(2002, 'popiah', 'spring roll', 3.0, 'vegetarian', 'side', TRUE, TRUE), 
+(2002, 'bee hoon', 'this is bee hoon', 4.3, 'vegetarian', 'main', TRUE, TRUE), 
+
+(2003, 'oyakodon', 'OYAKODONNNN', 4.9, 'japanese', 'main', FALSE, TRUE), 
+(2003, 'takoyaki', 'octopus balls bussin', 3.9, 'japanese', 'side', FALSE, TRUE), 
+
+(2004, 'bibimbap', 'rice and many vege and sauce yum', 5.3, 'korean', 'main', TRUE, FALSE),
+(2004, 'soju', 'sweet drink slurp', 12, 'korean', 'drink', TRUE, FALSE), -- haram SIAL
+
+(2005, 'maggi goreng', 'best supper dish', 4.9, 'indian', 'main', FALSE, FALSE),
+(2005, 'milo tower', 'best of the best no cap', 30.0, 'indian', 'drink', TRUE, FALSE);
+
 COMMIT;
 
 --
@@ -120,8 +135,8 @@ ALTER TABLE `order` AUTO_INCREMENT=4000;
 --
 
 INSERT INTO `order` (`user_id`, `hawker_id`, `status`, `total_price`, `discount`, `final_price`, `items`) VALUES
-(1000, 2001, "pending", 10, 5, 5, "[{'item_id': 3001, 'quantity': 1}, {'item_id': 3002, 'quantity': 1}]"),
-(1000, 2000, "accepted", 10, 0, 10, "[{'item_id': 3000, 'quantity': 2}, {'item_id': 3001, 'quantity': 1}, {'item_id': 3002, 'quantity': 1}, {'item_id': 3003, 'quantity': 1}, {'item_id': 3004, 'quantity': 1}]");
+(1000, 2000, "pending", 12.5, 0, 12.5, "[{'item_id': 3000, 'quantity': 2}, {'item_id': 3001, 'quantity': 1}]"),
+(1000, 2001, "accepted", 19.8, 0.8, 19, "[{'item_id': 3002, 'quantity': 2}, {'item_id': 3003, 'quantity': 20}]");
 COMMIT;
 
 --
@@ -140,11 +155,17 @@ CREATE TABLE IF NOT EXISTS `wallet` (
 --
 
 INSERT INTO `wallet` (`wallet_id`, `total_balance`, `available_balance`) VALUES
-(1000, 0.0, 0.0),
+(1000, 81.5, 50),
 (1001, 100.0, 100.0),
-(2000, 50.0, 50.0),
-(2001, 15.3, 12.4),
-(1002, 1337.0, 42.0);
+(1002, 80.0, 80.0),
+(1003, 20, 20.0),
+(1004, 0.0, 0.0),
+(2000, 0, 0),
+(2001, 0, 0),
+(2002, 0, 0),
+(2003, 0, 0),
+(2004, 0, 0),
+(2005, 0, 0);
 COMMIT;
 
 --
@@ -165,8 +186,8 @@ CREATE TABLE IF NOT EXISTS `escrow` (
 --
 
 INSERT INTO `escrow` (`order_id`, `payer_id`, `receiving_id`, `amount`) VALUES
-(4000, 1, 2, 1.0), -- check if can pay when person has no money
-(4001, 2, 3, 1.0);
+(4000, 1000, 2000, 12.5),
+(4001, 1000, 2001, 19);
 COMMIT;
 
 --
