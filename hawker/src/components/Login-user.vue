@@ -77,18 +77,35 @@ export default {
         let response = await axios.post('http://localhost:5001/user/authenticate', params);
 
         if (response.data){
-          // setUserId(response.data)
-          localStorage.setItem("user_id", response.data)
-          console.log(`Successfully set User ID: ${response.data}`)
-          // this.user_id = response.data
-          // this.setUserId(response.data.data)
-          // this.user_id = response.data.data
-        } else {
-          this.error = "Unsuccessful login";
-          console.log(this.error)
+
+          let response_userid = response.data.data
+
+          // if (response_usertype == "customer"){
+          localStorage.setItem("user_id", response_userid)
+          console.log(`Successfully set User ID: ${response_userid}.. Routing>>`)
+          this.$router.replace({name: "Hawkers"});
+
+        }
+
+        else {
+
+          let response = await axios.post('http://localhost:5002/hawker/authenticate', params);
+          
+          if (response){
+
+            let response_userid = response.data.data
+
+            localStorage.setItem("hawker_id", response_userid)
+            console.log(`Successfully set Hawker ID: ${response_userid}.. Routing>>`)
+            this.$router.replace({name: "Order"});
+          }
+          
+          else {
+              this.error = "Unsuccessful login";
+              console.log(this.error)
+            }
         }
       }
-      
-  }
+    }
 }
 </script>

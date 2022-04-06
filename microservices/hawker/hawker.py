@@ -200,6 +200,26 @@ def update_hawker(hawker_id):
         }
     ), 201
 
+@app.route("/hawker/authenticate", methods=["POST"])
+@cross_origin()
+def authenticate_hawker():
+    data = request.get_json()
+
+    email = data["email"]
+    password = data["password"]
+    hawker = Hawker.query.filter_by(email=email).first().json()
+    if hawker:
+        retrieved_password = hawker["password"]
+        if password == retrieved_password:
+            return jsonify({
+                "code": 203,
+                "data": hawker["hawker_id"],
+            })
+    
+    return jsonify({
+        "code": 403,
+        "data": None
+    })
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5002, debug=True)    

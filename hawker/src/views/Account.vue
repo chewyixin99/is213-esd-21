@@ -54,7 +54,7 @@ export default {
       username: "",
       email: "",
       password: "",
-      user_id: 0,
+      user_id: localStorage.getItem("user_id"),
     }
   },
   // created: function(){

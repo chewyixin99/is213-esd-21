@@ -123,14 +123,13 @@ def authenticate_user():
     email = data["email"]
     password = data["password"]
     user = User.query.filter_by(email=email).first().json()
-    retrieved_password = user["password"]
-
-    if password == retrieved_password:
-
-        return jsonify({
-            "code": 203,
-            "data": user["user_id"]
-        })
+    if user:
+        retrieved_password = user["password"]
+        if password == retrieved_password:
+            return jsonify({
+                "code": 203,
+                "data": user["user_id"],
+            })
     
     return jsonify({
         "code": 403,
