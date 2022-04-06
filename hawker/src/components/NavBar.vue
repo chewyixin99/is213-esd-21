@@ -6,6 +6,9 @@
         <router-link to="/hawkers">
           <div class="text-white mb-2">Hawker Stalls</div>
         </router-link>
+        <router-link to="/">
+          <div class="text-white">Log In</div>
+        </router-link>
       </div>
       <div v-else-if="globalState.user_id >= 2000" class="bg-dark p-4">
         <router-link to="/">
