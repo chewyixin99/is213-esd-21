@@ -61,30 +61,29 @@ export default {
   },
 
   methods: {
-      setUserId(){
-        console.log("=== set user id ===")
-        localStorage.setItem("user_id", this.user_id)
-        console.log(this.user_id)
+      setUserId(user_id){
+        // console.log("=== set user id ===")
+        localStorage.setItem("user_id", user_id)
+        console.log(`Successfully set User ID: ${user_id}`)
       },
 
-      // async login(){
-      //   // console.log(this.email)
-      //   // console.log(this.password)
-      //   let params = {
-      //     email: this.email,
-      //     password: this.password,
-      //   }
+      async login(){
+        // console.log(this.email)
+        // console.log(this.password)
+        let params = {
+          email: this.email,
+          password: this.password,
+        }
 
-      //   let response = await axios.post('http://localhost:5001/user/', params);
+        let response = await axios.post('http://localhost:5001/user/authenticate', params);
 
-      //   console.log(response.data);
-
-      //   if (True){
-      //     this.setUserId()
-      //   } else {
-      //     this.error = "Unsuccessful login";
-      //   }
-      // }
+        if (response.data){
+          setUserId(response.data)
+          this.user_id = response.data
+        } else {
+          this.error = "Unsuccessful login";
+        }
+      }
       
   }
 }
