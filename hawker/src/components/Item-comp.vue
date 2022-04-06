@@ -13,7 +13,7 @@
         <div class="text-center">
           <span class="col-span-1 font-semibold">Price</span>
           <br>
-          <button type="button" class="btn btn-primary">+</button>
+          <button type="button" class="btn btn-primary" @click="addToCart">+</button>
         </div>
       </div>
     </div>
@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import { stateSetters } from '../store'
+
 export default {
   name: 'Item',
   props : {
@@ -32,13 +34,21 @@ export default {
 
   data() {
     return {
-      item_data: null  
+      item_data: null,
+      stateSetters,
     }
   },
 
   created() {
     this.item_data = this.item_data_prop
-    console.log(this.item_data)
+    // console.log(this.item_data)
   },
+
+  methods: {
+    addToCart() {
+      console.log("=== Adding item to cart ===")
+      stateSetters.addSelectedItem(this.item_data)
+    }
+  }
 }
 </script>

@@ -10,33 +10,27 @@
       </div>
     </div>
 
-    <div class="mt-3">
-      <CartItem/>
-      <CartItem/>
-      <CartItem/>
+    <div v-for="(item, index) in globalState.selected_items" :key="item.item_id" class="mt-3">
+      <CartItem :item_data_prop="item" @remove_item="removeItem(index)"/>
     </div>
 
     <div class="mt-3 text-left px-3 flex justify-content-between">
       <span class="font-semibold">Total Amount Payable</span>
-      <span class="text-xl">$30.00</span>
+      <span class="text-xl">${{totalAmount}}</span>
     </div>
 
     <div class="mt-3 md:text-right px-3">
       <button type="button" class="btn btn-warning w-full md:w-48">Pay</button>
     </div>
 
-    {{order}}
-
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import axios from 'axios';
 import CartItem from '@/components/Cart-item-comp.vue'
 import Wallet from '@/components/Wallet-comp.vue'
-
-const get_Order_URL = "http://localhost:5004/order/user/1000";
+import { globalState, stateSetters } from '../store'
 
 export default {
   name: 'Cart',
@@ -44,30 +38,32 @@ export default {
     CartItem,
     Wallet
   },
-  data(){
+
+  data() {
     return {
-      orders: [],
+      globalState,
+      stateSetters,
+      totalAmount: 0.00,
     }
   },
 
-  created: function(){
-    console.log("=== created ===")
-    this.getOrders()
+  created() {
+    this.getTotalAmount()
   },
 
   methods: {
-    getOrders(){
-      console.log("=== Open getOrders ===")
-      axios
-      .get(get_Order_URL)
-      .then(response => {
-        console.log(response.data.data.orders)
-        // this.orders = response.data.data.hawkers
-      })
-      .catch(error => {
-        console.log("=== error getOrders ===")
-        console.log(error.message)
-      })
+    removeItem(index) {
+      console.log("==== removeing item ====")
+      stateSetters.removeSelectedItem(index)
+      this.getTotalAmount()
+    },
+
+    getTotalAmount() {
+      this.totalAmount = 0
+      globalState.selected_items.map((item) => (
+        this.totalAmount += item.price
+      ))
+      this.totalAmount = Number.parseFloat(this.totalAmount).toFixed(2)
     }
   }
 
