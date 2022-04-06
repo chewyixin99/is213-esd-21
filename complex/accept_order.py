@@ -46,20 +46,18 @@ def process_accept_order(order_id):
         method="GET"
     )
 
-    old_order_data = old_order_result["data"]
-
     if old_order_result["code"] not in range(200, 300):
 
-    # ##################### AMQP code      
+        # ##################### AMQP code      
 
-    # handle error -> order retrieval fail
+        # handle error -> order retrieval fail
 
         print('\n\n-----Publishing the order retrieval error message with routing_key=retrieval.error-----')        
 
         message = {
-            "code": 400,
+            "code": 404,
             "message_type": "retrieval_error",
-            "data": old_order_data,
+            "data": old_order_result,
         }
 
         message = json.dumps(message)
@@ -73,7 +71,9 @@ def process_accept_order(order_id):
 
         return old_order_result
 
-        # ##################### AMQP code      
+        # ##################### AMQP code    
+
+    old_order_data = old_order_result["data"]
 
     # handle error -> order retrieval success
 
