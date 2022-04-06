@@ -113,6 +113,48 @@ def create_user(email):
         }
     )
 
+# Update user
+@app.route("/user/<int:user_id>", methods=['PUT'])
+def update_user(user_id):
+    user = User.query.filter_by(user_id=user_id).first()
+    
+    if not (user):
+        return jsonify(
+            {
+                "code": 404,
+                "data": {
+                    "user_id": user_id
+                },
+                "message": f"Requested user (with user id {user_id}) does not exist."
+            }
+        ), 404
+
+    data = request.get_json()
+
+    try:
+        for key in data.keys():            
+            setattr(user, key, data[key])
+        db.session.commit()
+        
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "data": {
+                    "user_id": user_id
+                },
+                "message": "An error occurred while updating the user."
+            }
+        ), 500
+
+    return jsonify(
+        {
+            "code": 201,
+            "data": user.json(),
+            "message": "Successfully updated user."
+        }
+    ), 201
+
 @app.route("/user/authenticate", methods=["POST"])
 @cross_origin()
 def authenticate_user():
