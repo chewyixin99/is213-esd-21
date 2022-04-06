@@ -147,7 +147,8 @@ def add_amount_to_wallet(wallet_id):
         {
             "code": 201,
             "data": wallet.json()
-        }
+        },
+        "message": "Wallet updated successfully."
     ), 201
 
 
