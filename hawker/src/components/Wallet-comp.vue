@@ -5,7 +5,8 @@
       <!-- Amount -->
       <router-link to="/topup">
         <div class="w-28 mx-auto mt-2 p-2 border border-warning border-2 rounded bg-white opacity-80">
-          <span class="text-dark">${{total_balance}}</span>
+          <span class="text-dark text-xl">${{avail_balance}}</span><br/>
+          <span class="text-dark text-xs">(${{total_balance}})</span>
         </div>
       </router-link>
   </div>
@@ -41,8 +42,8 @@ export default {
       .get(get_Wallet_URL + "/" + this.user_id)
       .then(response => {
         // console.log(response.data.data)
-        this.avail_balance = response.data.data['available_balance']
-        this.total_balance = response.data.data['total_balance']
+        this.avail_balance = Number.parseFloat(response.data.data['available_balance']).toFixed(2)
+        this.total_balance = Number.parseFloat(response.data.data['total_balance']).toFixed(2)
         // console.log(this.total_balance)
       })
       .catch(error => {
