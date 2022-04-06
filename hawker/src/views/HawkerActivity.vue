@@ -84,12 +84,10 @@ export default {
 
   created: function(){
     console.log("=== open created ===")
+    this.hawker_id = this.globalState.user_id
     this.getOrders()
   },
-  
-  created() {
-    this.hawker_id = this.globalState.user_id
-  },
+
 
   methods:{
     getOrders(){
@@ -97,6 +95,7 @@ export default {
       axios
       .get(get_Order_URL + "/hawker/" + this.hawker_id)
       .then(response => {
+        console.log(response.data)
         console.log(response.data.data.orders)
         this.orders = response.data.data.orders
       })
