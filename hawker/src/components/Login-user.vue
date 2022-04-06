@@ -31,7 +31,7 @@
       <div class="text-center">
 
           <!-- <router-link to="/Hawkers"> -->
-            <button @click="login()" type="button" class="btn btn-warning w-full">Log In</button>
+            <button @click="login" type="button" class="btn btn-warning w-full">Log In</button>
           <!-- </router-link> -->
 
           <div class="mt-2">
@@ -77,8 +77,8 @@ export default {
         let response = await axios.post('http://localhost:5001/user/authenticate', params);
 
         if (response.data){
-          setUserId(response.data)
-          this.user_id = response.data
+          this.setUserId(response.data.data)
+          this.user_id = response.data.data
         } else {
           this.error = "Unsuccessful login";
           console.log(this.error)

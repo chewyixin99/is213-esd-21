@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from os import environ
 
 app = Flask(__name__)
@@ -12,7 +12,8 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 # CORS(app)
-CORS(app)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
+
 # initializing model
 class User(db.Model):
     __tablename__ = "user"
@@ -114,6 +115,7 @@ def create_user(email):
     )
 
 @app.route("/user/authenticate", methods=["POST"])
+@cross_origin()
 def authenticate_user():
     data = request.get_json()
 
