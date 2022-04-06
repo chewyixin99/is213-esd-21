@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 # OS and error imports
 import os, sys
@@ -17,11 +17,12 @@ import pika
 import json
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 order_url = environ.get('order_URL') or "http://localhost:5004/order"
 
 @app.route("/accept_order/<string:order_id>", methods=["POST"])
+@cross_origin()
 def accept_order(order_id):
     try:
         result = process_accept_order(order_id)
@@ -45,20 +46,18 @@ def process_accept_order(order_id):
         method="GET"
     )
 
-    old_order_data = old_order_result["data"]
-
     if old_order_result["code"] not in range(200, 300):
 
-    # ##################### AMQP code      
+        # ##################### AMQP code      
 
-    # handle error -> order retrieval fail
+        # handle error -> order retrieval fail
 
         print('\n\n-----Publishing the order retrieval error message with routing_key=retrieval.error-----')        
 
         message = {
-            "code": 400,
+            "code": 404,
             "message_type": "retrieval_error",
-            "data": old_order_data,
+            "data": old_order_result,
         }
 
         message = json.dumps(message)
@@ -72,7 +71,9 @@ def process_accept_order(order_id):
 
         return old_order_result
 
-        # ##################### AMQP code      
+        # ##################### AMQP code    
+
+    old_order_data = old_order_result["data"]
 
     # handle error -> order retrieval success
 

@@ -1,6 +1,6 @@
 # Flask imports
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 # OS and error imports
 import os, sys
@@ -18,13 +18,14 @@ import pika
 import json
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 order_url = environ.get('order_URL') or "http://localhost:5004/order"
 wallet_url = environ.get('wallet_URL') or "http://localhost:5005/wallet"
 escrow_url = environ.get('escrow_URL') or "http://localhost:5006/escrow"
 
 @app.route("/reject_order/<string:order_id>", methods=["POST"])
+@cross_origin()
 def reject_order(order_id):
     try:
         return process_reject_order(order_id)
@@ -51,7 +52,7 @@ def process_reject_order(order_id):
         #     "code": 201,
         #     "data": {
         #         "discount": 0.0,
-        #         "final_price": 10.0,
+        #         "final_price":p 10.0,
         #         "hawker_id": 2000,
         #         "items": "[{'item_id': 3000,'quantity' : 1 }]",
         #         "order_id": 4003,
@@ -72,7 +73,7 @@ def process_reject_order(order_id):
         print('\n\n-----Publishing order retrieval error message with routing_key=retrieval.error-----')        
 
         message = {
-            "code": 400,
+            "code": 404,
             "message_type": "retrieval_error",
             "data": old_order_result,
         }
@@ -331,7 +332,7 @@ def process_reject_order(order_id):
 
         print("\nOrder rejection notification published to RabbitMQ Exchange.\n")
 
-        return new_order_data
+        return new_order_result
 
         # ##################### END OF AMQP code
 

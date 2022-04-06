@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from os import environ
 
 app = Flask(__name__)
@@ -11,7 +11,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = environ.get('dbURL')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 # initializing model
@@ -88,7 +88,7 @@ def find_by_order_id(order_id):
         )
     return jsonify(
         {
-            "code": 400,
+            "code": 404,
             "message": f"Order with order id:'{order_id}' not found."
         }
     )
@@ -111,7 +111,7 @@ def find_by_user_id(user_id):
         )
     return jsonify(
         {
-            "code": 400,
+            "code": 404,
             "message": f"Order with user id:{user_id} not found."
         }
     )
@@ -134,7 +134,7 @@ def find_by_hawker_id(hawker_id):
         )
     return jsonify(
         {
-            "code": 400,
+            "code": 404,
             "message": f"Order with hawker id:{hawker_id} not found."
         }
     )
@@ -159,13 +159,14 @@ def find_by_hawker_id_by_status(hawker_id, status):
         )
     return jsonify(
         {
-            "code": 400,
+            "code": 404,
             "message": f"Order with hawker id:{hawker_id} and status:{status} not found."
         }
     )
 
 
 # Create a order record
+@cross_origin()
 @app.route("/order", methods=["POST"])
 def create_order():
     data = request.get_json()

@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from os import environ
 from datetime import datetime
 import json
@@ -12,7 +12,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # initializing model
 class Hawker(db.Model):
@@ -22,7 +22,6 @@ class Hawker(db.Model):
     username = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(64), nullable=False)
     password = db.Column(db.String(255), nullable=False)
-    wallet_id = db.Column(db.Integer, nullable=True)
     cuisine = db.Column(db.String(64), nullable=True)
     halal = db.Column(db.Boolean(), nullable=False)
     has_vegetarian_option = db.Column(db.Boolean(), nullable=False)
@@ -40,7 +39,6 @@ class Hawker(db.Model):
             "username": self.username,
             "email": self.email,
             "password": self.password,
-            "wallet_id": self.wallet_id,
             "cuisine": self.cuisine,
             "halal": self.halal,
             "has_vegetarian_option": self.has_vegetarian_option,
@@ -117,6 +115,7 @@ def find_by_halal(is_halal):
 
 # Create hawker
 @app.route("/hawker/<string:email>", methods=["POST"])
+@cross_origin()
 def create_hawker(email):
     hawker = Hawker.query.filter_by(email=email).first()
     if (hawker):
@@ -199,6 +198,26 @@ def update_hawker(hawker_id):
         }
     ), 201
 
+@app.route("/hawker/authenticate", methods=["POST"])
+@cross_origin()
+def authenticate_hawker():
+    data = request.get_json()
+
+    email = data["email"]
+    password = data["password"]
+    hawker = Hawker.query.filter_by(email=email).first().json()
+    if hawker:
+        retrieved_password = hawker["password"]
+        if password == retrieved_password:
+            return jsonify({
+                "code": 203,
+                "data": hawker["hawker_id"],
+            })
+    
+    return jsonify({
+        "code": 403,
+        "data": None
+    })
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5002, debug=True)    

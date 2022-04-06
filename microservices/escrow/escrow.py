@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from os import environ
 
 app = Flask(__name__)
@@ -9,7 +9,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 class Escrow(db.Model):
     __tablename__ = 'escrow'
@@ -78,6 +78,7 @@ def find_by_order_id(order_id):
 
 #create escrow (only positive values, remember!)
 @app.route("/escrow/<int:order_id>", methods=['POST'])
+@cross_origin()
 def create_escrow(order_id):
     if (Escrow.query.filter_by(order_id=order_id).first()):
         return jsonify(

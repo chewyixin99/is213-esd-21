@@ -31,7 +31,7 @@
       <div class="text-center">
 
           <!-- <router-link to="/Hawkers"> -->
-            <button @click="login()" type="button" class="btn btn-warning w-full">Log In</button>
+            <button @click="login" type="button" class="btn btn-warning w-full">Log In</button>
           <!-- </router-link> -->
 
           <div class="mt-2">
@@ -61,15 +61,14 @@ export default {
   },
 
   methods: {
-      setUserId(user_id){
-        // console.log("=== set user id ===")
-        localStorage.setItem("user_id", user_id)
-        console.log(`Successfully set User ID: ${user_id}`)
-      },
+      // setUserId(user_id){
+      //   // console.log("=== set user id ===")
+      //   localStorage.setItem("user_id", user_id)
+      //   console.log(`Successfully set User ID: ${user_id}`)
+      // },
 
       async login(){
-        // console.log(this.email)
-        // console.log(this.password)
+
         let params = {
           email: this.email,
           password: this.password,
@@ -78,13 +77,35 @@ export default {
         let response = await axios.post('http://localhost:5001/user/authenticate', params);
 
         if (response.data){
-          setUserId(response.data)
-          this.user_id = response.data
-        } else {
-          this.error = "Unsuccessful login";
+
+          let response_userid = response.data.data
+
+          // if (response_usertype == "customer"){
+          localStorage.setItem("user_id", response_userid)
+          console.log(`Successfully set User ID: ${response_userid}.. Routing>>`)
+          this.$router.replace({name: "Hawkers"});
+
+        }
+
+        else {
+
+          let response = await axios.post('http://localhost:5002/hawker/authenticate', params);
+          
+          if (response){
+
+            let response_userid = response.data.data
+
+            localStorage.setItem("hawker_id", response_userid)
+            console.log(`Successfully set Hawker ID: ${response_userid}.. Routing>>`)
+            this.$router.replace({name: "Order"});
+          }
+          
+          else {
+              this.error = "Unsuccessful login";
+              console.log(this.error)
+            }
         }
       }
-      
-  }
+    }
 }
 </script>

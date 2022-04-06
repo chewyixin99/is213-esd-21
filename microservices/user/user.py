@@ -1,17 +1,16 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from os import environ
 
 app = Flask(__name__)
 
 # Flask SQLAlchemy config
 app.config["SQLALCHEMY_DATABASE_URI"] = environ.get('dbURL')
-# app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+mysqlconnector://is213@host.docker.internal:3306/esd"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # initializing model
 class User(db.Model):
@@ -21,7 +20,6 @@ class User(db.Model):
     email = db.Column(db.String(64), nullable=False)
     username = db.Column(db.String(64), nullable=False)
     password = db.Column(db.String(255), nullable=False)
-    wallet_id = db.Column(db.String(64), nullable=True)
 
     def __init__ (self, email, username, password):
         self.email = email
@@ -34,11 +32,11 @@ class User(db.Model):
             "email": self.email,
             "username": self.username,
             "password": self.password,
-            "wallet_id": self.wallet_id,
         }
 
 
 @app.route("/user")
+@cross_origin()
 def get_all():
     users = User.query.all()
     if len(users):
@@ -61,6 +59,7 @@ def get_all():
     
 
 @app.route("/user/<string:user_id>")
+@cross_origin()
 def find_by_user_id(user_id):
     
     user = User.query.filter_by(user_id=user_id).first()
@@ -80,6 +79,7 @@ def find_by_user_id(user_id):
     )
 
 @app.route("/user/<string:email>", methods=["POST"])
+@cross_origin()
 def create_user(email):
     if (User.query.filter_by(email=email).first()):
         return jsonify(
@@ -114,20 +114,20 @@ def create_user(email):
     )
 
 @app.route("/user/authenticate", methods=["POST"])
+@cross_origin()
 def authenticate_user():
     data = request.get_json()
 
     email = data["email"]
     password = data["password"]
     user = User.query.filter_by(email=email).first().json()
-    retrieved_password = user["password"]
-
-    if password == retrieved_password:
-
-        return jsonify({
-            "code": 203,
-            "data": user["user_id"]
-        })
+    if user:
+        retrieved_password = user["password"]
+        if password == retrieved_password:
+            return jsonify({
+                "code": 203,
+                "data": user["user_id"],
+            })
     
     return jsonify({
         "code": 403,
