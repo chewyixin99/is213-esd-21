@@ -27,10 +27,14 @@
       </form>
 
       <!-- Buttons -->
-      <div class="text-end flex mx-auto space-x-4">
+      <div class="text-end flex mb-3 mx-auto space-x-4">
           <button @click="cancel" type="button" class="btn btn-outline-danger w-full" href="#">Cancel</button>
           <button @click="createUser" type="button" href="/hawkers" class="btn btn-warning w-full">Create</button>
       </div>
+
+      <div>
+        <p :class="msgStatus">{{userMsg}}</p>
+      </div> 
 
     </div>
   </div>
@@ -39,6 +43,7 @@
 <script>
 // @ is an alias to /src
 import axios from 'axios';
+import { stateSetters } from '../store'
 
 // let userid = "1000";
 const get_User_URL = "http://localhost:5001/user";
@@ -51,29 +56,18 @@ export default {
 
   data(){
     return {
+      stateSetters,
       username: "",
       email: "",
       password: "",
-      user_id: localStorage.getItem("user_id"),
+      user_id: "",
+      userMsg: "",
+      msgStatus: "",
     }
   },
-  // created: function(){
-  //   console.log("=== created ===")
-  //   this.getUser()
-  // },
+
 
   methods:{
-    // getUser(){
-    //   axios
-    //   .get(get_User_URL)
-    //   .then(response => {
-    //     console.log(response)
-    //   })
-    //   .catch(error => {
-    //     console.log(error)
-    //   })
-    // }
-
     createUser(){
       console.log("=== Open CreateUser ===")
       axios
@@ -85,10 +79,14 @@ export default {
         console.log(response.data.data)
         console.log(response.data.data['user_id']);
         this.user_id = response.data.data['user_id'];
+        localStorage.setItem("user_id", response.data.data['user_id'])
+        this.stateSetters.updateUser_id(response.data.data['user_id'])
         this.createWallet()
       })
-      .catch(function(error){
-        console.log(error);
+      .catch((error) => {
+        console.log(error)
+        this.userMsg = "Error occured while creating your account. Please try again."
+        this.msgStatus = "text-red-600"
       })
     },
 
@@ -101,11 +99,16 @@ export default {
         available_balance: 0.0,
         total_balance: 0.0,
       })
-      .then(function(response){
+      .then((response) => {
         console.log(response.data.data);
+        this.userMsg = "Account created successfully. Redirecting you to our home page..."
+        this.msgStatus = "text-green-600"
+        this.$router.replace({name: "Hawkers"});
       })
-      .catch(function(error){
-        console.log(error);
+      .catch((error) => {
+        console.log(error)
+        this.userMsg = "Error occured while creating your account. Please try again"
+        this.msgStatus = "text-red-600"
       })
     },
 

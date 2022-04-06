@@ -117,7 +117,6 @@ export default {
           discount: 0.0,
           final_price: Number(this.totalAmount),
         };
-        console.log(orderData);
 
         const place_order_URL = `http://localhost:5100/place_order`;
         axios
@@ -125,6 +124,7 @@ export default {
           .then((response) => {
             console.log(`=== order created ===`);
             // console.log(response.data.data);
+            console.log(response)
             this.isLoading = false;
             this.userMsg = "Order successfully placed."
             this.msgStatus = "text-green-600"

@@ -104,15 +104,12 @@ export default {
       })
       .then((response) => {
         this.forceReRender()
-        console.log(this.reRender)
+        this.amount = 0
       })
       .catch(error => {
         console.log(error.response.data)
       })
-      // .get(get_Wallet_URL + "/" + this.globalState.user_id)
-      // .then(response => {
-      //   console.log(response.data.data)
-      // })
+
     },
 
     cancel() {
