@@ -33,6 +33,7 @@
 <script>
 // @ is an alias to /src
 import axios from 'axios';
+import { globalState } from '../store'
 
 const get_Order_URL = "http://localhost:5004/order";
 
@@ -44,7 +45,7 @@ export default {
   data(){
     return {
       orders: [],
-      user_id: 1000,
+      globalState
     }
   },
 
@@ -57,7 +58,7 @@ export default {
     getOrders(){
       console.log("=== open getOrders ===")
       axios
-      .get(get_Order_URL + "/user/" + this.user_id)
+      .get(get_Order_URL + "/user/" + globalState.user_id)
       .then(response => {
         console.log(response.data.data.orders)
         this.orders = response.data.data.orders

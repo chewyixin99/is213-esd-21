@@ -12,7 +12,10 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 # CORS(app, resources=r'/*')
-CORS(app)
+# CORS(app)
+# CORS(app)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
+
 # initializing model
 class User(db.Model):
     __tablename__ = "user"

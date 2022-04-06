@@ -83,22 +83,16 @@ export default {
           }
         )
       })
-
       finalItems = JSON.stringify(finalItems)
-      console.log(finalItems)
-      finalItems = finalItems.replace(/\\/g, "");
-      console.log(finalItems)
-
-    
 
       const orderData = {
         "user_id": globalState.user_id,
         "hawker_id": this.selectedHawker,
         "items": finalItems,
         "status": "pending",
-        "total_price": this.totalAmount,
+        "total_price": Number(this.totalAmount),
         "discount": 0.0,
-        "final_price": this.totalAmount
+        "final_price": Number(this.totalAmount)
       }
       console.log(orderData)
 
