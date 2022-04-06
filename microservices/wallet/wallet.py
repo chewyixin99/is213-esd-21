@@ -103,7 +103,8 @@ def create_wallet(wallet_id):
     return jsonify(
         {
             "code": 201,
-            "data": wallet.json()
+            "data": wallet.json(),
+            "message": "Wallet created successfully."
         }
     ), 201
 
