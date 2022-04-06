@@ -48,11 +48,13 @@
 
 <script>
 import axios from 'axios';
+import { stateSetters } from "../store"
 
 export default {
   name: 'LoginUser',
   data(){
     return{
+      stateSetters,
       email: "",
       password: "",
       error: null,

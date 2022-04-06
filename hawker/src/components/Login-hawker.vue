@@ -34,12 +34,6 @@
 
           <div v-if="error" class="mt-1 text-danger">{{this.errorMsg}}</div>
 
-          <div class="mt-2">
-            <router-link to="account">
-              <span class="text-warning">Create an account</span>
-            </router-link>
-          </div>
-
       </div>
 
     </div>

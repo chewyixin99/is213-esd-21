@@ -39,7 +39,7 @@ export default {
     this.hawker_name = this.$route.query.hawker_name;
 
     // console.log(`=== getting ${this.hawker_id}'s items ===`);
-    const get_Item_URL = `http://localhost:5003/item/hawker/${this.hawker_id}`;
+    const get_Item_URL = `http://localhost:8000/item/hawker/${this.hawker_id}`;
 
     axios
       .get(get_Item_URL)

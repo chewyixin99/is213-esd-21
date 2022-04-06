@@ -1,7 +1,7 @@
 import { reactive } from 'vue'
 
 const globalState = reactive({
-  user_id: localStorage.getItem("user_id"),
+  user_id: null,
   selected_items: []
 })
 

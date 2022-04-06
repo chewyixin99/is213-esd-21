@@ -49,8 +49,8 @@
 
       <!-- Buttons -->
       <div class="text-end flex mx-auto space-x-4">
-          <button type="button" class="btn btn-outline-danger w-full">Cancel</button>
-          <button @click="topup()" type="button" class="btn btn-warning w-full">Top Up</button>
+          <button @click="cancel" type="button" class="btn btn-outline-danger w-full">Cancel</button>
+          <button @click="topup" type="button" class="btn btn-warning w-full">Top Up</button>
       </div>
 
     </div>
@@ -62,7 +62,7 @@
 import axios from 'axios';
 import Wallet from '@/components/Wallet-comp.vue'
 
-const get_Wallet_URL = "http://localhost:5005/wallet";
+const get_Wallet_URL = "http://localhost:8000/wallet";
 
 export default {
   name: 'TopUp',
@@ -101,6 +101,10 @@ export default {
       // .then(response => {
       //   console.log(response.data.data)
       // })
+    },
+
+    cancel() {
+      this.$router.replace({name: "Hawker"})
     }
   }
 

@@ -13,8 +13,9 @@
 
 <script>
 import axios from 'axios';
+import { globalState } from '../store'
 
-const get_Wallet_URL = "http://localhost:5005/wallet";
+const get_Wallet_URL = "http://localhost:8000/wallet";
 
 export default {
   name: 'Wallet',
@@ -22,7 +23,7 @@ export default {
     return{
       avail_balance: 0,
       total_balance: 0,
-      wallet_id: 1001,
+      globalState
     }
   },
 
@@ -35,7 +36,7 @@ export default {
     getAmt(){
       console.log("=== Open getAmt ===")
       axios
-      .get(get_Wallet_URL + "/" + this.wallet_id)
+      .get(get_Wallet_URL + "/" + this.globalState.user_id)
       .then(response => {
         // console.log(response.data.data)
         this.avail_balance = response.data.data['available_balance']
