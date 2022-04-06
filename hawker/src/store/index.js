@@ -15,8 +15,8 @@ const stateSetters = {
     // console.log(payload)
   },
 
-  removeSelectedItem() {
-    
+  removeSelectedItem(index) {
+    globalState.selected_items.splice(index, 1)
   }
 }
 

@@ -7,11 +7,11 @@
       </div>
       <!-- Item Detail -->
       <div class="p-3 col-span-1 text-center">
-        <span class="font-semibold">{{item_data.price}}</span>
+        <span class="font-semibold">${{item_data.price}}</span>
         <br>
         <div class="space-x-2 mt-2">
-          <button type="button" class="btn btn-danger w-10 rounded-full">-</button>
-          <button type="button" class="btn btn-danger w-10 rounded-full">+</button>
+          <button type="button" @click="$emit('remove_item')" class="btn btn-danger w-10 rounded-full">-</button>
+          <!-- <button type="button" class="btn btn-danger w-10 rounded-full">+</button> -->
         </div>
       </div>
     </div>

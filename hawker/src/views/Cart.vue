@@ -10,32 +10,27 @@
       </div>
     </div>
 
-    <div v-for="item in globalState.selected_items" :key="item.item_id" class="mt-3">
-      <CartItem :item_data_prop="item"/>
+    <div v-for="(item, index) in globalState.selected_items" :key="item.item_id" class="mt-3">
+      <CartItem :item_data_prop="item" @remove_item="removeItem(index)"/>
     </div>
 
     <div class="mt-3 text-left px-3 flex justify-content-between">
       <span class="font-semibold">Total Amount Payable</span>
-      <span class="text-xl">$30.00</span>
+      <span class="text-xl">${{totalAmount}}</span>
     </div>
 
     <div class="mt-3 md:text-right px-3">
       <button type="button" class="btn btn-warning w-full md:w-48">Pay</button>
     </div>
 
-    {{order}}
-
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import axios from 'axios';
 import CartItem from '@/components/Cart-item-comp.vue'
 import Wallet from '@/components/Wallet-comp.vue'
-import { globalState } from '../store'
-
-const get_Order_URL = "http://localhost:5004/order/user/1000";
+import { globalState, stateSetters } from '../store'
 
 export default {
   name: 'Cart',
@@ -46,7 +41,29 @@ export default {
 
   data() {
     return {
-      globalState
+      globalState,
+      stateSetters,
+      totalAmount: 0.00,
+    }
+  },
+
+  created() {
+    this.getTotalAmount()
+  },
+
+  methods: {
+    removeItem(index) {
+      console.log("==== removeing item ====")
+      stateSetters.removeSelectedItem(index)
+      this.getTotalAmount()
+    },
+
+    getTotalAmount() {
+      this.totalAmount = 0
+      globalState.selected_items.map((item) => (
+        this.totalAmount += item.price
+      ))
+      this.totalAmount = Number.parseFloat(this.totalAmount).toFixed(2)
     }
   }
 
