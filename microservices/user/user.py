@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from os import environ
 
 app = Flask(__name__)
@@ -11,7 +11,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = environ.get('dbURL')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
-# CORS(app)
+# CORS(app, resources=r'/*')
 CORS(app)
 # initializing model
 class User(db.Model):
@@ -39,6 +39,7 @@ class User(db.Model):
 
 
 @app.route("/user")
+@cross_origin()
 def get_all():
     users = User.query.all()
     if len(users):
@@ -61,6 +62,7 @@ def get_all():
     
 
 @app.route("/user/<string:user_id>")
+@cross_origin()
 def find_by_user_id(user_id):
     
     user = User.query.filter_by(user_id=user_id).first()
@@ -80,6 +82,7 @@ def find_by_user_id(user_id):
     )
 
 @app.route("/user/<string:email>", methods=["POST"])
+@cross_origin()
 def create_user(email):
     if (User.query.filter_by(email=email).first()):
         return jsonify(
@@ -114,24 +117,30 @@ def create_user(email):
     )
 
 @app.route("/user/authenticate", methods=["POST"])
+@cross_origin()
 def authenticate_user():
     data = request.get_json()
 
     email = data["email"]
     password = data["password"]
     user = User.query.filter_by(email=email).first().json()
-    retrieved_password = user["password"]
+    # retrieved_password = user["password"]
 
-    if password == retrieved_password:
+    # if password == retrieved_password:
 
-        return jsonify({
-            "code": 203,
-            "data": user["user_id"]
-        })
+    #     return jsonify({
+    #         "code": 203,
+    #         "data": user["user_id"]
+    #     })
     
+    # return jsonify({
+    #     "code": 403,
+    #     "data": None
+    # })
+
     return jsonify({
-        "code": 403,
-        "data": None
+        "code": 203,
+        "data": email
     })
 
 

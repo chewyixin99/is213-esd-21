@@ -61,11 +61,11 @@ export default {
   },
 
   methods: {
-      setUserId(user_id){
-        // console.log("=== set user id ===")
-        localStorage.setItem("user_id", user_id)
-        console.log(`Successfully set User ID: ${user_id}`)
-      },
+      // setUserId(user_id){
+      //   // console.log("=== set user id ===")
+      //   localStorage.setItem("user_id", user_id)
+      //   console.log(`Successfully set User ID: ${user_id}`)
+      // },
 
       async login(){
 
@@ -77,8 +77,10 @@ export default {
         let response = await axios.post('http://localhost:5001/user/authenticate', params);
 
         if (response.data){
-          setUserId(response.data)
-          this.user_id = response.data
+          // setUserId(response.data)
+          localStorage.setItem("user_id", response.data)
+          console.log(`Successfully set User ID: ${response.data}`)
+          // this.user_id = response.data
         } else {
           this.error = "Unsuccessful login";
           console.log(this.error)
