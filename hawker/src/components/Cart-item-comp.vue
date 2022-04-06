@@ -1,19 +1,13 @@
 <template>
   <div class="text-left">
-    <div class="grid grid-cols-3 md:grid-cols-4 my-3">
-      <!-- Item Image -->
-      <div class="col-span-2 md:col-span-3 p-3">
-        <span class="col-span-2">{{item_data.name}}</span>
-      </div>
+    <div class="m-3 flex justify-content-between">
       <!-- Item Detail -->
-      <div class="p-3 col-span-1 text-center">
-        <span class="font-semibold">${{item_data.price}}</span>
-        <br>
-        <div class="space-x-2 mt-2">
-          <button type="button" @click="$emit('remove_item')" class="btn btn-danger w-10 rounded-full">-</button>
-          <!-- <button type="button" class="btn btn-danger w-10 rounded-full">+</button> -->
-        </div>
+      <div>
+        <span class="font-semibold">{{item_data.name}}</span><br>
+        <span>${{item_data.price}}</span>
       </div>
+      <button type="button" @click="$emit('remove_item')" class="btn btn-danger">Remove</button>
+      <!-- <button type="button" class="btn btn-danger w-10 rounded-full">+</button> -->
     </div>
     <hr>
   </div>

@@ -5,6 +5,9 @@
         <router-link to="/hawkers">
           <div class="text-white mb-2">Hawker Stalls</div>
         </router-link>
+        <router-link to="/order">
+          <div class="text-white mb-2">My Orders</div>
+        </router-link>
         <router-link to="/topup">
           <div class="text-white mb-2">Top Up Wallet</div>
         </router-link>

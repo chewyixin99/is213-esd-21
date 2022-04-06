@@ -30,18 +30,18 @@
         <!-- CC Details -->
         <div class="mb-3 text-start">
           <label for="ccno" class="form-label">Credit Card Number</label>
-          <input type="text" class="form-control" id="ccno" v-model="ccno">
+          <input type="text" class="form-control" id="ccno" v-model="ccno" placeholder="0000 0000 0000 0000">
         </div>
 
         <div class="flex space-x-4">
           <div class="mb-3 text-start">
             <label for="expiry" class="form-label">Expiry</label>
-            <input type="text" class="form-control" id="expiry" v-model="expiry">
+            <input type="text" class="form-control" id="expiry" v-model="expiry" placeholder="05/22">
           </div>
 
           <div class="mb-5 text-start">
             <label for="cvv" class="form-label">CVV</label>
-            <input type="text" class="form-control" id="cvv" v-model="cvv">
+            <input type="text" class="form-control" id="cvv" v-model="cvv" placeholder="123">
           </div>
         </div>
 
@@ -91,8 +91,8 @@ export default {
       console.log(this.amount)
       axios
       .put(get_Wallet_URL + "/" + this.wallet_id, {
-        available_balance: this.amount,
-        total_balance: this.amount,
+        amount_to_add_to_available_balance: this.amount,
+        amount_to_add_to_total_balance: this.amount,
       })
       .catch(error => {
         console.log(error.response.data)
