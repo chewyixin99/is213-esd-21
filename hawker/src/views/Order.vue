@@ -66,7 +66,17 @@ export default {
       .catch(error => {
         console.log(error)
       })
-    }
+    },
+    // testing for order time out
+    // processTimeout(){
+    //   for (order in this.orders){
+    //     let datetime = order.time
+    //     let split_time = datetime.split(" ")[4]
+    //     let seconds = split_time[0]*60*60+split_time[1]*60+split_time[2]
+
+    //   }
+    // }
+
   }
 
 }
