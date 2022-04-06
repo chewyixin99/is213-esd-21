@@ -6,7 +6,7 @@
     </div>
 
     <!-- Order List -->
-    <div class="pt-3" v-for="order in orders" :key="order">
+    <div class="pt-3" v-for="order in orders.slice().reverse()" :key="order">
       <!-- HEADERS -->
       <div class="flex justify-content-between">
 
@@ -18,7 +18,7 @@
         </div>
 
         <!-- RHS -->
-        <div>
+        <div class="text-right">
           <span class="badge bg-warning text-dark">Status: {{order.status}}</span><br>
           <span class="font-semibold">Qty</span>
         </div>
@@ -26,13 +26,24 @@
       </div>
 
       <!-- ITEM LIST -->
-      {{order.items}}<br>
-      <!-- <div class="pb-3" v-for="item in order.items" :key="item">
-        {{item}}
-      </div> -->
+      <div class="pb-3" v-for="item in order.items" :key="item">
+        <div class="flex justify-content-between">
+          <!-- LHS -->
+          <div class="text-left">
+            <span class="font-semibold">{{item.item_id}}</span><br>     
+          </div>
+          <!-- RHS -->
+          <div class="text-right">
+            <span class="text-dark">{{item.quantity}}</span><br>
+          </div>
+        </div>
+      </div>
 
+      <span>Time of Order: {{order.time}} </span><br>
+      <span>Order Price: ${{order.price}} </span>
+      <!-- <div>{{ (new Date(order.time))-(Date.now()) }}</div> -->
       <!-- BUTTONS -->
-      {{order.status}}
+      <!-- {{order.status}} -->
       <!-- if pending -->
       <div v-if="order.status == 'pending'" class="flex space-x-4">
         <button @click="rejectOrder(order.order_id)" type="button" class="btn btn-danger w-full">Reject</button>
@@ -76,27 +87,56 @@ export default {
     return {
       orders: [],
       items: [],
-      hawker_id: 2001,
+      hawker_id: null,
     }
   },
 
   created: function(){
     console.log("=== open created ===")
+    this.hawker_id = localStorage.getItem("user_id")
     this.getOrders()
   },
 
   methods:{
     getOrders(){
       console.log("=== open getOrders ===")
+      console.log(get_Order_URL + "/hawker/" + this.hawker_id)
       axios
       .get(get_Order_URL + "/hawker/" + this.hawker_id)
       .then(response => {
         console.log(response.data.data.orders)
         this.orders = response.data.data.orders
+
+        let order_compilation = []
+        for (let order of response.data.data.orders){
+          console.log(order)
+          let processedOrder = {
+            "order_id" : order.order_id,
+            "status" : order.status,
+            "items" : eval(order.items),
+            "time" : order.time,
+            "price" : order.final_price
+          }
+          console.log(eval(order.items)[0])
+          console.log(typeof(order.items))
+          console.log("----")
+          console.log(typeof(eval(order.items)))
+          order_compilation.push(processedOrder)
+        }
+        this.orders = order_compilation
       })
       .catch(error => {
         console.log(error)
       })
+    },
+    millisToMinutesAndSeconds(millis){
+
+        var minutes = Math.floor(millis / 60000);
+        var seconds = ((millis % 60000) / 1000).toFixed(0);
+        return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+
+      millisToMinutesAndSeconds(298999); // "4:59"
+      millisToMinutesAndSeconds(60999);  // "1:01"
     },
 
     // getItems(){
