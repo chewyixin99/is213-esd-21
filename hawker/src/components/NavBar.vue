@@ -12,7 +12,7 @@
       </div>
       <div v-else-if="globalState.user_id >= 2000" class="bg-dark p-4">
         <router-link to="/">
-          <div class="text-white">Log out</div>
+          <div @click="logout" class="text-white">Log out</div>
         </router-link>
       </div>
       <div v-else class="bg-dark p-4">
@@ -26,7 +26,7 @@
             <div class="text-white mb-2">Top Up Wallet</div>
           </router-link>
           <router-link to="/">
-            <div class="text-white">Log out</div>
+            <div @click="logout" class="text-white">Log out</div>
           </router-link>
       </div>
     </div>
@@ -44,13 +44,20 @@
 </template>
 
 <script>
-import { globalState } from '../store'
+import { globalState, stateSetters } from '../store'
 
 export default {
   name: 'NavBar',
   data() {
     return {
-      globalState
+      globalState,
+      stateSetters
+    }
+  },
+  methods: {
+    logout() {
+      this.stateSetters.resetState()
+      localStorage.clear()
     }
   }
 }
