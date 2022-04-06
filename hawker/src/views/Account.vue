@@ -29,7 +29,7 @@
       <!-- Buttons -->
       <div class="text-end flex mx-auto space-x-4">
           <button type="button" class="btn btn-outline-danger w-full" href="#">Cancel</button>
-          <button @click="createUser(), createWallet()" type="button" href="/hawkers" class="btn btn-warning w-full">Create</button>
+          <button @click="createUser()" type="button" href="/hawkers" class="btn btn-warning w-full">Create</button>
       </div>
 
     </div>
@@ -82,25 +82,27 @@ export default {
         password: this.password,
       })
       .then((response) => {
+        console.log(response.data.data)
         console.log(response.data.data['user_id']);
         this.user_id = response.data.data['user_id'];
+        this.createWallet()
       })
       .catch(function(error){
         console.log(error);
       })
     },
 
-    createWallet(){
+    async createWallet(){
       console.log("=== Open CreateWallet ===")
 
       console.log(get_Wallet_URL + "/" + this.user_id)
-      axios
+      await axios
       .post(get_Wallet_URL + "/" + this.user_id , {
         available_balance: 0.0,
         total_balance: 0.0,
       })
       .then(function(response){
-        console.log(response);
+        console.log(response.data.data);
       })
       .catch(function(error){
         console.log(error);
