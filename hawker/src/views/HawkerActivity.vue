@@ -6,26 +6,52 @@
     </div>
 
     <!-- Order List -->
-      {{orders}}
-    <div v-for="order in orders" :key="order">
-      <!-- order details -->
-      <div class="flex justify-content-between py-3">
+    <div class="pt-3" v-for="order in orders" :key="order">
+      <!-- HEADERS -->
+      <div class="flex justify-content-between">
 
+        <!-- LHS -->
         <div class="text-left">
-          <span class="font-semibold">{{order.hawker_id}}</span><br>
-          <span>Status: {{order.status}}</span><br>
-          <span>{{order.time}}</span>
+          <span class="font-semibold">Order ID: {{order.order_id}}</span><br>
+          <!-- <span>{{order.time}}</span> -->
+          <span class="font-semibold">Item</span><br>         
         </div>
 
+        <!-- RHS -->
         <div>
-          <span class="text-sm">${{order.total_price}}</span><br>
-          <span class="text-sm">-${{order.discount}}</span><br>
-          <span class="text-lg font-semibold">${{order.final_price}}</span>
+          <span class="badge bg-warning text-dark">Status: {{order.status}}</span><br>
+          <span class="font-semibold">Qty</span>
         </div>
 
       </div>
 
-      <hr>
+      <!-- ITEM LIST -->
+      {{order.items}}<br>
+      <!-- <div class="pb-3" v-for="item in order.items" :key="item">
+        {{item}}
+      </div> -->
+
+      <!-- BUTTONS -->
+      {{order.status}}
+      <!-- if pending -->
+      <div v-if="order.status == 'pending'" class="flex space-x-4">
+        <button @click="rejectOrder(order.order_id)" type="button" class="btn btn-danger w-full">Reject</button>
+        <button @click="acceptOrder(order.order_id)" type="button" class="btn btn-warning w-full">Accept</button>
+      </div>
+      <!-- if rejected -->
+      <div v-if="order.status == 'rejected'" class="flex space-x-4">
+        <button type="button" class="btn btn-secondary w-full disabled">Rejected</button>
+      </div>
+      <!-- if accepted -->
+      <div v-if="order.status == 'accepted'" class="flex space-x-4">
+        <button @click="completeOrder(order.order_id)" type="button" class="btn btn-success w-full">Complete</button>
+      </div>
+      <!-- if completed -->
+      <div v-if="order.status == 'completed'" class="flex space-x-4">
+        <button type="button" class="btn btn-secondary w-full disabled">Completed</button>
+      </div>
+
+      <hr class="mt-3">
     </div>
 
   </div>
@@ -35,7 +61,11 @@
 // @ is an alias to /src
 import axios from 'axios';
 
-const get_Order_URL = "http://localhost:5004/order";
+const get_Order_URL = "http://localhost:8000/order";
+const get_Item_URL = "http://localhost:8000/item";
+const accept_Order_URL = "http://localhost:8000/accept_order";
+const reject_Order_URL = "http://localhost:8000/reject_order";
+const complete_Order_URL = "http://localhost:8000/complete_order";
 
 export default {
   name: 'HawkerActivity',
@@ -45,7 +75,8 @@ export default {
   data(){
     return {
       orders: [],
-      hawker_id: 2000,
+      items: [],
+      hawker_id: 2001,
     }
   },
 
@@ -66,7 +97,64 @@ export default {
       .catch(error => {
         console.log(error)
       })
-    }
+    },
+
+    // getItems(){
+    //   console.log("=== open getItems ===")
+    //   axios
+    //   .get(get_Item_URL + "/item/" + this.item_id)
+    //   .then(response => {
+    //     console.log(response.data.data)
+    //     this.orders = response.data.data
+    //   })
+    //   .catch(error => {
+    //     console.log(error)
+    //   })
+    // },
+
+    // getJSON(str){
+    //   return JSON.parse(str)
+    // },
+
+    acceptOrder(order_id){
+      console.log("=== open acceptOrder ===")
+      console.log(order_id)
+      axios
+      .post(accept_Order_URL + "/" + order_id)
+      .then(response => {
+        console.log(response.data)
+      })
+      .catch(error =>{
+        console.log(error.message)
+      })
+    },
+
+    rejectOrder(order_id){
+      console.log("=== open rejectOrder ===")
+      console.log(order_id)
+      axios
+      .post(reject_Order_URL + "/" + order_id)
+      .then(response => {
+        console.log(response.data)
+      })
+      .catch(error =>{
+        console.log(error.message)
+      })
+    },
+
+    completeOrder(order_id){
+      console.log("=== open completeOrder ===")
+      console.log(order_id)
+      axios
+      .post(complete_Order_URL + "/" + order_id)
+      .then(response => {
+        console.log(response.data)
+      })
+      .catch(error =>{
+        console.log(error.message)
+      })
+    },
+
   }
 
 }
