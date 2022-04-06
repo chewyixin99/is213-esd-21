@@ -21,7 +21,6 @@ class User(db.Model):
     email = db.Column(db.String(64), nullable=False)
     username = db.Column(db.String(64), nullable=False)
     password = db.Column(db.String(255), nullable=False)
-    wallet_id = db.Column(db.String(64), nullable=True)
 
     def __init__ (self, email, username, password):
         self.email = email
@@ -34,7 +33,6 @@ class User(db.Model):
             "email": self.email,
             "username": self.username,
             "password": self.password,
-            "wallet_id": self.wallet_id,
         }
 
 

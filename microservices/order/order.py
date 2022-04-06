@@ -88,7 +88,7 @@ def find_by_order_id(order_id):
         )
     return jsonify(
         {
-            "code": 400,
+            "code": 404,
             "message": f"Order with order id:'{order_id}' not found."
         }
     )
@@ -111,7 +111,7 @@ def find_by_user_id(user_id):
         )
     return jsonify(
         {
-            "code": 400,
+            "code": 404,
             "message": f"Order with user id:{user_id} not found."
         }
     )
@@ -134,7 +134,7 @@ def find_by_hawker_id(hawker_id):
         )
     return jsonify(
         {
-            "code": 400,
+            "code": 404,
             "message": f"Order with hawker id:{hawker_id} not found."
         }
     )
@@ -159,7 +159,7 @@ def find_by_hawker_id_by_status(hawker_id, status):
         )
     return jsonify(
         {
-            "code": 400,
+            "code": 404,
             "message": f"Order with hawker id:{hawker_id} and status:{status} not found."
         }
     )
