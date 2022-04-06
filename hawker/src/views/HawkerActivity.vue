@@ -2,10 +2,11 @@
   <div class="w-96 mx-auto mt-3 px-3 ">
     <!-- Title -->
     <div class="text-left mb-2">
-      <h1 class="font-medium text-3xl">Order Log</h1>
+      <h1 class="font-medium text-3xl">Order Activity</h1>
     </div>
 
     <!-- Order List -->
+      {{orders}}
     <div v-for="order in orders" :key="order">
       <!-- order details -->
       <div class="flex justify-content-between py-3">
@@ -44,7 +45,7 @@ export default {
   data(){
     return {
       orders: [],
-      user_id: 1000,
+      hawker_id: 2000,
     }
   },
 
@@ -57,7 +58,7 @@ export default {
     getOrders(){
       console.log("=== open getOrders ===")
       axios
-      .get(get_Order_URL + "/user/" + this.user_id)
+      .get(get_Order_URL + "/hawker/" + this.hawker_id)
       .then(response => {
         console.log(response.data.data.orders)
         this.orders = response.data.data.orders

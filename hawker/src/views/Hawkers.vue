@@ -4,7 +4,7 @@
     <div class="grid grid-cols-5 shadow bgimg">
       <div class="col-span-3 text-left p-3 my-auto">
         <h1 class="text-3xl font-bold text-white 
-        shadow-lg">Welcome to e-Hawker</h1>
+        shadow-lg">Welcome to HawkerSG</h1>
       </div>
       <div class="col-span-2 p-3 text-white">
         <Wallet/>

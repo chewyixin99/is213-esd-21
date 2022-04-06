@@ -91,8 +91,8 @@ export default {
       console.log(this.amount)
       axios
       .put(get_Wallet_URL + "/" + this.wallet_id, {
-        amount_to_add_to_available_balance: this.amount,
-        amount_to_add_to_total_balance: this.amount,
+        amount_to_add_to_available_balance: parseFloat(this.amount),
+        amount_to_add_to_total_balance: parseFloat(this.amount),
       })
       .catch(error => {
         console.log(error.response.data)

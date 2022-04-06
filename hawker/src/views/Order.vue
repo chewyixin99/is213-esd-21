@@ -12,7 +12,7 @@
 
         <div class="text-left">
           <span class="font-semibold">{{order.hawker_id}}</span><br>
-          <span>Status: {{order.status}}</span><br>
+          <span class="badge bg-warning text-dark">Status: {{order.status}}</span><br>
           <span>{{order.time}}</span>
         </div>
 
@@ -70,5 +70,3 @@ export default {
 
 }
 </script>
-
-/
