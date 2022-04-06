@@ -126,12 +126,12 @@ def authenticate_user():
 
         return jsonify({
             "code": 203,
-            "data": True
+            "data": user["user_id"]
         })
     
     return jsonify({
         "code": 403,
-        "data": False
+        "data": None
     })
 
 
