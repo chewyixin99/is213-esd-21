@@ -149,9 +149,10 @@ def delete_escrow(order_id):
     return jsonify(
         {
             "code": 201,
-            "order_id": order_id
-        },
-        "message": f"Successfully deleted item (with order id {order_id})."
+            "order_id": order_id,
+            "message": f"Successfully deleted item (with order id {order_id})."
+        }
+        
     ), 201
 
 
