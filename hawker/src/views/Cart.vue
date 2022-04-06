@@ -10,10 +10,8 @@
       </div>
     </div>
 
-    <div class="mt-3">
-      <CartItem/>
-      <CartItem/>
-      <CartItem/>
+    <div v-for="item in globalState.selected_items" :key="item.item_id" class="mt-3">
+      <CartItem :item_data_prop="item"/>
     </div>
 
     <div class="mt-3 text-left px-3 flex justify-content-between">
@@ -35,6 +33,7 @@
 import axios from 'axios';
 import CartItem from '@/components/Cart-item-comp.vue'
 import Wallet from '@/components/Wallet-comp.vue'
+import { globalState } from '../store'
 
 const get_Order_URL = "http://localhost:5004/order/user/1000";
 
@@ -44,30 +43,10 @@ export default {
     CartItem,
     Wallet
   },
-  data(){
+
+  data() {
     return {
-      orders: [],
-    }
-  },
-
-  created: function(){
-    console.log("=== created ===")
-    this.getOrders()
-  },
-
-  methods: {
-    getOrders(){
-      console.log("=== Open getOrders ===")
-      axios
-      .get(get_Order_URL)
-      .then(response => {
-        console.log(response.data.data.orders)
-        // this.orders = response.data.data.hawkers
-      })
-      .catch(error => {
-        console.log("=== error getOrders ===")
-        console.log(error.message)
-      })
+      globalState
     }
   }
 
