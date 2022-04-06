@@ -15,20 +15,22 @@
 import axios from 'axios';
 import { globalState } from '../store'
 
-const get_Wallet_URL = "http://localhost:8000/wallet";
+const get_Wallet_URL = "http://localhost:5005/wallet";
 
 export default {
   name: 'Wallet',
   data(){
     return{
+      globalState,
+      user_id: null,
       avail_balance: 0,
       total_balance: 0,
-      globalState
     }
   },
 
   created: function(){
     console.log("=== open Created ===")
+    this.user_id = this.globalState.user_id
     this.getAmt()
   },
 
@@ -36,7 +38,7 @@ export default {
     getAmt(){
       console.log("=== Open getAmt ===")
       axios
-      .get(get_Wallet_URL + "/" + this.globalState.user_id)
+      .get(get_Wallet_URL + "/" + this.user_id)
       .then(response => {
         // console.log(response.data.data)
         this.avail_balance = response.data.data['available_balance']
