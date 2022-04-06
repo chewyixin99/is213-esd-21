@@ -63,7 +63,7 @@ import axios from 'axios';
 import Wallet from '@/components/Wallet-comp.vue'
 import { globalState } from '../store'
 
-const get_Wallet_URL = "http://localhost:8000/wallet";
+const get_Wallet_URL = "http://localhost:5005/wallet" || "http://localhost:8000/wallet" 
 
 export default {
   name: 'TopUp',
@@ -95,7 +95,7 @@ export default {
     topup(){
       console.log("=== open topup ===")
       console.log(this.amount)
-
+      console.log(get_Wallet_URL + "/" + this.user_id)
       axios
       .put(get_Wallet_URL + "/" + this.user_id, {
         amount_to_add_to_available_balance: parseFloat(this.amount),
@@ -111,7 +111,7 @@ export default {
     },
 
     cancel() {
-      this.$router.replace({name: "Hawker"})
+      this.$router.replace({name: "Hawkers"})
     }
   }
 
