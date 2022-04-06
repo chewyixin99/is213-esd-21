@@ -68,8 +68,7 @@ export default {
       },
 
       async login(){
-        // console.log(this.email)
-        // console.log(this.password)
+
         let params = {
           email: this.email,
           password: this.password,
@@ -82,6 +81,7 @@ export default {
           this.user_id = response.data
         } else {
           this.error = "Unsuccessful login";
+          console.log(this.error)
         }
       }
       
