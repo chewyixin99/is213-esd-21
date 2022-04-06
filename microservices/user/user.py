@@ -1,17 +1,16 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from os import environ
 
 app = Flask(__name__)
 
 # Flask SQLAlchemy config
 app.config["SQLALCHEMY_DATABASE_URI"] = environ.get('dbURL')
-# app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+mysqlconnector://is213@host.docker.internal:3306/esd"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # initializing model
 class User(db.Model):
@@ -37,6 +36,7 @@ class User(db.Model):
 
 
 @app.route("/user")
+@cross_origin()
 def get_all():
     users = User.query.all()
     if len(users):
@@ -59,6 +59,7 @@ def get_all():
     
 
 @app.route("/user/<string:user_id>")
+@cross_origin()
 def find_by_user_id(user_id):
     
     user = User.query.filter_by(user_id=user_id).first()
@@ -78,6 +79,7 @@ def find_by_user_id(user_id):
     )
 
 @app.route("/user/<string:email>", methods=["POST"])
+@cross_origin()
 def create_user(email):
     if (User.query.filter_by(email=email).first()):
         return jsonify(
@@ -112,6 +114,7 @@ def create_user(email):
     )
 
 @app.route("/user/authenticate", methods=["POST"])
+@cross_origin()
 def authenticate_user():
     data = request.get_json()
 
@@ -124,12 +127,12 @@ def authenticate_user():
 
         return jsonify({
             "code": 203,
-            "data": True
+            "data": user["user_id"]
         })
     
     return jsonify({
         "code": 403,
-        "data": False
+        "data": None
     })
 
 

@@ -3,7 +3,8 @@
     <!-- Welcome Message and Wallet -->
     <div class="grid grid-cols-5 shadow bgimg">
       <div class="col-span-3 text-left p-3 my-auto">
-        <h1 class="text-3xl font-bold text-white shadow-lg">Welcome to e-Hawker</h1>
+        <h1 class="text-3xl font-bold text-white 
+        shadow-lg">Welcome to e-Hawker</h1>
       </div>
       <div class="col-span-2 p-3 text-white">
         <Wallet/>
@@ -22,7 +23,6 @@
         <ul>{{hawker.username}}</ul>
       </li>
     </ul> -->
-
   </div>
 </template>
 
@@ -31,6 +31,7 @@
 import axios from "axios";
 import Hawker from "@/components/Hawker-comp.vue";
 import Wallet from "@/components/Wallet-comp.vue";
+import { globalState } from "../store"
 
 export default {
   name: "Hawkers",
@@ -38,6 +39,7 @@ export default {
     Hawker,
     Wallet,
   },
+
 
   data() {
     return {
@@ -54,6 +56,7 @@ export default {
       // username: "",
       // wallet_id: null
       hawkers: null,
+      globalState
       // info: "",
     };
   },
@@ -69,7 +72,7 @@ export default {
       axios
         .get(get_Hawker_URL)
         .then((response) => {
-          console.log(response.data.data.hawkers);
+          // console.log(response.data.data.hawkers);
           this.hawkers = response.data.data.hawkers;
         })
         .catch((error) => {

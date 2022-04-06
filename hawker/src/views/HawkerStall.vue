@@ -38,13 +38,13 @@ export default {
     this.hawker_id = this.$route.query.hawker_id;
     this.hawker_name = this.$route.query.hawker_name;
 
-    console.log(`=== getting ${this.hawker_id}'s items ===`);
+    // console.log(`=== getting ${this.hawker_id}'s items ===`);
     const get_Item_URL = `http://localhost:5003/item/hawker/${this.hawker_id}`;
 
     axios
       .get(get_Item_URL)
       .then((response) => {
-        console.log(response.data.data.items);
+        // console.log(response.data.data.items);
         this.items = response.data.data.items;
       })
       .catch((error) => {

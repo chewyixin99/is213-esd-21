@@ -31,7 +31,7 @@
       <div class="text-center">
 
           <!-- <router-link to="/Hawkers"> -->
-            <button @click="login()" type="button" class="btn btn-warning w-full">Log In</button>
+            <button @click="login" type="button" class="btn btn-warning w-full">Log In</button>
           <!-- </router-link> -->
 
           <div class="mt-2">
@@ -61,30 +61,33 @@ export default {
   },
 
   methods: {
-      setUserId(){
-        console.log("=== set user id ===")
-        localStorage.setItem("user_id", this.user_id)
-        console.log(this.user_id)
-      },
+      // setUserId(user_id){
+      //   // console.log("=== set user id ===")
+      //   localStorage.setItem("user_id", user_id)
+      //   console.log(`Successfully set User ID: ${user_id}`)
+      // },
 
-      // async login(){
-      //   // console.log(this.email)
-      //   // console.log(this.password)
-      //   let params = {
-      //     email: this.email,
-      //     password: this.password,
-      //   }
+      async login(){
 
-      //   let response = await axios.post('http://localhost:5001/user/', params);
+        let params = {
+          email: this.email,
+          password: this.password,
+        }
 
-      //   console.log(response.data);
+        let response = await axios.post('http://localhost:5001/user/authenticate', params);
 
-      //   if (True){
-      //     this.setUserId()
-      //   } else {
-      //     this.error = "Unsuccessful login";
-      //   }
-      // }
+        if (response.data){
+          // setUserId(response.data)
+          localStorage.setItem("user_id", response.data)
+          console.log(`Successfully set User ID: ${response.data}`)
+          // this.user_id = response.data
+          // this.setUserId(response.data.data)
+          // this.user_id = response.data.data
+        } else {
+          this.error = "Unsuccessful login";
+          console.log(this.error)
+        }
+      }
       
   }
 }
