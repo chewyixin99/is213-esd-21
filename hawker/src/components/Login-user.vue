@@ -88,6 +88,7 @@ export default {
           .then((response)=>{
             if (response.data.code == 203) {
               localStorage.setItem("user_id", response.data.data)
+              this.stateSetters.updateUser_id(response.data.data)
               console.log(`Successfully set Customer's User ID: ${response.data.data}..`)
               this.$router.replace({name: "Hawkers"});
               return response.data.data
