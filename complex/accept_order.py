@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 # OS and error imports
 import os, sys
@@ -17,11 +17,12 @@ import pika
 import json
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 order_url = environ.get('order_URL') or "http://localhost:5004/order"
 
 @app.route("/accept_order/<string:order_id>", methods=["POST"])
+@cross_origin()
 def accept_order(order_id):
     try:
         result = process_accept_order(order_id)

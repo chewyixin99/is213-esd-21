@@ -96,7 +96,7 @@ export default {
       }
       console.log(orderData)
 
-      const place_order_URL = `localhost:5100/place_order`
+      const place_order_URL = `http://localhost:5100/place_order`
       axios
       .post(place_order_URL, orderData)
       .then((response) => {

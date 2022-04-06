@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from os import environ
 from datetime import datetime
 import json
@@ -12,7 +12,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # initializing model
 class Hawker(db.Model):
@@ -117,6 +117,7 @@ def find_by_halal(is_halal):
 
 # Create hawker
 @app.route("/hawker/<string:email>", methods=["POST"])
+@cross_origin()
 def create_hawker(email):
     hawker = Hawker.query.filter_by(email=email).first()
     if (hawker):

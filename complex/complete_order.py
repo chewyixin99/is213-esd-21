@@ -1,6 +1,6 @@
 # Flask imports
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 # OS and error imports
 import os, sys
@@ -18,13 +18,14 @@ import pika
 import json
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 order_url = environ.get('order_URL') or "http://localhost:5004/order"
 wallet_url = environ.get('wallet_URL') or "http://localhost:5005/wallet"
 escrow_url = environ.get('escrow_URL') or "http://localhost:5006/escrow"
 
 @app.route("/complete_order/<string:order_id>", methods=["POST"])
+@cross_origin()
 def complete_order(order_id):
 
     try:

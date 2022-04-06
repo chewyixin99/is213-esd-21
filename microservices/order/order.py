@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from os import environ
 
 app = Flask(__name__)
@@ -11,7 +11,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = environ.get('dbURL')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 # initializing model
@@ -166,6 +166,7 @@ def find_by_hawker_id_by_status(hawker_id, status):
 
 
 # Create a order record
+@cross_origin()
 @app.route("/order", methods=["POST"])
 def create_order():
     data = request.get_json()
