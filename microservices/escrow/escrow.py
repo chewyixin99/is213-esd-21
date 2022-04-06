@@ -103,7 +103,7 @@ def create_escrow(order_id):
                 "data": {
                     "order_id": order_id
                 },
-                "message": "An error occurred creating the escrow."
+                "message": "An error occurred while creating the escrow record."
             }
         ), 500
 
@@ -150,7 +150,8 @@ def delete_escrow(order_id):
         {
             "code": 201,
             "order_id": order_id
-        }
+        },
+        "message": f"Successfully deleted item (with order id {order_id})."
     ), 201
 
 

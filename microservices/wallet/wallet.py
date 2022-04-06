@@ -185,7 +185,8 @@ def delete_wallet(wallet_id):
         {
             "code": 201,
             "wallet_id": wallet_id
-        }
+        },
+        "message": "Wallet deleted successfully."
     ), 201
 
 
