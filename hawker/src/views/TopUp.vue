@@ -49,8 +49,8 @@
 
       <!-- Buttons -->
       <div class="text-end flex mx-auto space-x-4">
-          <button type="button" class="btn btn-outline-danger w-full">Cancel</button>
-          <button @click="topup()" type="button" class="btn btn-warning w-full">Top Up</button>
+          <button @click="cancel" type="button" class="btn btn-outline-danger w-full">Cancel</button>
+          <button @click="topup" type="button" class="btn btn-warning w-full">Top Up</button>
       </div>
 
     </div>
@@ -61,8 +61,9 @@
 // @ is an alias to /src
 import axios from 'axios';
 import Wallet from '@/components/Wallet-comp.vue'
+import { globalState } from '../store'
 
-const get_Wallet_URL = "http://localhost:5005/wallet";
+const get_Wallet_URL = "http://localhost:8000/wallet";
 
 export default {
   name: 'TopUp',
@@ -72,12 +73,17 @@ export default {
 
   data(){
     return {
+      globalState,
       amount: 0,
-      ccno: "",
-      expiry: "",
-      cvv: "",
-      wallet_id: 1001,
+      ccno: "5678 4165 4124 7669",
+      expiry: "05/22",
+      cvv: "369",
+      user_id: null, 
     }
+  },
+
+  created() {
+    this.user_id = this.globalState.user_id
   },
 
   methods:{
@@ -89,18 +95,23 @@ export default {
     topup(){
       console.log("=== open topup ===")
       console.log(this.amount)
+
       axios
-      .put(get_Wallet_URL + "/" + this.wallet_id, {
-        amount_to_add_to_available_balance: this.amount,
-        amount_to_add_to_total_balance: this.amount,
+      .put(get_Wallet_URL + "/" + this.user_id, {
+        amount_to_add_to_available_balance: parseFloat(this.amount),
+        amount_to_add_to_total_balance: parseFloat(this.amount),
       })
       .catch(error => {
         console.log(error.response.data)
       })
-      // .get(get_Wallet_URL + "/" + this.wallet_id)
+      // .get(get_Wallet_URL + "/" + this.globalState.user_id)
       // .then(response => {
       //   console.log(response.data.data)
       // })
+    },
+
+    cancel() {
+      this.$router.replace({name: "Hawker"})
     }
   }
 

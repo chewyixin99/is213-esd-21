@@ -28,8 +28,8 @@
 
       <!-- Buttons -->
       <div class="text-end flex mx-auto space-x-4">
-          <button type="button" class="btn btn-outline-danger w-full" href="#">Cancel</button>
-          <button @click="createUser()" type="button" href="/hawkers" class="btn btn-warning w-full">Create</button>
+          <button @click="cancel" type="button" class="btn btn-outline-danger w-full" href="#">Cancel</button>
+          <button @click="createUser" type="button" href="/hawkers" class="btn btn-warning w-full">Create</button>
       </div>
 
     </div>
@@ -41,8 +41,8 @@
 import axios from 'axios';
 
 // let userid = "1000";
-const get_User_URL = "http://localhost:5001/user";
-const get_Wallet_URL = "http://localhost:5005/wallet"
+const get_User_URL = "http://localhost:8000/user";
+const get_Wallet_URL = "http://localhost:8000/wallet"
 
 export default {
   name: 'Account',
@@ -107,6 +107,10 @@ export default {
       .catch(function(error){
         console.log(error);
       })
+    },
+
+    cancel() {
+      this.$router.replace({name: "Login"})
     }
   }
 

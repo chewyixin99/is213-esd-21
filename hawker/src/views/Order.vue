@@ -12,7 +12,7 @@
 
         <div class="text-left">
           <span class="font-semibold">{{order.hawker_id}}</span><br>
-          <span>Status: {{order.status}}</span><br>
+          <span class="badge bg-warning text-dark">Status: {{order.status}}</span><br>
           <span>{{order.time}}</span>
         </div>
 
@@ -35,7 +35,7 @@
 import axios from 'axios';
 import { globalState } from '../store'
 
-const get_Order_URL = "http://localhost:5004/order";
+const get_Order_URL = "http://localhost:8000/order";
 
 export default {
   name: 'order',
@@ -44,14 +44,16 @@ export default {
 
   data(){
     return {
+      globalState,
       orders: [],
-      globalState
     }
   },
 
   created: function(){
     console.log("=== open created ===")
     this.getOrders()
+
+
   },
 
   methods:{
@@ -66,10 +68,18 @@ export default {
       .catch(error => {
         console.log(error)
       })
-    }
+    },
+    // testing for order time out
+    // processTimeout(){
+    //   for (order in this.orders){
+    //     let datetime = order.time
+    //     let split_time = datetime.split(" ")[4]
+    //     let seconds = split_time[0]*60*60+split_time[1]*60+split_time[2]
+
+    //   }
+    // }
+
   }
 
 }
 </script>
-
-/
