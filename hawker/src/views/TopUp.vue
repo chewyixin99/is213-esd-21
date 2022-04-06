@@ -78,7 +78,12 @@ export default {
       ccno: "5678 4165 4124 7669",
       expiry: "05/22",
       cvv: "369",
+      user_id: null, 
     }
+  },
+
+  created() {
+    this.user_id = this.globalState.user_id
   },
 
   methods:{
@@ -90,8 +95,9 @@ export default {
     topup(){
       console.log("=== open topup ===")
       console.log(this.amount)
+
       axios
-      .put(get_Wallet_URL + "/" + this.globalState.user_id, {
+      .put(get_Wallet_URL + "/" + this.user_id, {
         amount_to_add_to_available_balance: parseFloat(this.amount),
         amount_to_add_to_total_balance: parseFloat(this.amount),
       })

@@ -60,6 +60,7 @@
 <script>
 // @ is an alias to /src
 import axios from 'axios';
+import { globalState } from '../store'
 
 const get_Order_URL = "http://localhost:8000/order";
 const get_Item_URL = "http://localhost:8000/item";
@@ -74,15 +75,20 @@ export default {
 
   data(){
     return {
+      globalState,
       orders: [],
       items: [],
-      hawker_id: 2001,
+      hawker_id: null,
     }
   },
 
   created: function(){
     console.log("=== open created ===")
     this.getOrders()
+  },
+  
+  created() {
+    this.hawker_id = this.globalState.user_id
   },
 
   methods:{
