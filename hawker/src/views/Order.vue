@@ -35,7 +35,7 @@
 import axios from 'axios';
 import { globalState } from '../store'
 
-const get_Order_URL = "http://localhost:5004/order";
+const get_Order_URL = "http://localhost:8000/order";
 
 export default {
   name: 'order',
@@ -44,14 +44,16 @@ export default {
 
   data(){
     return {
+      globalState,
       orders: [],
-      globalState
     }
   },
 
   created: function(){
     console.log("=== open created ===")
     this.getOrders()
+
+
   },
 
   methods:{

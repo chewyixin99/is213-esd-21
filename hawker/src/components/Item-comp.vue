@@ -14,7 +14,7 @@
           <span class="col-span-1">${{item_data.price}}</span>
         </div>
         <div class="my-auto">
-          <button type="button" class="btn btn-primary" @click="addToCart">Add</button>
+          <button type="button" class="btn btn-primary" :disabled="globalState.user_id === null" @click="addToCart">Add</button>
         </div>
       </div>
     </div>
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { stateSetters } from '../store'
+import { globalState, stateSetters } from '../store'
 
 export default {
   name: 'Item',
@@ -36,6 +36,7 @@ export default {
   data() {
     return {
       item_data: null,
+      globalState,
       stateSetters,
     }
   },

@@ -71,6 +71,7 @@ def find_by_wallet_id(wallet_id):
 
 #create wallet
 @app.route("/wallet/<int:wallet_id>", methods=['POST'])
+@cross_origin()
 def create_wallet(wallet_id):
     if (Wallet.query.filter_by(wallet_id=wallet_id).first()):
         return jsonify(

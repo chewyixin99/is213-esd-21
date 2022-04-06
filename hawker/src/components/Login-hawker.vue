@@ -34,12 +34,6 @@
 
           <div v-if="error" class="mt-1 text-danger">{{this.errorMsg}}</div>
 
-          <div class="mt-2">
-            <router-link to="account">
-              <span class="text-warning">Create an account</span>
-            </router-link>
-          </div>
-
       </div>
 
     </div>
@@ -48,12 +42,14 @@
 
 <script>
 import axios from 'axios';
+import { stateSetters } from "../store"
 
 export default {
   name: 'LoginHawker',
 
   data(){
     return{
+      stateSetters,
       email: "",
       password: "",
       error: null,
@@ -82,6 +78,7 @@ export default {
           .then((response)=>{
             if (response.data.code == 203) {
               localStorage.setItem("user_id", response.data.data)
+              this.stateSetters.updateUser_id(response.data.data)
               console.log(`Successfully set Hawker's User ID: ${response.data.data}..`)
               this.$router.replace({name: "HawkerActivity"});
               return response.data.data

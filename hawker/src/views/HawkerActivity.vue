@@ -71,6 +71,7 @@
 <script>
 // @ is an alias to /src
 import axios from 'axios';
+import { globalState } from '../store'
 
 const get_Order_URL = "http://localhost:8000/order";
 const get_Item_URL = "http://localhost:8000/item";
@@ -85,6 +86,7 @@ export default {
 
   data(){
     return {
+      globalState,
       orders: [],
       items: [],
       hawker_id: null,
@@ -93,9 +95,10 @@ export default {
 
   created: function(){
     console.log("=== open created ===")
-    this.hawker_id = localStorage.getItem("user_id")
+    this.hawker_id = this.globalState.user_id
     this.getOrders()
   },
+
 
   methods:{
     getOrders(){
@@ -104,6 +107,7 @@ export default {
       axios
       .get(get_Order_URL + "/hawker/" + this.hawker_id)
       .then(response => {
+        console.log(response.data)
         console.log(response.data.data.orders)
         this.orders = response.data.data.orders
 

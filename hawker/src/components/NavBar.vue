@@ -1,21 +1,34 @@
 <template>
   <div>
     <div class="collapse" id="navbarToggleExternalContent">
-    <div class="bg-dark p-4">
+      <!-- Conditional render for navbar -->
+      <div v-if="globalState.user_id === null" class="bg-dark p-4">
         <router-link to="/hawkers">
           <div class="text-white mb-2">Hawker Stalls</div>
         </router-link>
-        <router-link to="/order">
-          <div class="text-white mb-2">My Orders</div>
-        </router-link>
-        <router-link to="/topup">
-          <div class="text-white mb-2">Top Up Wallet</div>
-        </router-link>
         <router-link to="/">
-          <div class="text-white">Log out</div>
+          <div class="text-white">Log In</div>
         </router-link>
-
-    </div>
+      </div>
+      <div v-else-if="globalState.user_id >= 2000" class="bg-dark p-4">
+        <router-link to="/">
+          <div @click="logout" class="text-white">Log out</div>
+        </router-link>
+      </div>
+      <div v-else class="bg-dark p-4">
+          <router-link to="/hawkers">
+            <div class="text-white mb-2">Hawker Stalls</div>
+          </router-link>
+          <router-link to="/order">
+            <div class="text-white mb-2">My Orders</div>
+          </router-link>
+          <router-link to="/topup">
+            <div class="text-white mb-2">Top Up Wallet</div>
+          </router-link>
+          <router-link to="/">
+            <div @click="logout" class="text-white">Log out</div>
+          </router-link>
+      </div>
     </div>
     <nav class="navbar navbar-dark fixed-top bg-dark">
     <div class="container-fluid">
@@ -31,7 +44,21 @@
 </template>
 
 <script>
+import { globalState, stateSetters } from '../store'
+
 export default {
   name: 'NavBar',
+  data() {
+    return {
+      globalState,
+      stateSetters
+    }
+  },
+  methods: {
+    logout() {
+      this.stateSetters.resetState()
+      localStorage.clear()
+    }
+  }
 }
 </script>
