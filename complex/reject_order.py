@@ -71,12 +71,10 @@ def process_reject_order(order_id):
 
         print('\n\n-----Publishing order retrieval error message with routing_key=retrieval.error-----')        
 
-        old_order_data = old_order_result["data"]
-
         message = {
             "code": 400,
             "message_type": "retrieval_error",
-            "data": old_order_data,
+            "data": old_order_result,
         }
         message = json.dumps(message)
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="retrieval.error", 
@@ -111,7 +109,6 @@ def process_reject_order(order_id):
 
     # ##################### END OF AMQP code
 
-    old_order_data = old_order_result["data"]
     if old_order_data["status"] == "pending":
         # escrow microservice ----------------------------
         # get data of $ in escrow
@@ -119,8 +116,6 @@ def process_reject_order(order_id):
             f"{escrow_url}/{old_order_data['order_id']}",
             method="GET"
         )
-
-        escrow_data = escrow_result["data"]
 
         if escrow_result["code"] not in range(200,300):
             # -------------------- FOR JIAN LIN TO ADD AMQP FAIL
@@ -135,7 +130,7 @@ def process_reject_order(order_id):
             message = {
                 "code": 400,
                 "message_type": "escrow_error",
-                "data": escrow_data
+                "data": escrow_result
             }
             message = json.dumps(message)
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="escrow.error", 
@@ -146,6 +141,8 @@ def process_reject_order(order_id):
             # ##################### END OF AMQP code
 
             return escrow_result
+        
+        escrow_data = escrow_result["data"]
         
         # # -------------------- FOR JIAN LIN TO ADD AMQP PASS
 
@@ -181,8 +178,6 @@ def process_reject_order(order_id):
             json=wallet_update_json
         )
 
-        wallet_data = wallet_result["data"]
-
         if wallet_result["code"] not in range(200,300):
             # -------------------- FOR JIAN LIN TO ADD AMQP FAIL
 
@@ -192,12 +187,10 @@ def process_reject_order(order_id):
 
             print('\n\n-----Publishing the wallet error message with routing_key=wallet.error-----')        
 
-            wallet_data = wallet_result["data"]
-
             message = {
                 "code": 400,
                 "message_type": "wallet_error",
-                "data": wallet_data
+                "data": wallet_result
                 
             }
             message = json.dumps(message)
@@ -209,6 +202,8 @@ def process_reject_order(order_id):
             # ##################### END OF AMQP code
 
             return wallet_result
+
+        wallet_data = wallet_result["data"]
         
         # -------------------- FOR JIAN LIN TO ADD AMQP PASS
 
@@ -235,7 +230,6 @@ def process_reject_order(order_id):
             f"{escrow_url}/{old_order_data['order_id']}",
             method="DELETE"
         )
-        escrow_delete_data = escrow_delete_result["order_id"]
 
         if escrow_delete_result["code"] not in range(200,300):
             # -------------------- FOR JIAN LIN TO ADD AMQP FAIL
@@ -249,7 +243,7 @@ def process_reject_order(order_id):
             message = {
                 "code": 400,
                 "message_type": "escrow_deletion_error",
-                "data": escrow_delete_data
+                "data": escrow_delete_result
             }
             message = json.dumps(message)
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="escrow_deletion.error", 
@@ -262,6 +256,7 @@ def process_reject_order(order_id):
             return escrow_delete_result
 
         # -------------------- FOR JIAN LIN TO ADD AMQP PASS
+        escrow_delete_data = escrow_delete_result["data"]
 
         # ##################### AMQP code      
 
@@ -290,8 +285,6 @@ def process_reject_order(order_id):
             method="PUT",
             json=order_status
         )
-        
-        new_order_data = new_order_result["data"]
 
         if new_order_result["code"] not in range(200,300):
             # -------------------- FOR JIAN LIN TO ADD AMQP FAIL
@@ -305,7 +298,7 @@ def process_reject_order(order_id):
             message = {
                 "code": 400,
                 "message_type": "reject_error",
-                "data": new_order_data
+                "data": new_order_result
             }
             message = json.dumps(message)
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="reject.error", 
@@ -317,6 +310,7 @@ def process_reject_order(order_id):
 
             return new_order_result
 
+        new_order_data = new_order_result["data"]
         # -------------------- FOR JIAN LIN TO ADD AMQP PASS
 
         # ##################### AMQP code      
@@ -353,7 +347,7 @@ def process_reject_order(order_id):
     message = {
         "code": 403,
         "message_type": "reject_status_error",
-        "data": new_order_data
+        "data": old_order_data
     }
     message = json.dumps(message)
     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="reject_status.error", 

@@ -103,7 +103,8 @@ def create_wallet(wallet_id):
     return jsonify(
         {
             "code": 201,
-            "data": wallet.json()
+            "data": wallet.json(),
+            "message": "Wallet created successfully."
         }
     ), 201
 
@@ -145,8 +146,10 @@ def add_amount_to_wallet(wallet_id):
     return jsonify(
         {
             "code": 201,
-            "data": wallet.json()
+            "data": wallet.json(),
+            "message": "Wallet updated successfully."
         }
+        
     ), 201
 
 
@@ -182,8 +185,10 @@ def delete_wallet(wallet_id):
     return jsonify(
         {
             "code": 201,
-            "wallet_id": wallet_id
+            "wallet_id": wallet_id,
+            "message": "Wallet deleted successfully."
         }
+        
     ), 201
 
 
