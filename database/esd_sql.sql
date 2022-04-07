@@ -57,13 +57,13 @@ ALTER TABLE hawker AUTO_INCREMENT=2000;
 -- Dumping data for table `user`
 --
 
-INSERT INTO `hawker` (`username`, `email`, `password`, `opening_hours`, `closing_hours`) VALUES
-('chinese', 'chinese@mail.com', 'password', '09:00:00', '21:00:00'), 
-('muslim', 'muslim@mail.com', 'password', '08:00:00', '22:00:00'),
-('vegetarian', 'vegetarian@mail.com', 'password', '07:30:00', '19:00:00'),
-('japanese', 'japanese@mail.com', 'password', '07:30:00', '19:00:00'),
-('korean', 'korean@mail.com', 'password', '10:00:00', '20:00:00'),
-('indian', 'indian@mail.com', 'password', '10:00:00', '20:00:00');
+INSERT INTO `hawker` (`username`, `email`, `password`, `halal`, `has_vegetarian_option`, `opening_hours`, `closing_hours`) VALUES
+('chinese', 'chinese@mail.com', 'password', FALSE, TRUE, '09:00:00', '21:00:00'), 
+('muslim', 'muslim@mail.com', 'password', TRUE, TRUE, '08:00:00', '22:00:00'),
+('vegetarian', 'vegetarian@mail.com', 'password', FALSE, TRUE, '07:30:00', '19:00:00'),
+('japanese', 'japanese@mail.com', 'password', FALSE, FALSE, '07:30:00', '19:00:00'),
+('korean', 'korean@mail.com', 'password', FALSE, FALSE, '10:00:00', '20:00:00'),
+('indian', 'indian@mail.com', 'password', FALSE, FALSE, '10:00:00', '20:00:00');
 COMMIT;
 
 --
