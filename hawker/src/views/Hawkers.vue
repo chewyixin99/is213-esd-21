@@ -7,7 +7,7 @@
         shadow-lg">Welcome to HawkerSG</h1>
       </div>
       <div class="col-span-2 p-3 text-white">
-        <Wallet/>
+        <Wallet v-if="globalState.user_id !== null && globalState.user_id < 2000"/>
       </div>
     </div>
 
@@ -17,12 +17,6 @@
         <Hawker :hawker_name="hawker.username" :opening_hours="hawker.opening_hours" :closing_hours="hawker.closing_hours"/>
       </router-link>
     </div>
-        
-    <!-- <ul>
-      <li v-for="hawker in hawkers" :key="hawker.hawker_id">
-        <ul>{{hawker.username}}</ul>
-      </li>
-    </ul> -->
   </div>
 </template>
 
@@ -43,21 +37,8 @@ export default {
 
   data() {
     return {
-      // hawkers: [],
-      // message: "",
-      // closing_hours: "",
-      // cuisine: "",
-      // email: "",
-      // halal: false,
-      // has_vegetarian_option: false,
-      // hawker_id: "",
-      // opening_hours: "",
-      // password: "",
-      // username: "",
-      // wallet_id: null
+      globalState,
       hawkers: null,
-      globalState
-      // info: "",
     };
   },
 
@@ -68,7 +49,7 @@ export default {
   methods: {
     getHawkers() {
       console.log("=== open getHawker ===");
-      const get_Hawker_URL = "http://localhost:5002/hawker" || "http://localhost:8000/hawker";
+      const get_Hawker_URL = "http://localhost:5002/hawker";
       axios
         .get(get_Hawker_URL)
         .then((response) => {
@@ -81,13 +62,6 @@ export default {
         });
     },
   },
-
-  // mounted () {
-  //   axios
-  //   .get(get_Hawker_URL)
-  //   .then(response => (this.info = response))
-  //   console.log(this.info)
-  // }
 };
 </script>
 
@@ -96,6 +70,5 @@ export default {
 .bgimg {
   background-image: url("../assets/hawkerbg.jpg");
   background-size: 100%;
-  /* filter: brightness(50%); */
 }
 </style>

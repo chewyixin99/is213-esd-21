@@ -6,7 +6,7 @@
         <h1 class="font-medium text-3xl">My Order</h1>
       </div>
       <div class="col-span-2 p-3">
-        <Wallet />
+        <Wallet :key="reRender"/>
       </div>
     </div>
 
@@ -35,10 +35,7 @@
     </div>
 
     <div class="mt-3">
-      <p>{{ userMsg }}</p>
-      <p>
-        
-      </p>
+      <p :class="msgStatus">{{ userMsg }}</p>
     </div>
   </div>
 </template>
@@ -65,6 +62,8 @@ export default {
       selectedHawker: null,
       isLoading: false,
       userMsg: "",
+      msgStatus: "",
+      reRender: 0,
     };
   },
 
@@ -103,6 +102,7 @@ export default {
 
       if (finalItems.length === 0) {
         this.userMsg = "Please add items to your cart first."
+        this.msgStatus = "text-red-600"
         this.isLoading = false
 
       } else {
@@ -117,7 +117,6 @@ export default {
           discount: 0.0,
           final_price: Number(this.totalAmount),
         };
-        console.log(orderData);
 
         const place_order_URL = `http://localhost:5100/place_order`;
         axios
@@ -125,19 +124,27 @@ export default {
           .then((response) => {
             console.log(`=== order created ===`);
             // console.log(response.data.data);
+            console.log(response)
             this.isLoading = false;
             this.userMsg = "Order successfully placed."
+            this.msgStatus = "text-green-600"
             this.stateSetters.clearSelectedItems()
             this.getTotalAmount()
+            this.forceReRender()
           })
           .catch((error) => {
             console.log(`=== ERROR creating items ===`);
             console.log(error.message);
             this.isLoading = false;
             this.userMsg = "Failed to process order. Please try again.";
+            this.msgStatus = "text-red-600"
           });
       }
     },
+
+    forceReRender() {
+      this.reRender += 1
+    }
   },
 };
 </script>

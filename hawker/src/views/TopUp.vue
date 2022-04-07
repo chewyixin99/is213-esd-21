@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="bg-warning p-3">
-      <Wallet/>
+      <Wallet :key="reRender"/>
     </div>
     
     <div class="w-96 mx-auto mt-3 px-3 ">
@@ -74,11 +74,12 @@ export default {
   data(){
     return {
       globalState,
+      user_id: null, 
       amount: 0,
       ccno: "5678 4165 4124 7669",
       expiry: "05/22",
       cvv: "369",
-      user_id: null, 
+      reRender: 0,
     }
   },
 
@@ -101,17 +102,22 @@ export default {
         amount_to_add_to_available_balance: parseFloat(this.amount),
         amount_to_add_to_total_balance: parseFloat(this.amount),
       })
+      .then((response) => {
+        this.forceReRender()
+        this.amount = 0
+      })
       .catch(error => {
         console.log(error.response.data)
       })
-      // .get(get_Wallet_URL + "/" + this.globalState.user_id)
-      // .then(response => {
-      //   console.log(response.data.data)
-      // })
+
     },
 
     cancel() {
-      this.$router.replace({name: "Hawkers"})
+      this.$router.replace({name: "Hawker"})
+    },
+
+    forceReRender() {
+      this.reRender += 1
     }
   }
 
