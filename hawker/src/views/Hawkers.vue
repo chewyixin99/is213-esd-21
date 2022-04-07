@@ -3,8 +3,8 @@
     <!-- Welcome Message and Wallet -->
     <div class="grid grid-cols-5 shadow bgimg">
       <div class="col-span-3 text-left p-3 my-auto">
-        <h1 class="text-3xl font-bold text-white 
-        shadow-lg">Welcome to HawkerSG</h1>
+        <h1 class="text-2xl font-bold text-white 
+        shadow-lg">Welcome to Hawker<br>Pre-Orderation</h1>
       </div>
       <div class="col-span-2 p-3 text-white">
         <Wallet v-if="globalState.user_id !== null && globalState.user_id < 2000"/>
@@ -26,6 +26,8 @@ import axios from "axios";
 import Hawker from "@/components/Hawker-comp.vue";
 import Wallet from "@/components/Wallet-comp.vue";
 import { globalState } from "../store"
+
+const get_Hawker_URL = "http://localhost:5002/hawker";
 
 export default {
   name: "Hawkers",
@@ -49,7 +51,6 @@ export default {
   methods: {
     getHawkers() {
       console.log("=== open getHawker ===");
-      const get_Hawker_URL = "http://localhost:5002/hawker";
       axios
         .get(get_Hawker_URL)
         .then((response) => {

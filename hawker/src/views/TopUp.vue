@@ -76,8 +76,8 @@ export default {
       globalState,
       user_id: null, 
       amount: 0,
-      ccno: "5678 4165 4124 7669",
-      expiry: "05/22",
+      ccno: "5412 7512 3412 3456",
+      expiry: "07/24",
       cvv: "369",
       reRender: 0,
     }

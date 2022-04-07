@@ -5,7 +5,7 @@
       <!-- Amount -->
       <router-link to="/topup">
         <div class="w-28 mx-auto mt-2 p-2 border border-warning border-2 rounded bg-white opacity-80">
-          <span class="text-dark text-xl">${{avail_balance}}</span><br/>
+          <span class="text-dark text-xl font-medium">${{avail_balance}}</span><br/>
           <span class="text-dark text-xs">(${{total_balance}})</span>
         </div>
       </router-link>
