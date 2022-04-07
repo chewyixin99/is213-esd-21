@@ -27,7 +27,7 @@ export default {
 
   created() {
     this.item_data = this.item_data_prop
-    console.log(this.item_data)
+    // console.log(this.item_data)
   },
 
 }
