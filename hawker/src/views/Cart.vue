@@ -93,18 +93,32 @@ export default {
       var finalItems = [];
       this.isLoading = true;
 
-      globalState.selected_items.map((item) => {
-        finalItems.push({
-          item_id: item.item_id,
-          quantity: 1,
-        });
-      });
+      this.globalState.selected_items.forEach((item) => {
+        var itemAdded = false
+        finalItems.forEach((finalItem) => {
+          if (item.item_id === finalItem.item_id) {
+            finalItem.quantity += 1
+            itemAdded = true
+          }
+        })
+
+        if (!itemAdded) {
+          finalItems.push({
+            item_id: item.item_id,
+            quantity: 1
+          })
+          itemAdded = false
+        }
+      })
 
       if (finalItems.length === 0) {
         this.userMsg = "Please add items to your cart first."
         this.msgStatus = "text-red-600"
         this.isLoading = false
-
+      } else if (this.globalState.avail_balance < this.totalAmount) {
+        this.userMsg = "Insufficient funds, please top up your wallet."
+        this.msgStatus = "text-red-600"
+        this.isLoading = false
       } else {
         finalItems = JSON.stringify(finalItems);
 

@@ -2,7 +2,9 @@ import { reactive } from 'vue'
 
 const globalState = reactive({
   user_id: localStorage.getItem('user_id') || null,
-  selected_items: []
+  selected_items: [],
+  avail_balance: null,
+  total_balance: null,
 })
 
 const stateSetters = {
@@ -25,6 +27,14 @@ const stateSetters = {
 
   clearSelectedItems() {
     globalState.selected_items = []
+  },
+
+  update_availBalance(payload) {
+    globalState.avail_balance = payload
+  },
+
+  update_totalBalance(payload) {
+    globalState.total_balance = payload
   }
 }
 

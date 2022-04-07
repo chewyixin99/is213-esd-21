@@ -24,10 +24,7 @@ def callback(channel, method, properties, body): # required signature for the ca
     print() # print a new line feed
 
 def processError(errorMsg):
-    print("Printing the error message:")
-
-    print("GraphQL goes here connection goes here.")
-
+    print("Printing the error message:{}".format(errorMsg))
 
 
 if __name__ == "__main__":  # execute this program only if it is run as a script (not by 'import')    

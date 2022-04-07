@@ -4,9 +4,9 @@ from twilio.rest import Client
 import amqp_setup
 
 monitorBindingKey='*.notify'
-account_sid = 'ACfb66da0927db664980a680736cc0e708'
-auth_token = '681ddb63eacac9a192280a59fedec821'
-twilio_number = '+15857284607'
+account_sid = 'ACed3d23117c25da75a17a2c32b03f8fc7'
+auth_token = 'c3cce512e7a30ce175024151ab3ab472'
+twilio_number = '+15632073733'
 target_number = '+6586862106'
 
 def receiveOrderLog():
