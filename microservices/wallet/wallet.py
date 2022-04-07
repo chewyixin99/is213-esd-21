@@ -112,6 +112,7 @@ def create_wallet(wallet_id):
 
 #add amount to wallet, can be in negative integers to simulate a deduction
 @app.route("/wallet/<int:wallet_id>", methods=['PUT'])
+@cross_origin()
 def add_amount_to_wallet(wallet_id):
     wallet = Wallet.query.filter_by(wallet_id=wallet_id).first()
     if not (wallet):
@@ -156,6 +157,7 @@ def add_amount_to_wallet(wallet_id):
 
 #delete wallet
 @app.route("/wallet/<int:wallet_id>", methods=['DELETE'])
+@cross_origin()
 def delete_wallet(wallet_id):
     wallet = Wallet.query.filter_by(wallet_id=wallet_id).first()
     if not (wallet):
