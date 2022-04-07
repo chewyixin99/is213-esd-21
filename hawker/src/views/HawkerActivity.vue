@@ -19,7 +19,8 @@
 
         <!-- RHS -->
         <div class="text-right">
-          <span class="badge bg-warning text-dark">Status: {{order.status}}</span><br>
+          <!-- {{getStatus(order.status)}} -->
+          <span :class="getStatus(order.status)">Status: {{order.status}}</span><br>
           <span class="font-semibold">Qty</span>
         </div>
 
@@ -39,9 +40,12 @@
         </div>
       </div>
 
-      <span>Time of Order: {{order.time}} </span><br>
-      <span>Order Price: ${{order.price}} </span>
-      <!-- <div>{{ (new Date(order.time))-(Date.now()) }}</div> -->
+      <div class="mb-3">
+        <span>Time of Order: {{order.time}} </span><br>
+        <span class="font-medium">Order Price: ${{order.price}} </span>
+        <!-- <div>{{ (new Date(order.time))-(Date.now()) }}</div> -->
+      </div>
+
       <!-- BUTTONS -->
       <!-- {{order.status}} -->
       <!-- if pending -->
@@ -90,6 +94,7 @@ export default {
       orders: [],
       items: [],
       hawker_id: null,
+      // color: "badge bg-warning text-dark",
     }
   },
 
@@ -107,8 +112,8 @@ export default {
       axios
       .get(get_Order_URL + "/hawker/" + this.hawker_id)
       .then(response => {
-        console.log(response.data)
-        console.log(response.data.data.orders)
+        // console.log(response.data)
+        // console.log(response.data.data.orders)
         this.orders = response.data.data.orders
 
         let order_compilation = []
@@ -121,10 +126,10 @@ export default {
             "time" : order.time,
             "price" : order.final_price
           }
-          console.log(eval(order.items)[0])
-          console.log(typeof(order.items))
-          console.log("----")
-          console.log(typeof(eval(order.items)))
+          // console.log(eval(order.items)[0])
+          // console.log(typeof(order.items))
+          // console.log("----")
+          // console.log(typeof(eval(order.items)))
           order_compilation.push(processedOrder)
         }
         this.orders = order_compilation
@@ -133,32 +138,22 @@ export default {
         console.log(error)
       })
     },
-    millisToMinutesAndSeconds(millis){
 
+    millisToMinutesAndSeconds(millis){
         var minutes = Math.floor(millis / 60000);
         var seconds = ((millis % 60000) / 1000).toFixed(0);
         return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
-
-      millisToMinutesAndSeconds(298999); // "4:59"
-      millisToMinutesAndSeconds(60999);  // "1:01"
     },
 
-    // getItems(){
-    //   console.log("=== open getItems ===")
-    //   axios
-    //   .get(get_Item_URL + "/item/" + this.item_id)
-    //   .then(response => {
-    //     console.log(response.data.data)
-    //     this.orders = response.data.data
-    //   })
-    //   .catch(error => {
-    //     console.log(error)
-    //   })
-    // },
-
-    // getJSON(str){
-    //   return JSON.parse(str)
-    // },
+    getStatus(val){
+      if (val == "rejected"){
+        return ("badge bg-danger");
+      } else if (val == "accepted" | val == "pending"){
+        return ("badge bg-warning text-dark");
+      } else {
+        return ("badge bg-success");
+      }
+    },
 
     acceptOrder(order_id){
       console.log("=== open acceptOrder ===")
@@ -167,6 +162,7 @@ export default {
       .post(accept_Order_URL + "/" + order_id)
       .then(response => {
         console.log(response.data)
+        this.getOrders()
       })
       .catch(error =>{
         console.log(error.message)
@@ -180,6 +176,7 @@ export default {
       .post(reject_Order_URL + "/" + order_id)
       .then(response => {
         console.log(response.data)
+        this.getOrders()
       })
       .catch(error =>{
         console.log(error.message)
@@ -193,6 +190,7 @@ export default {
       .post(complete_Order_URL + "/" + order_id)
       .then(response => {
         console.log(response.data)
+        this.getOrders()
       })
       .catch(error =>{
         console.log(error.message)
@@ -203,5 +201,3 @@ export default {
 
 }
 </script>
-
-/

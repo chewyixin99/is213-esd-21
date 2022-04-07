@@ -115,7 +115,7 @@ export default {
         this.userMsg = "Please add items to your cart first."
         this.msgStatus = "text-red-600"
         this.isLoading = false
-      } else if (this.globalState.avail_balance < this.totalAmount) {
+      } else if (Number(this.globalState.avail_balance) < Number(this.totalAmount)) {
         this.userMsg = "Insufficient funds, please top up your wallet."
         this.msgStatus = "text-red-600"
         this.isLoading = false

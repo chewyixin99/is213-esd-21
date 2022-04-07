@@ -23,7 +23,7 @@
         </div>
         <div class="mb-5 text-start">
           <label for="formGroupExampleInput2" class="form-label">Password</label>
-          <input v-model="password" type="text" class="form-control" id="formGroupExampleInput2" placeholder="Enter Password">
+          <input v-model="password" type="password" class="form-control" id="formGroupExampleInput2" placeholder="Enter Password">
         </div>
       </form>
 

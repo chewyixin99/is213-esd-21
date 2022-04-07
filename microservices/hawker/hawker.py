@@ -112,6 +112,32 @@ def find_by_halal(is_halal):
             "message": f"No {'halal' if is_halal else 'non-halal'} hawkers found."
         }
     )
+    
+# Get hawker by vegetarian
+@app.route("/hawker/vegetarian/<int:is_vegetarian>")
+def find_by_vegetarian(is_vegetarian):
+    if is_vegetarian: 
+        hawkers = Hawker.query.filter(Hawker.has_vegetarian_option.is_(True)).all()
+    else:
+        hawkers = Hawker.query.filter(Hawker.has_vegetarian_option.is_(False)).all()
+
+    if hawkers:
+        return jsonify(
+            {
+                "code":200,
+                "data": {
+                    "hawkers": [
+                        hawker.json() for hawker in hawkers
+                    ]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": f"No {'vegetarian' if is_vegetarian else 'non-vegetarian'} hawkers found."
+        }
+    )
 
 # Create hawker
 @app.route("/hawker/<string:email>", methods=["POST"])
