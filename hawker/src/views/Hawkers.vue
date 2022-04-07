@@ -61,6 +61,21 @@ export default {
           console.log(error.message);
         });
     },
+
+    getHalal() {
+      console.log("=== open getHalal ===")
+      const get_Halal_URL = "http://localhost:5002/hawker/halal/1";
+      axios
+        .get(get_Halal_URL)
+        .then((response) => {
+          // console.log(response.data.data.hawkers);
+          this.hawkers = response.data.data.hawkers;
+        })
+        .catch((error) => {
+          console.log("=== error getHalal ===");
+          console.log(error.message);
+        });
+    }
   },
 };
 </script>
