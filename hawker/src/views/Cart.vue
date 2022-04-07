@@ -97,7 +97,6 @@ export default {
         var itemAdded = false
         finalItems.forEach((finalItem) => {
           if (item.item_id === finalItem.item_id) {
-            console.log(finalItem)
             finalItem.quantity += 1
             itemAdded = true
           }
@@ -112,12 +111,14 @@ export default {
         }
       })
 
-
       if (finalItems.length === 0) {
         this.userMsg = "Please add items to your cart first."
         this.msgStatus = "text-red-600"
         this.isLoading = false
-
+      } else if (this.globalState.avail_balance < this.totalAmount) {
+        this.userMsg = "Insufficient funds, please top up your wallet."
+        this.msgStatus = "text-red-600"
+        this.isLoading = false
       } else {
         finalItems = JSON.stringify(finalItems);
 
