@@ -68,7 +68,7 @@ export default {
   methods: {
     getHawkers() {
       console.log("=== open getHawker ===");
-      const get_Hawker_URL = "http://localhost:8000/hawker";
+      const get_Hawker_URL = "http://localhost:5002/hawker" || "http://localhost:8000/hawker";
       axios
         .get(get_Hawker_URL)
         .then((response) => {

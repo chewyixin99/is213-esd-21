@@ -35,7 +35,7 @@
 import axios from 'axios';
 import { globalState } from '../store'
 
-const get_Order_URL = "http://localhost:8000/order";
+const get_Order_URL = "http://localhost:5004/order" || "http://localhost:8000/order";
 
 export default {
   name: 'order',
