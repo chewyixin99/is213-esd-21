@@ -6,7 +6,13 @@
     </div>
 
     <!-- Order List -->
-    <div v-for="order in orders" :key="order">
+    <div v-if="orders.length === 0">
+      <div class="flex justify-content-between py-3">
+        <p>You don't have any orders at the moment. Visit any hawker to start ordering!</p>
+      </div>
+    </div>
+
+    <div v-else v-for="order in orders" :key="order">
       <!-- order details -->
       <div class="flex justify-content-between py-3">
 
@@ -35,7 +41,7 @@
 import axios from 'axios';
 import { globalState } from '../store'
 
-const get_Order_URL = "http://localhost:8000/order";
+const get_Order_URL = "http://localhost:5004/order";
 
 export default {
   name: 'order',
@@ -52,8 +58,6 @@ export default {
   created: function(){
     console.log("=== open created ===")
     this.getOrders()
-
-
   },
 
   methods:{

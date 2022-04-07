@@ -6,6 +6,7 @@ from os import environ
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# app.config['CORS_HEADERS'] = 'Content-Type'
 
 db = SQLAlchemy(app)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -111,9 +112,11 @@ def create_wallet(wallet_id):
 
 
 #add amount to wallet, can be in negative integers to simulate a deduction
-@app.route("/wallet/<int:wallet_id>", methods=['PUT'])
+@app.route("/wallet/<int:wallet_id>", methods=['PUT', "OPTIONS"])
 @cross_origin()
 def add_amount_to_wallet(wallet_id):
+    if request.method == "OPTIONS": # CORS preflight
+        return _build_cors_preflight_response()
     wallet = Wallet.query.filter_by(wallet_id=wallet_id).first()
     if not (wallet):
         return jsonify(

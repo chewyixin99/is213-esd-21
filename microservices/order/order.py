@@ -166,8 +166,8 @@ def find_by_hawker_id_by_status(hawker_id, status):
 
 
 # Create a order record
-@cross_origin()
 @app.route("/order", methods=["POST"])
+@cross_origin()
 def create_order():
     data = request.get_json()
     order = Order(**data)
@@ -196,6 +196,7 @@ def create_order():
 
 # Edit an order status
 @app.route("/order/<string:order_id>", methods=["PUT"])
+@cross_origin()
 def update_order(order_id):
     order = Order.query.filter_by(order_id=order_id).first()
     if (order):
@@ -235,6 +236,7 @@ def update_order(order_id):
 
 # delete order
 @app.route("/order/<int:order_id>", methods=["DELETE"])
+@cross_origin()
 def delete_order(order_id):
     order = Order.query.filter_by(order_id=order_id).first()
     if not (order):

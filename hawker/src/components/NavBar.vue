@@ -11,6 +11,9 @@
         </router-link>
       </div>
       <div v-else-if="globalState.user_id >= 2000" class="bg-dark p-4">
+        <router-link to="/hawkeractivity">
+          <div class="text-white mb-2">Order Activity</div>
+        </router-link>
         <router-link to="/">
           <div @click="logout" class="text-white">Log out</div>
         </router-link>
@@ -35,7 +38,7 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
-        <router-link to="/cart">
+        <router-link v-if="globalState.user_id !== null && globalState.user_id < 2000" to="/cart">
           <img src="../assets/cart.png" class="w-7 mr-2">
         </router-link>
     </div>
