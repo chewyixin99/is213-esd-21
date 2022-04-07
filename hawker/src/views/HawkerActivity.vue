@@ -112,8 +112,8 @@ export default {
       axios
       .get(get_Order_URL + "/hawker/" + this.hawker_id)
       .then(response => {
-        console.log(response.data)
-        console.log(response.data.data.orders)
+        // console.log(response.data)
+        // console.log(response.data.data.orders)
         this.orders = response.data.data.orders
 
         let order_compilation = []
@@ -126,10 +126,10 @@ export default {
             "time" : order.time,
             "price" : order.final_price
           }
-          console.log(eval(order.items)[0])
-          console.log(typeof(order.items))
-          console.log("----")
-          console.log(typeof(eval(order.items)))
+          // console.log(eval(order.items)[0])
+          // console.log(typeof(order.items))
+          // console.log("----")
+          // console.log(typeof(eval(order.items)))
           order_compilation.push(processedOrder)
         }
         this.orders = order_compilation
@@ -138,14 +138,11 @@ export default {
         console.log(error)
       })
     },
-    millisToMinutesAndSeconds(millis){
 
+    millisToMinutesAndSeconds(millis){
         var minutes = Math.floor(millis / 60000);
         var seconds = ((millis % 60000) / 1000).toFixed(0);
         return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
-
-      millisToMinutesAndSeconds(298999); // "4:59"
-      millisToMinutesAndSeconds(60999);  // "1:01"
     },
 
     getStatus(val){
@@ -165,6 +162,7 @@ export default {
       .post(accept_Order_URL + "/" + order_id)
       .then(response => {
         console.log(response.data)
+        this.getOrders()
       })
       .catch(error =>{
         console.log(error.message)
@@ -178,6 +176,7 @@ export default {
       .post(reject_Order_URL + "/" + order_id)
       .then(response => {
         console.log(response.data)
+        this.getOrders()
       })
       .catch(error =>{
         console.log(error.message)
@@ -191,6 +190,7 @@ export default {
       .post(complete_Order_URL + "/" + order_id)
       .then(response => {
         console.log(response.data)
+        this.getOrders()
       })
       .catch(error =>{
         console.log(error.message)

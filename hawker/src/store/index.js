@@ -11,6 +11,8 @@ const stateSetters = {
   resetState() {
     globalState.user_id = null
     globalState.selected_items = []
+    globalState.avail_balance = null
+    globalState.total_balance = null
   },
 
   updateUser_id(payload) {
