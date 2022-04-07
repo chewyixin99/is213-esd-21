@@ -144,7 +144,7 @@ def process_complete_order(order_id):
 
         # ##################### AMQP code
 
-        # # handle error -> order status fail
+        # # handle error -> order completion status update fail
         
         print('\n\n-----Publishing order completion status error message with routing_key=order_status.error-----')
         message = {

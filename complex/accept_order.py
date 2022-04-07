@@ -129,9 +129,9 @@ def process_accept_order(order_id):
 
     # ##################### AMQP code      
 
-    # handle error -> order acceptance fail
+    # handle error -> order update fail
 
-    print('\n\n-----Publishing the order accept error message with routing_key=accept.error-----')        
+    print('\n\n-----Publishing the order accept update message with routing_key=accept.error-----')        
 
     message = json.dumps({
         "code": 400,

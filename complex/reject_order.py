@@ -191,7 +191,7 @@ def process_reject_order(order_id):
             message = {
                 "code": 400,
                 "message_type": "wallet_error",
-                "data": wallet_result
+                "data": wallet_result["message"]
                 
             }
             message = json.dumps(message)
@@ -244,7 +244,7 @@ def process_reject_order(order_id):
             message = {
                 "code": 400,
                 "message_type": "escrow_deletion_error",
-                "data": escrow_delete_result
+                "data": escrow_delete_result["message"]
             }
             message = json.dumps(message)
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="escrow_deletion.error", 
@@ -292,9 +292,9 @@ def process_reject_order(order_id):
 
             # ##################### AMQP code      
 
-            # handle error -> order rejection fail
+            # handle error -> order rejection update fail
 
-            print('\n\n-----Publishing the order rejection error message with routing_key=reject.error-----')        
+            print('\n\n-----Publishing the order rejection update error message with routing_key=reject.error-----')        
 
             message = {
                 "code": 400,
@@ -305,7 +305,7 @@ def process_reject_order(order_id):
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="reject.error", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
-            print("\nOrder rejection error published to RabbitMQ Exchange.\n")
+            print("\nOrder rejection update error published to RabbitMQ Exchange.\n")
 
             # ##################### END OF AMQP code
 

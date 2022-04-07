@@ -163,12 +163,10 @@ def process_place_order(order):
 
         # ##################### AMQP code      
     
-        # handle error -> order was not processed successfully
+        # handle error -> order microservice error
 
         code = order_result["code"]
         
-        # order_id = order_data["order_id"]
-
         print('\n\n-----Publishing the (order error) message with routing_key=order.error-----')
 
         message = {
