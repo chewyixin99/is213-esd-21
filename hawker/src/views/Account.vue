@@ -46,8 +46,8 @@ import axios from 'axios';
 import { stateSetters } from '../store'
 
 // let userid = "1000";
-const get_User_URL = "http://localhost:5001/user";
-const get_Wallet_URL = "http://localhost:5005/wallet"
+const get_User_URL = "http://localhost:8000/user";
+const get_Wallet_URL = "http://localhost:8000/wallet"
 
 export default {
   name: 'Account',

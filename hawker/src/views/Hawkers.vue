@@ -35,7 +35,7 @@ import Hawker from "@/components/Hawker-comp.vue";
 import Wallet from "@/components/Wallet-comp.vue";
 import { globalState } from "../store"
 
-const get_Hawker_URL = "http://localhost:5002/hawker";
+const get_Hawker_URL = "http://localhost:8000/hawker";
 
 export default {
   name: "Hawkers",

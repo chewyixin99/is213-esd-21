@@ -77,11 +77,11 @@
 import axios from 'axios';
 import { globalState } from '../store'
 
-const get_Order_URL = "http://localhost:5004/order";
-const get_Item_URL = "http://localhost:5003/item";
-const accept_Order_URL = "http://localhost:5101/accept_order";
-const reject_Order_URL = "http://localhost:5102/reject_order";
-const complete_Order_URL = "http://localhost:5103/complete_order";
+const get_Order_URL = "http://localhost:8000/order";
+const get_Item_URL = "http://localhost:8000/item";
+const accept_Order_URL = "http://localhost:8000/accept_order";
+const reject_Order_URL = "http://localhost:8000/reject_order";
+const complete_Order_URL = "http://localhost:8000/complete_order";
 
 export default {
   name: 'HawkerActivity',
