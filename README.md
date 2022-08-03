@@ -50,7 +50,7 @@ ESD_PROJECT_22 <br/>
 1. In the command line, ensure that we are in the main directory (esd_project_22/hawker)
 2. Make sure you are using node version v16.0.0 (node -v) and above, and npm version 7.10.0 (npm -v) and above
 3. Run the command <br/>
-	npm install <br/>
+	*npm install* <br/>
 followed by the command <br/>
-	npm run serve <br/>
+	*npm run serve* <br/>
 4. The app is now accessible via http://localhost:8080
