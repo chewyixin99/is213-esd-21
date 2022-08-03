@@ -16,7 +16,7 @@
 import axios from 'axios';
 import { globalState, stateSetters } from '../store'
 
-const get_Wallet_URL = "http://localhost:5005/wallet";
+const get_Wallet_URL = "http://localhost:8000/wallet";
 
 export default {
   name: 'Wallet',
