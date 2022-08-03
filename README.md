@@ -17,7 +17,7 @@ ESD_PROJECT_22 <br/>
 1. In the command line, ensure that we are in the main directory ```esd_project_22```
 2. Run the command 
 ```
-	cd kong 
+cd kong 
 ```
 3. You should now be in the directory ```esd_project_22/kong```
 4. Run the following command 
@@ -34,11 +34,11 @@ ESD_PROJECT_22 <br/>
 7. Tick all the checkboxes, and click Import Objects
 8. You should see an overview of the snapshot you just restored.
 ```
-	services	imported: 10	failed: 0
-	routes		imported: 16	failed: 0
-	consumers	imported: 1	failed:0
-	…
-	The rest should be 0
+services	imported: 10	failed: 0
+routes		imported: 16	failed: 0
+consumers	imported: 1	failed:0
+…
+The rest should be 0
 ```
 9. If the expected result at 8 is not observed, repeat step 7.
 10. You are now ready to test the API services at ```http://localhost:8000/route```
@@ -53,9 +53,9 @@ ESD_PROJECT_22 <br/>
 1. In the command line, ensure that we are in the main directory ```esd_project_22/hawker```
 2. Make sure you are using node version v16.0.0 (node -v) and above, and npm version 7.10.0 (npm -v) and above
 3. Run the command <br/>
-	```*npm install*```<br/>
+	```npm install```<br/>
 followed by the command <br/>
-	```*npm run serve*``` <br/>
+	```npm run serve``` <br/>
 4. The app is now accessible via ```http://localhost:8080```
 
 ----------------------
