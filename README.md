@@ -1,12 +1,12 @@
 # Project Directory
 ----------------------
 ESD_PROJECT_22 <br/>
-	| complex <br/>
-	| database <br/>
-	| hawker <br/>
-	| kong <br/>
-	| microservices <br/>
-	| docker-compose.yml <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| complex <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| database <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| hawker <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| kong <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| microservices <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| docker-compose.yml <br/>
 
 ----------------------
 ## Instructions for loading up the database:
