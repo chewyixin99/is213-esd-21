@@ -63,7 +63,7 @@ import axios from 'axios';
 import Wallet from '@/components/Wallet-comp.vue'
 import { globalState } from '../store'
 
-const get_Wallet_URL = "http://localhost:5005/wallet" || "http://localhost:8000/wallet" 
+const get_Wallet_URL =  "http://localhost:8000/wallet" 
 
 export default {
   name: 'TopUp',
