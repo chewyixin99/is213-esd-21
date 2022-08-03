@@ -54,3 +54,14 @@ ESD_PROJECT_22 <br/>
 followed by the command <br/>
 	*npm run serve* <br/>
 4. The app is now accessible via http://localhost:8080
+
+----------------------
+image.png
+See: 
+https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request
+
+### To fix:
+1. Go to http://localhost:1337
+2. Click on routes
+3. Click on the route you want to modify
+4. Under *Methods*, add "OPTIONS" in all caps, and hit enter
