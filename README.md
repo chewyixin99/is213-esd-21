@@ -56,7 +56,9 @@ followed by the command <br/>
 4. The app is now accessible via http://localhost:8080
 
 ----------------------
-image.png
+For error: <br/>
+*Access to XMLHttpRequest at <path> from origin <origin> has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.*
+<br/>
 See: 
 https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request
 
